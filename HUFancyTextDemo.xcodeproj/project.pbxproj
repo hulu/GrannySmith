@@ -7,29 +7,38 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC3A594414BCE61A005CB196 /* HUStringParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3A594314BCE619005CB196 /* HUStringParserTest.m */; };
+		EC61850314BCC17500E1DA2F /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A2D14BBE9D50016D910 /* SenTestingKit.framework */; };
+		EC61850414BCC17500E1DA2F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1514BBE9D40016D910 /* UIKit.framework */; };
+		EC61850514BCC17500E1DA2F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
+		EC61850B14BCC17500E1DA2F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC61850914BCC17500E1DA2F /* InfoPlist.strings */; };
+		EC61850E14BCC17500E1DA2F /* HUFancyTextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61850D14BCC17500E1DA2F /* HUFancyTextTest.m */; };
+		EC61851314BCC23E00E1DA2F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1914BBE9D40016D910 /* CoreGraphics.framework */; };
+		EC61852514BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851814BCC3F200E1DA2F /* GTMNSString+HTML.m */; };
+		EC61852614BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851814BCC3F200E1DA2F /* GTMNSString+HTML.m */; };
+		EC61852714BCC3F200E1DA2F /* HUFancyText.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851A14BCC3F200E1DA2F /* HUFancyText.m */; };
+		EC61852814BCC3F200E1DA2F /* HUFancyText.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851A14BCC3F200E1DA2F /* HUFancyText.m */; };
+		EC61852914BCC3F200E1DA2F /* HUFancyTextDefines.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851C14BCC3F200E1DA2F /* HUFancyTextDefines.m */; };
+		EC61852A14BCC3F200E1DA2F /* HUFancyTextDefines.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851C14BCC3F200E1DA2F /* HUFancyTextDefines.m */; };
+		EC61852B14BCC3F200E1DA2F /* HUFancyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851E14BCC3F200E1DA2F /* HUFancyTextView.m */; };
+		EC61852C14BCC3F200E1DA2F /* HUFancyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851E14BCC3F200E1DA2F /* HUFancyTextView.m */; };
+		EC61852D14BCC3F200E1DA2F /* HUMarkupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852014BCC3F200E1DA2F /* HUMarkupNode.m */; };
+		EC61852E14BCC3F200E1DA2F /* HUMarkupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852014BCC3F200E1DA2F /* HUMarkupNode.m */; };
+		EC61852F14BCC3F200E1DA2F /* NSScanner+HierarchicalScan.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852214BCC3F200E1DA2F /* NSScanner+HierarchicalScan.m */; };
+		EC61853014BCC3F200E1DA2F /* NSScanner+HierarchicalScan.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852214BCC3F200E1DA2F /* NSScanner+HierarchicalScan.m */; };
+		EC61853114BCC3F200E1DA2F /* NSString+ParsingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852414BCC3F200E1DA2F /* NSString+ParsingHelper.m */; };
+		EC61853214BCC3F200E1DA2F /* NSString+ParsingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852414BCC3F200E1DA2F /* NSString+ParsingHelper.m */; };
 		EC6B5A1614BBE9D40016D910 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1514BBE9D40016D910 /* UIKit.framework */; };
 		EC6B5A1814BBE9D40016D910 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
 		EC6B5A1A14BBE9D40016D910 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1914BBE9D40016D910 /* CoreGraphics.framework */; };
 		EC6B5A2014BBE9D40016D910 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC6B5A1E14BBE9D40016D910 /* InfoPlist.strings */; };
 		EC6B5A2214BBE9D40016D910 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EC6B5A2114BBE9D40016D910 /* main.m */; };
 		EC6B5A2614BBE9D40016D910 /* HUAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EC6B5A2514BBE9D40016D910 /* HUAppDelegate.m */; };
-		EC6B5A2E14BBE9D50016D910 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A2D14BBE9D50016D910 /* SenTestingKit.framework */; };
-		EC6B5A2F14BBE9D50016D910 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1514BBE9D40016D910 /* UIKit.framework */; };
-		EC6B5A3014BBE9D50016D910 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
-		EC6B5A3814BBE9D50016D910 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC6B5A3614BBE9D50016D910 /* InfoPlist.strings */; };
-		EC6B5A3B14BBE9D50016D910 /* HUFancyTextDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EC6B5A3A14BBE9D50016D910 /* HUFancyTextDemoTests.m */; };
 		ECB1361414BC0D600036EA1C /* HUDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ECB1361314BC0D600036EA1C /* HUDemoViewController.m */; };
-		ECFDC58614BBEBCC0084F4CB /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC57914BBEBCC0084F4CB /* GTMNSString+HTML.m */; };
-		ECFDC58714BBEBCC0084F4CB /* HUFancyText.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC57B14BBEBCC0084F4CB /* HUFancyText.m */; };
-		ECFDC58814BBEBCC0084F4CB /* HUFancyTextDefines.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC57D14BBEBCC0084F4CB /* HUFancyTextDefines.m */; };
-		ECFDC58914BBEBCC0084F4CB /* HUFancyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC57F14BBEBCC0084F4CB /* HUFancyTextView.m */; };
-		ECFDC58A14BBEBCC0084F4CB /* HUMarkupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC58114BBEBCC0084F4CB /* HUMarkupNode.m */; };
-		ECFDC58B14BBEBCC0084F4CB /* NSScanner+HierarchicalScan.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC58314BBEBCC0084F4CB /* NSScanner+HierarchicalScan.m */; };
-		ECFDC58C14BBEBCC0084F4CB /* NSString+ParsingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC58514BBEBCC0084F4CB /* NSString+ParsingHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		EC6B5A3114BBE9D50016D910 /* PBXContainerItemProxy */ = {
+		ECD70E4614BCC6820008AB53 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EC6B5A0814BBE9D40016D910 /* Project object */;
 			proxyType = 1;
@@ -39,6 +48,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EC3A594314BCE619005CB196 /* HUStringParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUStringParserTest.m; sourceTree = "<group>"; };
+		EC61850214BCC17500E1DA2F /* HUFancyTextTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HUFancyTextTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC61850814BCC17500E1DA2F /* HUFancyTextTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HUFancyTextTest-Info.plist"; sourceTree = "<group>"; };
+		EC61850A14BCC17500E1DA2F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EC61850D14BCC17500E1DA2F /* HUFancyTextTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HUFancyTextTest.m; sourceTree = "<group>"; };
+		EC61850F14BCC17500E1DA2F /* HUFancyTextTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HUFancyTextTest-Prefix.pch"; sourceTree = "<group>"; };
+		EC61851614BCC3F200E1DA2F /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		EC61851714BCC3F200E1DA2F /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		EC61851814BCC3F200E1DA2F /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
+		EC61851914BCC3F200E1DA2F /* HUFancyText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUFancyText.h; sourceTree = "<group>"; };
+		EC61851A14BCC3F200E1DA2F /* HUFancyText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUFancyText.m; sourceTree = "<group>"; };
+		EC61851B14BCC3F200E1DA2F /* HUFancyTextDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUFancyTextDefines.h; sourceTree = "<group>"; };
+		EC61851C14BCC3F200E1DA2F /* HUFancyTextDefines.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUFancyTextDefines.m; sourceTree = "<group>"; };
+		EC61851D14BCC3F200E1DA2F /* HUFancyTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUFancyTextView.h; sourceTree = "<group>"; };
+		EC61851E14BCC3F200E1DA2F /* HUFancyTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUFancyTextView.m; sourceTree = "<group>"; };
+		EC61851F14BCC3F200E1DA2F /* HUMarkupNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUMarkupNode.h; sourceTree = "<group>"; };
+		EC61852014BCC3F200E1DA2F /* HUMarkupNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUMarkupNode.m; sourceTree = "<group>"; };
+		EC61852114BCC3F200E1DA2F /* NSScanner+HierarchicalScan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSScanner+HierarchicalScan.h"; sourceTree = "<group>"; };
+		EC61852214BCC3F200E1DA2F /* NSScanner+HierarchicalScan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSScanner+HierarchicalScan.m"; sourceTree = "<group>"; };
+		EC61852314BCC3F200E1DA2F /* NSString+ParsingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ParsingHelper.h"; sourceTree = "<group>"; };
+		EC61852414BCC3F200E1DA2F /* NSString+ParsingHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ParsingHelper.m"; sourceTree = "<group>"; };
 		EC6B5A1114BBE9D40016D910 /* HUFancyTextDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUFancyTextDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC6B5A1514BBE9D40016D910 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		EC6B5A1714BBE9D40016D910 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -49,32 +79,23 @@
 		EC6B5A2314BBE9D40016D910 /* HUFancyTextDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HUFancyTextDemo-Prefix.pch"; sourceTree = "<group>"; };
 		EC6B5A2414BBE9D40016D910 /* HUAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HUAppDelegate.h; sourceTree = "<group>"; };
 		EC6B5A2514BBE9D40016D910 /* HUAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HUAppDelegate.m; sourceTree = "<group>"; };
-		EC6B5A2C14BBE9D50016D910 /* HUFancyTextDemoTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HUFancyTextDemoTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC6B5A2D14BBE9D50016D910 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		EC6B5A3514BBE9D50016D910 /* HUFancyTextDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HUFancyTextDemoTests-Info.plist"; sourceTree = "<group>"; };
-		EC6B5A3714BBE9D50016D910 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		EC6B5A3914BBE9D50016D910 /* HUFancyTextDemoTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HUFancyTextDemoTests.h; sourceTree = "<group>"; };
-		EC6B5A3A14BBE9D50016D910 /* HUFancyTextDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HUFancyTextDemoTests.m; sourceTree = "<group>"; };
 		ECB1361214BC0D600036EA1C /* HUDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDemoViewController.h; sourceTree = "<group>"; };
 		ECB1361314BC0D600036EA1C /* HUDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUDemoViewController.m; sourceTree = "<group>"; };
-		ECFDC57714BBEBCC0084F4CB /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
-		ECFDC57814BBEBCC0084F4CB /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
-		ECFDC57914BBEBCC0084F4CB /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
-		ECFDC57A14BBEBCC0084F4CB /* HUFancyText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUFancyText.h; sourceTree = "<group>"; };
-		ECFDC57B14BBEBCC0084F4CB /* HUFancyText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUFancyText.m; sourceTree = "<group>"; };
-		ECFDC57C14BBEBCC0084F4CB /* HUFancyTextDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUFancyTextDefines.h; sourceTree = "<group>"; };
-		ECFDC57D14BBEBCC0084F4CB /* HUFancyTextDefines.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUFancyTextDefines.m; sourceTree = "<group>"; };
-		ECFDC57E14BBEBCC0084F4CB /* HUFancyTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUFancyTextView.h; sourceTree = "<group>"; };
-		ECFDC57F14BBEBCC0084F4CB /* HUFancyTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUFancyTextView.m; sourceTree = "<group>"; };
-		ECFDC58014BBEBCC0084F4CB /* HUMarkupNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUMarkupNode.h; sourceTree = "<group>"; };
-		ECFDC58114BBEBCC0084F4CB /* HUMarkupNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUMarkupNode.m; sourceTree = "<group>"; };
-		ECFDC58214BBEBCC0084F4CB /* NSScanner+HierarchicalScan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSScanner+HierarchicalScan.h"; sourceTree = "<group>"; };
-		ECFDC58314BBEBCC0084F4CB /* NSScanner+HierarchicalScan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSScanner+HierarchicalScan.m"; sourceTree = "<group>"; };
-		ECFDC58414BBEBCC0084F4CB /* NSString+ParsingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ParsingHelper.h"; sourceTree = "<group>"; };
-		ECFDC58514BBEBCC0084F4CB /* NSString+ParsingHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ParsingHelper.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		EC6184FE14BCC17500E1DA2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC61851314BCC23E00E1DA2F /* CoreGraphics.framework in Frameworks */,
+				EC61850314BCC17500E1DA2F /* SenTestingKit.framework in Frameworks */,
+				EC61850414BCC17500E1DA2F /* UIKit.framework in Frameworks */,
+				EC61850514BCC17500E1DA2F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EC6B5A0E14BBE9D40016D910 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -85,25 +106,65 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EC6B5A2814BBE9D50016D910 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EC6B5A2E14BBE9D50016D910 /* SenTestingKit.framework in Frameworks */,
-				EC6B5A2F14BBE9D50016D910 /* UIKit.framework in Frameworks */,
-				EC6B5A3014BBE9D50016D910 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EC61850614BCC17500E1DA2F /* HUFancyTextTest */ = {
+			isa = PBXGroup;
+			children = (
+				EC61850D14BCC17500E1DA2F /* HUFancyTextTest.m */,
+				EC3A594314BCE619005CB196 /* HUStringParserTest.m */,
+				EC61850714BCC17500E1DA2F /* Supporting Files */,
+			);
+			path = HUFancyTextTest;
+			sourceTree = "<group>";
+		};
+		EC61850714BCC17500E1DA2F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EC61850814BCC17500E1DA2F /* HUFancyTextTest-Info.plist */,
+				EC61850914BCC17500E1DA2F /* InfoPlist.strings */,
+				EC61850F14BCC17500E1DA2F /* HUFancyTextTest-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EC61851414BCC3F200E1DA2F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				EC61851514BCC3F200E1DA2F /* GTM */,
+				EC61851914BCC3F200E1DA2F /* HUFancyText.h */,
+				EC61851A14BCC3F200E1DA2F /* HUFancyText.m */,
+				EC61851B14BCC3F200E1DA2F /* HUFancyTextDefines.h */,
+				EC61851C14BCC3F200E1DA2F /* HUFancyTextDefines.m */,
+				EC61851D14BCC3F200E1DA2F /* HUFancyTextView.h */,
+				EC61851E14BCC3F200E1DA2F /* HUFancyTextView.m */,
+				EC61851F14BCC3F200E1DA2F /* HUMarkupNode.h */,
+				EC61852014BCC3F200E1DA2F /* HUMarkupNode.m */,
+				EC61852114BCC3F200E1DA2F /* NSScanner+HierarchicalScan.h */,
+				EC61852214BCC3F200E1DA2F /* NSScanner+HierarchicalScan.m */,
+				EC61852314BCC3F200E1DA2F /* NSString+ParsingHelper.h */,
+				EC61852414BCC3F200E1DA2F /* NSString+ParsingHelper.m */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		EC61851514BCC3F200E1DA2F /* GTM */ = {
+			isa = PBXGroup;
+			children = (
+				EC61851614BCC3F200E1DA2F /* GTMDefines.h */,
+				EC61851714BCC3F200E1DA2F /* GTMNSString+HTML.h */,
+				EC61851814BCC3F200E1DA2F /* GTMNSString+HTML.m */,
+			);
+			path = GTM;
+			sourceTree = "<group>";
+		};
 		EC6B5A0614BBE9D40016D910 = {
 			isa = PBXGroup;
 			children = (
 				ECFDC57314BBEB950084F4CB /* HUSFT */,
 				EC6B5A1B14BBE9D40016D910 /* HUFancyTextDemo */,
-				EC6B5A3314BBE9D50016D910 /* HUFancyTextDemoTests */,
+				EC61850614BCC17500E1DA2F /* HUFancyTextTest */,
 				EC6B5A1414BBE9D40016D910 /* Frameworks */,
 				EC6B5A1214BBE9D40016D910 /* Products */,
 			);
@@ -113,7 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				EC6B5A1114BBE9D40016D910 /* HUFancyTextDemo.app */,
-				EC6B5A2C14BBE9D50016D910 /* HUFancyTextDemoTests.octest */,
+				EC61850214BCC17500E1DA2F /* HUFancyTextTest.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -152,66 +213,36 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		EC6B5A3314BBE9D50016D910 /* HUFancyTextDemoTests */ = {
-			isa = PBXGroup;
-			children = (
-				EC6B5A3914BBE9D50016D910 /* HUFancyTextDemoTests.h */,
-				EC6B5A3A14BBE9D50016D910 /* HUFancyTextDemoTests.m */,
-				EC6B5A3414BBE9D50016D910 /* Supporting Files */,
-			);
-			path = HUFancyTextDemoTests;
-			sourceTree = "<group>";
-		};
-		EC6B5A3414BBE9D50016D910 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				EC6B5A3514BBE9D50016D910 /* HUFancyTextDemoTests-Info.plist */,
-				EC6B5A3614BBE9D50016D910 /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		ECFDC57314BBEB950084F4CB /* HUSFT */ = {
 			isa = PBXGroup;
 			children = (
-				ECFDC57514BBEBCC0084F4CB /* src */,
+				EC61851414BCC3F200E1DA2F /* src */,
 			);
 			name = HUSFT;
-			sourceTree = "<group>";
-		};
-		ECFDC57514BBEBCC0084F4CB /* src */ = {
-			isa = PBXGroup;
-			children = (
-				ECFDC57614BBEBCC0084F4CB /* GTM */,
-				ECFDC57C14BBEBCC0084F4CB /* HUFancyTextDefines.h */,
-				ECFDC57D14BBEBCC0084F4CB /* HUFancyTextDefines.m */,
-				ECFDC57A14BBEBCC0084F4CB /* HUFancyText.h */,
-				ECFDC57B14BBEBCC0084F4CB /* HUFancyText.m */,
-				ECFDC57E14BBEBCC0084F4CB /* HUFancyTextView.h */,
-				ECFDC57F14BBEBCC0084F4CB /* HUFancyTextView.m */,
-				ECFDC58014BBEBCC0084F4CB /* HUMarkupNode.h */,
-				ECFDC58114BBEBCC0084F4CB /* HUMarkupNode.m */,
-				ECFDC58214BBEBCC0084F4CB /* NSScanner+HierarchicalScan.h */,
-				ECFDC58314BBEBCC0084F4CB /* NSScanner+HierarchicalScan.m */,
-				ECFDC58414BBEBCC0084F4CB /* NSString+ParsingHelper.h */,
-				ECFDC58514BBEBCC0084F4CB /* NSString+ParsingHelper.m */,
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
-		ECFDC57614BBEBCC0084F4CB /* GTM */ = {
-			isa = PBXGroup;
-			children = (
-				ECFDC57714BBEBCC0084F4CB /* GTMDefines.h */,
-				ECFDC57814BBEBCC0084F4CB /* GTMNSString+HTML.h */,
-				ECFDC57914BBEBCC0084F4CB /* GTMNSString+HTML.m */,
-			);
-			path = GTM;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		EC61850114BCC17500E1DA2F /* HUFancyTextTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EC61851014BCC17500E1DA2F /* Build configuration list for PBXNativeTarget "HUFancyTextTest" */;
+			buildPhases = (
+				EC6184FD14BCC17500E1DA2F /* Sources */,
+				EC6184FE14BCC17500E1DA2F /* Frameworks */,
+				EC6184FF14BCC17500E1DA2F /* Resources */,
+				EC61850014BCC17500E1DA2F /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ECD70E4714BCC6820008AB53 /* PBXTargetDependency */,
+			);
+			name = HUFancyTextTest;
+			productName = HUFancyTextTest;
+			productReference = EC61850214BCC17500E1DA2F /* HUFancyTextTest.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		EC6B5A1014BBE9D40016D910 /* HUFancyTextDemo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EC6B5A3E14BBE9D50016D910 /* Build configuration list for PBXNativeTarget "HUFancyTextDemo" */;
@@ -228,25 +259,6 @@
 			productName = HUFancyTextDemo;
 			productReference = EC6B5A1114BBE9D40016D910 /* HUFancyTextDemo.app */;
 			productType = "com.apple.product-type.application";
-		};
-		EC6B5A2B14BBE9D50016D910 /* HUFancyTextDemoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = EC6B5A4114BBE9D50016D910 /* Build configuration list for PBXNativeTarget "HUFancyTextDemoTests" */;
-			buildPhases = (
-				EC6B5A2714BBE9D50016D910 /* Sources */,
-				EC6B5A2814BBE9D50016D910 /* Frameworks */,
-				EC6B5A2914BBE9D50016D910 /* Resources */,
-				EC6B5A2A14BBE9D50016D910 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				EC6B5A3214BBE9D50016D910 /* PBXTargetDependency */,
-			);
-			name = HUFancyTextDemoTests;
-			productName = HUFancyTextDemoTests;
-			productReference = EC6B5A2C14BBE9D50016D910 /* HUFancyTextDemoTests.octest */;
-			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -270,12 +282,20 @@
 			projectRoot = "";
 			targets = (
 				EC6B5A1014BBE9D40016D910 /* HUFancyTextDemo */,
-				EC6B5A2B14BBE9D50016D910 /* HUFancyTextDemoTests */,
+				EC61850114BCC17500E1DA2F /* HUFancyTextTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		EC6184FF14BCC17500E1DA2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC61850B14BCC17500E1DA2F /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EC6B5A0F14BBE9D40016D910 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -284,18 +304,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EC6B5A2914BBE9D50016D910 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EC6B5A3814BBE9D50016D910 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		EC6B5A2A14BBE9D50016D910 /* ShellScript */ = {
+		EC61850014BCC17500E1DA2F /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -311,42 +323,58 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		EC6184FD14BCC17500E1DA2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC61850E14BCC17500E1DA2F /* HUFancyTextTest.m in Sources */,
+				EC61852614BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */,
+				EC61852814BCC3F200E1DA2F /* HUFancyText.m in Sources */,
+				EC61852A14BCC3F200E1DA2F /* HUFancyTextDefines.m in Sources */,
+				EC61852C14BCC3F200E1DA2F /* HUFancyTextView.m in Sources */,
+				EC61852E14BCC3F200E1DA2F /* HUMarkupNode.m in Sources */,
+				EC61853014BCC3F200E1DA2F /* NSScanner+HierarchicalScan.m in Sources */,
+				EC61853214BCC3F200E1DA2F /* NSString+ParsingHelper.m in Sources */,
+				EC3A594414BCE61A005CB196 /* HUStringParserTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EC6B5A0D14BBE9D40016D910 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				EC6B5A2214BBE9D40016D910 /* main.m in Sources */,
 				EC6B5A2614BBE9D40016D910 /* HUAppDelegate.m in Sources */,
-				ECFDC58614BBEBCC0084F4CB /* GTMNSString+HTML.m in Sources */,
-				ECFDC58714BBEBCC0084F4CB /* HUFancyText.m in Sources */,
-				ECFDC58814BBEBCC0084F4CB /* HUFancyTextDefines.m in Sources */,
-				ECFDC58914BBEBCC0084F4CB /* HUFancyTextView.m in Sources */,
-				ECFDC58A14BBEBCC0084F4CB /* HUMarkupNode.m in Sources */,
-				ECFDC58B14BBEBCC0084F4CB /* NSScanner+HierarchicalScan.m in Sources */,
-				ECFDC58C14BBEBCC0084F4CB /* NSString+ParsingHelper.m in Sources */,
 				ECB1361414BC0D600036EA1C /* HUDemoViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EC6B5A2714BBE9D50016D910 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EC6B5A3B14BBE9D50016D910 /* HUFancyTextDemoTests.m in Sources */,
+				EC61852514BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */,
+				EC61852714BCC3F200E1DA2F /* HUFancyText.m in Sources */,
+				EC61852914BCC3F200E1DA2F /* HUFancyTextDefines.m in Sources */,
+				EC61852B14BCC3F200E1DA2F /* HUFancyTextView.m in Sources */,
+				EC61852D14BCC3F200E1DA2F /* HUMarkupNode.m in Sources */,
+				EC61852F14BCC3F200E1DA2F /* NSScanner+HierarchicalScan.m in Sources */,
+				EC61853114BCC3F200E1DA2F /* NSString+ParsingHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		EC6B5A3214BBE9D50016D910 /* PBXTargetDependency */ = {
+		ECD70E4714BCC6820008AB53 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EC6B5A1014BBE9D40016D910 /* HUFancyTextDemo */;
-			targetProxy = EC6B5A3114BBE9D50016D910 /* PBXContainerItemProxy */;
+			targetProxy = ECD70E4614BCC6820008AB53 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		EC61850914BCC17500E1DA2F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EC61850A14BCC17500E1DA2F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		EC6B5A1E14BBE9D40016D910 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -355,17 +383,47 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		EC6B5A3614BBE9D50016D910 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				EC6B5A3714BBE9D50016D910 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		EC61851114BCC17500E1DA2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HUFancyTextDemo.app/HUFancyTextDemo";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HUFancyTextTest/HUFancyTextTest-Prefix.pch";
+				INFOPLIST_FILE = "HUFancyTextTest/HUFancyTextTest-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER) ";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		EC61851214BCC17500E1DA2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HUFancyTextDemo.app/HUFancyTextDemo";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HUFancyTextTest/HUFancyTextTest-Prefix.pch";
+				INFOPLIST_FILE = "HUFancyTextTest/HUFancyTextTest-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER) ";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
 		EC6B5A3C14BBE9D50016D910 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -435,43 +493,18 @@
 			};
 			name = Release;
 		};
-		EC6B5A4214BBE9D50016D910 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HUFancyTextDemo.app/HUFancyTextDemo";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "HUFancyTextDemo/HUFancyTextDemo-Prefix.pch";
-				INFOPLIST_FILE = "HUFancyTextDemoTests/HUFancyTextDemoTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		EC6B5A4314BBE9D50016D910 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HUFancyTextDemo.app/HUFancyTextDemo";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "HUFancyTextDemo/HUFancyTextDemo-Prefix.pch";
-				INFOPLIST_FILE = "HUFancyTextDemoTests/HUFancyTextDemoTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		EC61851014BCC17500E1DA2F /* Build configuration list for PBXNativeTarget "HUFancyTextTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EC61851114BCC17500E1DA2F /* Debug */,
+				EC61851214BCC17500E1DA2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EC6B5A0B14BBE9D40016D910 /* Build configuration list for PBXProject "HUFancyTextDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -486,15 +519,6 @@
 			buildConfigurations = (
 				EC6B5A3F14BBE9D50016D910 /* Debug */,
 				EC6B5A4014BBE9D50016D910 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		EC6B5A4114BBE9D50016D910 /* Build configuration list for PBXNativeTarget "HUFancyTextDemoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EC6B5A4214BBE9D50016D910 /* Debug */,
-				EC6B5A4314BBE9D50016D910 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

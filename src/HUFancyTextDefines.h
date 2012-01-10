@@ -10,7 +10,7 @@
 #define i2_HUFancyTextDefines_h
 
 
-#warning Please set the ARC_ENABLED flag according your situation. Comment out this line once you read and understand this so that the warning will be disabled.
+//#warning Please set the ARC_ENABLED flag according your situation. Comment out this line once you read and understand this so that the warning will be disabled.
 
 // Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
  #define ARC_ENABLED 1
