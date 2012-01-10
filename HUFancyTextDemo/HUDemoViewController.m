@@ -55,13 +55,6 @@ CGFloat const maxHeight = 1000;
     
     HUFancyText* fancyText = [[HUFancyText alloc] initWithMarkupText:text];
     [fancyText appendStyleSheet: @".right{text-align: right}"];
-    
-    //    [ft2 changeStylesToClass:@"yellow"
-    //                          on:HUFancyTextClass
-    //                    withName:@"green"
-    //     ];
-    //    NSLog(@"tree 2: %@", [ft2.parseStructure displayTree]);
-    //    [ft2 removeID: @"eee"];
     [fancyText changeNodeToStyledText:@"New <span class=green>Text</span> has been <span class=green>added</span>." forID:@"abc"];
     
     void(^drawStarBlock) (CGRect) = ^(CGRect rect) {

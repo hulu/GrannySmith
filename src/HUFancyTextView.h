@@ -13,7 +13,7 @@
 
 /// The view class
 /// based on HUFancyText model.
-/// Added features include: setting accessibility lable, update view frame height based on content height, etc
+/// Added features include: setting accessibility lable, auto-resizing, updating view frame height based on content height, etc
 
 @interface HUFancyTextView : UIView {
     HUFancyText* fancyText_;
