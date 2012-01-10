@@ -9,7 +9,10 @@
 #ifndef i2_HUFancyTextDefines_h
 #define i2_HUFancyTextDefines_h
 
-// Uncomment the following line if ARC is enabled
+
+#warning Please set the ARC_ENABLED flag according your situation. Comment out this line once you read and understand it so that the warning will be disabled.
+
+// Comment the following line if ARC is enabled. Uncomment it
  #define ARC_ENABLED 1
 
 

@@ -18,6 +18,11 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    demoViewController_ = [[HUDemoViewController alloc] init];
+    demoViewController_.view.frame = self.window.bounds;
+    [self.window addSubview:demoViewController_.view];
+    
     return YES;
 }
 

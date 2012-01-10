@@ -32,6 +32,12 @@
     HUMarkupNode* parsedTree_; // root of the parsed result (in tree structure). ready after parseStructure
 }
 
+@property (nonatomic, retain) NSMutableDictionary* style;
+@property (nonatomic, retain) NSString* text;
+@property (nonatomic, assign) CGFloat width;
+@property (nonatomic, assign) CGFloat maxHeight;
+
+
 /** initialize with a markup text (unparsed), a CSS dictionary (obtained with parsedCSS method), a width, and a maxHeight
  * @note this is the most low level initialization method.
  */
@@ -100,11 +106,9 @@
 - (void)setBlock:(void(^)(CGRect))drawingBlock forLambdaID:(NSString*)lambdaID;
 
 
-@property (nonatomic, retain) NSMutableDictionary* style;
-@property (nonatomic, retain) NSString* text;
-@property (nonatomic, assign) CGFloat width;
-@property (nonatomic, assign) CGFloat maxHeight;
-
+///---------------
+/// @name styles
+///---------------
 
 /** Parse a style sheet string and set it as the global default style 
  */

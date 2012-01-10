@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HUDemoViewController.h"
 
-@interface HUAppDelegate : UIResponder <UIApplicationDelegate>
+@interface HUAppDelegate : UIResponder <UIApplicationDelegate> {
+    HUDemoViewController* demoViewController_;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 

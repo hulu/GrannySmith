@@ -12,6 +12,7 @@
 
 @synthesize contentHeight = contentHeight_;
 @synthesize fancyText = fancyText_;
+@synthesize matchFrameHeightToContent = matchFrameHeightToContent_;
 
 #ifdef ARC_ENABLED
 #else
@@ -27,6 +28,7 @@
         fancyText_.width = frame.size.width;
         contentHeight_ = 0.f;
         self.backgroundColor = [UIColor clearColor];
+        matchFrameHeightToContent_ = NO;
     }
     return self;
 }
@@ -37,13 +39,19 @@
 }
 
 
-
-
-
 - (void)updateAccessibilityLabel {
     self.isAccessibilityElement = YES;
     NSString* pureText = [fancyText_ pureText];
     self.accessibilityLabel = pureText;
+}
+
+- (void)updateWithCurrentFrame {
+    self.fancyText.width = self.frame.size.width;
+    [self.fancyText generateLines];
+    if (matchFrameHeightToContent_) {
+        [self setFrameHeightToContentHeight];
+    }
+    [self setNeedsDisplay];
 }
 
 - (void)setFrameHeightToContentHeight {

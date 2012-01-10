@@ -18,6 +18,7 @@
 		EC6B5A3014BBE9D50016D910 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
 		EC6B5A3814BBE9D50016D910 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC6B5A3614BBE9D50016D910 /* InfoPlist.strings */; };
 		EC6B5A3B14BBE9D50016D910 /* HUFancyTextDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EC6B5A3A14BBE9D50016D910 /* HUFancyTextDemoTests.m */; };
+		ECB1361414BC0D600036EA1C /* HUDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ECB1361314BC0D600036EA1C /* HUDemoViewController.m */; };
 		ECFDC58614BBEBCC0084F4CB /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC57914BBEBCC0084F4CB /* GTMNSString+HTML.m */; };
 		ECFDC58714BBEBCC0084F4CB /* HUFancyText.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC57B14BBEBCC0084F4CB /* HUFancyText.m */; };
 		ECFDC58814BBEBCC0084F4CB /* HUFancyTextDefines.m in Sources */ = {isa = PBXBuildFile; fileRef = ECFDC57D14BBEBCC0084F4CB /* HUFancyTextDefines.m */; };
@@ -54,6 +55,8 @@
 		EC6B5A3714BBE9D50016D910 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EC6B5A3914BBE9D50016D910 /* HUFancyTextDemoTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HUFancyTextDemoTests.h; sourceTree = "<group>"; };
 		EC6B5A3A14BBE9D50016D910 /* HUFancyTextDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HUFancyTextDemoTests.m; sourceTree = "<group>"; };
+		ECB1361214BC0D600036EA1C /* HUDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDemoViewController.h; sourceTree = "<group>"; };
+		ECB1361314BC0D600036EA1C /* HUDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUDemoViewController.m; sourceTree = "<group>"; };
 		ECFDC57714BBEBCC0084F4CB /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		ECFDC57814BBEBCC0084F4CB /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		ECFDC57914BBEBCC0084F4CB /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
@@ -131,6 +134,8 @@
 			children = (
 				EC6B5A2414BBE9D40016D910 /* HUAppDelegate.h */,
 				EC6B5A2514BBE9D40016D910 /* HUAppDelegate.m */,
+				ECB1361214BC0D600036EA1C /* HUDemoViewController.h */,
+				ECB1361314BC0D600036EA1C /* HUDemoViewController.m */,
 				EC6B5A1C14BBE9D40016D910 /* Supporting Files */,
 			);
 			path = HUFancyTextDemo;
@@ -319,6 +324,7 @@
 				ECFDC58A14BBEBCC0084F4CB /* HUMarkupNode.m in Sources */,
 				ECFDC58B14BBEBCC0084F4CB /* NSScanner+HierarchicalScan.m in Sources */,
 				ECFDC58C14BBEBCC0084F4CB /* NSString+ParsingHelper.m in Sources */,
+				ECB1361414BC0D600036EA1C /* HUDemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

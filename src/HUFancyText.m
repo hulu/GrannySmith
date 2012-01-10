@@ -106,7 +106,6 @@ static int lineID_ = 1;
         self.text = text;
         contentHeight_ = 0.f;
         lambdaBlocks_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
-        // we don't calculate upon init. Because the right width might not be determined yet.
     }
     return self;
 }
@@ -1080,8 +1079,7 @@ typedef enum {
     else {
         SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%@Color", value]);
         if ([[UIColor class] respondsToSelector: sel]) {
-//            return [[UIColor class] performSelector:sel];
-            objc_msgSend([UIColor class], sel);
+            return objc_msgSend([UIColor class], sel);
         }
     }
     return [UIColor blackColor];
