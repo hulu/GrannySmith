@@ -1,0 +1,409 @@
+//
+//  HUMarkupNode.m
+//  i2
+//
+//  Created by Bao Lei on 1/4/12.
+//  Copyright (c) 2012 Hulu. All rights reserved.
+//
+
+#import "HUMarkupNode.h"
+#import "HUFancyText.h"
+
+@implementation HUMarkupNode
+
+@synthesize children = children_;
+@synthesize data = data_;
+@synthesize parent = parent_;
+
+@synthesize isContainer = isContainer_;
+@synthesize classesMap = classesMap_;
+@synthesize IDMap = IDMap_;
+
+- (id)init {
+    if (( self = [super init])) {
+        data_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+        children_ = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+        parent_ = nil;
+        isContainer_ = NO;
+        IDMap_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+        classesMap_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+    }
+    return self;
+}
+
+#ifdef ARC_ENABLED
+#else
+- (void)dealloc {
+    release(children_);
+    release(IDMap_);
+    release(classesMap_);
+    [super dealloc];
+}
+#endif
+
+- (void)appendChild:(HUMarkupNode*)node {
+    [children_ addObject:node];
+    node.parent = self;
+}
+
+- (void)appendSubtree:(HUMarkupNode*)subtreeRoot underNode:(HUMarkupNode*)node {
+    [node appendChild:subtreeRoot];
+    
+    // upstream: the ID, class hashmap
+    [self.IDMap setValuesForKeysWithDictionary:subtreeRoot.IDMap];
+
+    for (NSString* className in [subtreeRoot.classesMap allKeys]) {
+        NSArray* objects = [subtreeRoot.classesMap objectForKey:className];
+        for (HUMarkupNode* object in objects) {
+            [HUFancyText addObject:object intoDict:self.classesMap underKey:className];
+        }
+    }
+    
+    // downstream: the styles
+    // first prepare the styles to be applied, bottom up
+    NSMutableDictionary* stylesToPassDown = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+
+    HUMarkupNode* styleGroup = node;
+    while (styleGroup) {
+        
+        for (id key in [styleGroup.data allKeys]) {
+            id value = [styleGroup.data objectForKey: key];
+            if (value && ![stylesToPassDown objectForKey:key]) {
+                // set only when it wasn't set before. because lower level has higher priority
+                [stylesToPassDown setObject: value forKey:key];
+            }
+        }
+        
+        styleGroup = [styleGroup parent];
+    }
+    
+    // do something to let the new subtree have the styles
+    [subtreeRoot applyAndSpreadStyles:stylesToPassDown removeOldStyles:NO];
+    
+    release(stylesToPassDown);
+}
+
+
+- (NSString*)displayTree {
+    
+    NSMutableString* tree = [[NSMutableString alloc] init];
+    
+    NSMutableArray* stack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* indentStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    
+    [stack addObject:self];
+    [indentStack addObject:[NSNumber numberWithInt:0]];
+    
+    while ([stack count]) {
+        HUMarkupNode* node = [stack lastObject];
+        [stack removeLastObject];
+        int indent = [[indentStack lastObject] intValue];
+        [indentStack removeLastObject];
+        
+        for (int i=0; i<indent; i++) {
+            [tree appendString:@"  "];
+        }
+        NSString* text = [node.data objectForKey:HUFancyTextTextKey];
+        [tree appendString: text? text : @"*"];
+        if (!text) {
+            [tree appendFormat:@" (%p)", node];
+        }
+        [tree appendString:@"\n"];
+        
+        for (int i=node.children.count-1; i>=0; i--) {
+            HUMarkupNode* child = [node.children objectAtIndex:i];
+            [stack addObject: child];
+            [indentStack addObject: [NSNumber numberWithInt:(indent+1)]];
+        }
+    }
+    
+    release(stack);
+    release(indentStack);
+    
+    // also list the id, class map
+    for (id key in [self.IDMap allKeys]) {
+        [tree appendFormat:@"id %@ : %p\n", key, [self.IDMap objectForKey:key]];
+    }
+    
+    for (NSString* key in [self.classesMap allKeys]) {
+        [tree appendFormat:@"class %@ : ", key];
+        NSArray* nodes = [self.classesMap objectForKey:key];
+        for (HUMarkupNode* node in nodes) {
+            [tree appendFormat:@"%p ", node];
+        }
+        [tree appendFormat:@"\n"];
+    }
+    
+    return autoreleased(tree);
+}
+
+- (NSArray*)newDepthFirstOrderDataArray {
+    NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    
+    NSMutableArray* stack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    
+    [stack addObject:self];
+    
+    while ([stack count]) {
+        HUMarkupNode* node = [stack lastObject];
+        [stack removeLastObject];
+        
+        if (!node.isContainer) {
+            [array addObject:node.data];
+        }
+        for (int i=node.children.count-1; i>=0; i--) {
+            HUMarkupNode* child = [node.children objectAtIndex:i];
+            [stack addObject: child];
+        }
+    }
+    release(stack);
+    return array;
+}
+
+- (HUMarkupNode*)childNodeWithID:(NSString*)nodeID {
+    HUMarkupNode* node = [self.IDMap objectForKey:nodeID];
+    if (!node && [nodeID caseInsensitiveCompare:HUFancyTextRootID]==NSOrderedSame) {
+        node = self;
+    }
+    return node;
+}
+
+- (NSArray*)childrenNodesWithClassName:(NSString*)className {
+    return [self.classesMap objectForKey:className];
+}
+
+
+- (id)copy {
+    
+    HUMarkupNode* newGuy = [[HUMarkupNode alloc] init];
+
+    // new hashmaps for the newGuy (since it's copying, the address will be different, so the map should point to something different)
+    NSMutableDictionary* idMap = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];  // id must be unique, so the value is just an HUMarkupString node pointer
+    NSMutableDictionary* classesMap = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize]; // classes won't be unique, so the value is an array
+    
+    
+    NSMutableArray* oldTreeStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* newTreeStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    
+    [oldTreeStack addObject:self];
+    [newTreeStack addObject:newGuy];
+    
+    while ([oldTreeStack count]) {
+        HUMarkupNode* nodeInOldTree = [oldTreeStack lastObject];
+        [oldTreeStack removeLastObject];
+        
+        HUMarkupNode* nodeInNewTree = [newTreeStack lastObject];
+        [newTreeStack removeLastObject];
+        
+        // copy dictionary data
+        [nodeInNewTree.data setValuesForKeysWithDictionary:nodeInOldTree.data];
+        nodeInNewTree.isContainer = nodeInOldTree.isContainer;
+        
+        // then we have to manually update the hashmaps, based on the new tree node address
+        if (nodeInNewTree.isContainer) {
+            NSString* tagID = [nodeInNewTree.data objectForKey: HUFancyTextIDKey];
+            if (tagID) {
+                [idMap setObject:nodeInNewTree forKey:tagID];
+            }
+            NSArray* tagClassNames = [nodeInNewTree.data objectForKey: HUFancyTextClassKey];
+            if (tagClassNames) {
+                for (NSString* className in tagClassNames) {
+                    [HUFancyText addObject:nodeInNewTree intoDict:classesMap underKey:className];
+                }
+            }
+        }
+        NSString* lambdaID = [nodeInNewTree.data objectForKey: HUFancyTextInternalLambdaIDKey];
+        if (lambdaID) {
+            [idMap setObject:nodeInNewTree forKey:lambdaID];
+        }
+        
+        // create enough children for the new node
+        for (int i=0; i<nodeInOldTree.children.count; i++) {
+            HUMarkupNode* childForNewTree = [[HUMarkupNode alloc] init];
+            [nodeInNewTree appendChild: childForNewTree]; // declare child relation
+        }
+        
+        for (int i=nodeInOldTree.children.count-1; i>=0; i--) {
+            HUMarkupNode* childInOldTree = [nodeInOldTree.children objectAtIndex:i];
+            [oldTreeStack addObject: childInOldTree];
+            
+            HUMarkupNode* childInNewTree = [nodeInNewTree.children objectAtIndex:i];
+            [newTreeStack addObject: childInNewTree];
+        }
+    }
+    
+    release(oldTreeStack);
+    release(newTreeStack);
+    
+    newGuy.IDMap = idMap;
+    newGuy.classesMap = classesMap;
+    
+    release(idMap);
+    release(classesMap);
+    
+//    NSLog(@"tree (right after copying):\n%@", [newGuy displayTree]);
+    
+    return newGuy;
+}
+
+#pragma mark - Modification
+
+- (void)cutFromParent {
+    [self.parent.children removeObject: self];
+    self.parent = nil;
+}
+
+- (void)dimissAllChildren {
+    for (HUMarkupNode* child in self.children) {
+        child.parent = nil;
+    }
+    [self.children removeAllObjects];
+}
+
+- (void)resetChildToText:(NSString*)text {
+    // for performance considerations, we do this in this way:
+    // 1. if there is a text node under this node, we just replace the text of that node, and remove all other nodes. E.g. <span>abc<span>12</span><span>34</span></span>, just replace the abc text and cut 12, 34
+    // 2. otherwise, remove all text children (lambda not included) and add the text node. E.g. <span><span>1</span><span>2</span></span>
+    BOOL found = NO;
+    for (int i=self.children.count-1; i>=0; i--) {
+        HUMarkupNode* child = [self.children objectAtIndex:i];
+        if (!found && [child.data objectForKey:HUFancyTextTextKey] && !child.children.count) {
+            [child.data setObject:text forKey:HUFancyTextTextKey];
+            // just change the text and leave other styles
+            found = YES;
+        }
+        else {
+            if (![[child.data allKeys] containsObject:HUFancyTextInternalLambdaIDKey]) {
+                [child cutFromParent];
+            }
+        }
+    }
+    
+    if (!found) {
+        HUMarkupNode* newChild = [[HUMarkupNode alloc] init];
+        [newChild.data setValuesForKeysWithDictionary:self.data];
+        [newChild.data setObject:text forKey:HUFancyTextTextKey];
+        [self appendChild:newChild];
+        release(newChild);
+    }
+    
+}
+
+- (void)applyAndSpreadStyles:(NSMutableDictionary*)styles removeOldStyles:(BOOL)removeOldStyles; {
+    
+    NSMutableArray* stylesToRemove;
+    
+    // first apply the changes to the root node
+    if (removeOldStyles) {
+        stylesToRemove = [[NSMutableArray alloc] initWithCapacity:[self.data allKeys].count];
+        for (NSString* key in [self.data allKeys]) {
+            [self.data removeObjectForKey:key];
+            [stylesToRemove addObject:key];
+        }
+    }
+    [self.data setValuesForKeysWithDictionary:styles];
+    
+    // a DFS traversal to apply the styles to children and grandchildren etc
+    // but a class node will block the penetration
+    
+    NSMutableArray* stack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* styleStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* stylesToRemoveStack;
+    
+    [stack addObject:self];
+    [styleStack addObject:styles];
+    
+    if (removeOldStyles) {
+        stylesToRemoveStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+        [stylesToRemoveStack addObject: stylesToRemove];
+        autorelease(stylesToRemove); // can only autorelease because we need to use this object after popping it out of the stack
+        
+        if (!stylesToRemove.count) {
+            removeOldStyles = NO; // if there's nothing necessary to remove, just don't bother checking every time
+        }
+    }
+    
+    while ([stack count]) {
+        HUMarkupNode* node = [stack lastObject];
+        [stack removeLastObject];
+        
+        NSMutableDictionary* stylesForThisNode = [styleStack lastObject];
+        [styleStack removeLastObject];
+        
+        NSMutableArray* stylesToRemoveForThisNode;
+        if (removeOldStyles) {
+            stylesToRemoveForThisNode = [stylesToRemoveStack lastObject];
+            [stylesToRemoveStack removeLastObject];
+//            NSLog(@"popped styles to remove: %@", stylesToRemoveForThisNode);
+        }
+        
+        if (!node.children.count) {
+            // don't apply styles to class nodes
+            // just apply to leaf nodes (text segments)
+            
+            if (removeOldStyles) {
+                for (id key in stylesToRemoveForThisNode) {
+                    [node.data removeObjectForKey:key];
+                }
+            }
+            
+            [node.data setValuesForKeysWithDictionary:stylesForThisNode];
+            [HUFancyText createFontKeyForDict:node.data];
+        }
+        
+        for (int i=node.children.count-1; i>=0; i--) {
+            HUMarkupNode* child = [node.children objectAtIndex:i];
+
+            NSMutableDictionary* stylesForTheChild = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+            NSMutableArray* stylesToRemoveForChild;
+            
+            if (removeOldStyles) {
+                stylesToRemoveForChild = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+            }
+            
+            if (!child.children.count) {
+                // if it's a leaf node,  pass all styles
+                [stylesForTheChild setValuesForKeysWithDictionary:stylesForThisNode];
+                
+                if (removeOldStyles) {
+//                    NSLog(@"styles to remove for child: %@", stylesToRemoveForChild);
+//                    NSLog(@"styles to remove for this node: %@", stylesToRemoveForThisNode);
+                    [stylesToRemoveForChild addObjectsFromArray:stylesToRemoveForThisNode];
+                }
+            }
+            else {
+                // if it's a class node, just pass the styles not overriden by the class
+                for (id key in [stylesForThisNode allKeys]) {
+                    if (! [child.data objectForKey:key]) {
+                        [stylesForTheChild setObject:[stylesForThisNode objectForKey:key] forKey:key];
+                    }
+                }
+                if (removeOldStyles) {
+                    for (id key in stylesToRemoveForThisNode) {
+                        if (! [child.data objectForKey:key]) {
+                            [stylesToRemoveForChild addObject:key];
+                        }
+                    }
+                }
+            }
+            
+            if ([stylesForTheChild allKeys].count || (removeOldStyles && stylesToRemoveForChild.count)) {
+                [stack addObject: child];
+                [styleStack addObject: stylesForTheChild];
+                if (removeOldStyles) {
+                    [stylesToRemoveStack addObject:stylesToRemoveForChild];
+                }
+            }
+            
+            // has to be auto released because later we need to pop the stylesForTheChild out of stack and use it. so can't release here
+            autorelease(stylesForTheChild);
+            if (removeOldStyles) {
+                autorelease(stylesToRemoveForChild);
+            }
+        }
+    }
+    release(stack);
+    release(styleStack);
+}
+
+@end
