@@ -32,6 +32,7 @@
     HUMarkupNode* parsedTree_; // root of the parsed result (in tree structure). ready after parseStructure
 }
 
+@property (nonatomic, retain) NSMutableDictionary* lambdaBlocks;
 @property (nonatomic, retain) NSMutableDictionary* style;
 @property (nonatomic, retain) NSString* text;
 @property (nonatomic, assign) CGFloat width;

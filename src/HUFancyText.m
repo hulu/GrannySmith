@@ -82,6 +82,7 @@ static int lineID_ = 1;
 
 @implementation HUFancyText
 
+@synthesize lambdaBlocks = lambdaBlocks_;
 @synthesize style = style_;
 @synthesize width = width_;
 @synthesize maxHeight = maxHeight_;
@@ -1670,6 +1671,36 @@ static NSMutableDictionary* fontMemory_;
     else {
         [array addObject:object];
     }
+}
+
+#pragma mark - copy
+
+/// @note: it will only copy user set info and parsing result, but not line generating result (including content height)
+- (id)copy {
+    // if the original one is parsed, then just copy the parsed result tree
+    HUFancyText* newFancyText;
+    if (self.parsedResultTree) {
+        HUMarkupNode* newTree = [self.parsedResultTree copy];
+        newFancyText = [[HUFancyText alloc] initWithParsedStructure:newTree];
+        release(newTree);
+    }
+    else {
+        NSString* newText = [self.text copy];
+        newFancyText = [[HUFancyText alloc] initWithMarkupText:newText];
+        release(newText);
+    }
+    newFancyText.width = self.width;
+    newFancyText.maxHeight = self.maxHeight;
+    
+    NSMutableDictionary* newStyle = [self.style copy];
+    newFancyText.style = newStyle;
+    release(newStyle);
+    
+    NSMutableDictionary* newlambdaBlocks = [self.lambdaBlocks copy];
+    newFancyText.lambdaBlocks = newlambdaBlocks;
+    release(newlambdaBlocks);
+ 
+    return newFancyText;
 }
 
 @end
