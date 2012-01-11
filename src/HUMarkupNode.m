@@ -253,7 +253,7 @@
     self.parent = nil;
 }
 
-- (void)dimissAllChildren {
+- (void)dismissAllChildren {
     for (HUMarkupNode* child in self.children) {
         child.parent = nil;
     }

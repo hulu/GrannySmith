@@ -34,6 +34,7 @@
 		EC6B5A2014BBE9D40016D910 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC6B5A1E14BBE9D40016D910 /* InfoPlist.strings */; };
 		EC6B5A2214BBE9D40016D910 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EC6B5A2114BBE9D40016D910 /* main.m */; };
 		EC6B5A2614BBE9D40016D910 /* HUAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EC6B5A2514BBE9D40016D910 /* HUAppDelegate.m */; };
+		EC785F8114BCFC7800D9DB6F /* HUMarkupNodeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC785F8014BCFC7800D9DB6F /* HUMarkupNodeTest.m */; };
 		ECB1361414BC0D600036EA1C /* HUDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ECB1361314BC0D600036EA1C /* HUDemoViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,7 @@
 		EC6B5A2414BBE9D40016D910 /* HUAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HUAppDelegate.h; sourceTree = "<group>"; };
 		EC6B5A2514BBE9D40016D910 /* HUAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HUAppDelegate.m; sourceTree = "<group>"; };
 		EC6B5A2D14BBE9D50016D910 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		EC785F8014BCFC7800D9DB6F /* HUMarkupNodeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUMarkupNodeTest.m; sourceTree = "<group>"; };
 		ECB1361214BC0D600036EA1C /* HUDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDemoViewController.h; sourceTree = "<group>"; };
 		ECB1361314BC0D600036EA1C /* HUDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUDemoViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,6 +116,7 @@
 			children = (
 				EC61850D14BCC17500E1DA2F /* HUFancyTextTest.m */,
 				EC3A594314BCE619005CB196 /* HUStringParserTest.m */,
+				EC785F8014BCFC7800D9DB6F /* HUMarkupNodeTest.m */,
 				EC61850714BCC17500E1DA2F /* Supporting Files */,
 			);
 			path = HUFancyTextTest;
@@ -336,6 +339,7 @@
 				EC61853014BCC3F200E1DA2F /* NSScanner+HierarchicalScan.m in Sources */,
 				EC61853214BCC3F200E1DA2F /* NSString+ParsingHelper.m in Sources */,
 				EC3A594414BCE61A005CB196 /* HUStringParserTest.m in Sources */,
+				EC785F8114BCFC7800D9DB6F /* HUMarkupNodeTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

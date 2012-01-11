@@ -62,6 +62,7 @@
 
 /** append a node into the children array
  * @note this also sets the parent of the child node
+ * @warning it only establishes child/parent relationship, but doesn't pass styles and hashmaps. So it's mainly used during construction stage.
  */
 - (void)appendChild:(HUMarkupNode*)node;
 
@@ -113,7 +114,7 @@
 /** Dismiss all children of this node
  * @discussion from user's point of view, this method has similar effect with cutFromParent, but if we call this one, later we still have a chance to add children into this node. cutFromParent is more thorough.
  */
-- (void)dimissAllChildren;
+- (void)dismissAllChildren;
 
 /** Reset the text under this node
  * @warning if there's any subtree under this node, it will be removed. After this call there will be only one text child note, plus the lambda nodes

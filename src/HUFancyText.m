@@ -1273,7 +1273,7 @@ static NSMutableDictionary* fontMemory_;
         if (theNode) {
             // do it only when the current HUFancyText is parsed and has the nodeID
             
-            [theNode dimissAllChildren];
+            [theNode dismissAllChildren];
             HUMarkupNode* newTree = [[self class] parsedMarkupString:styledText withStyleDict:self.style];
             [self.parsedResultTree appendSubtree:newTree underNode:theNode];
         }
