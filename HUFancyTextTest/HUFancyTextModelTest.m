@@ -19,10 +19,10 @@
 
 - (void)setUp {
     NSString* styleSheet = @".default{color: #ffffff; vertical-align:middle}\n\
-    span.green {color:  'rgb(0, 255, 0)' ;font-family: 'Georgia'; font-size: 15px; font-style:'italic'   }\
+    .green {color:  'rgb(0, 255, 0)' ;font-family: 'Georgia'; font-size: 15px; font-style:'italic'   }\
     .right{text-align: right}\
     .yellow {color: yellow; font-family: Futura; font-SIzE: 18px}\
-    b.blue{color: blue}\
+    span.blue{color: blue}\
     .center{text-align: center}\
     .limit2{line-count:2; truncate-mode:tail}";
     
@@ -67,8 +67,126 @@
 
 - (void)testMarkupParsing {
     HUFancyText* fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=green>c</b>e"];
-    // todo: a lot of weird cases to test
+    [fancyText parseStructure];
+    int count = fancyText.parsedResultTree.children.count;
+    STAssertEquals(count, 1, @"expecting 1 child but seeing %d", count);
+    HUMarkupNode* node = [[[[fancyText.parsedResultTree childrenNodesWithClassName:@"green"] objectAtIndex:0] children] objectAtIndex:0];
+    UIColor* color = [node.data objectForKey:HUFancyTextColorKey];
+    STAssertEqualObjects(color, [UIColor greenColor], @"class green's text color is %@", color);
+    release(fancyText);
     
+    
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"yellow\">c</p><p class='green'>e</p>"];
+    [fancyText parseStructure];
+    count = fancyText.parsedResultTree.children.count;
+    STAssertEquals(count, 2, @"expecting 2 children but seeing %d", count);
+    node = [[[[fancyText.parsedResultTree childrenNodesWithClassName:@"green"] objectAtIndex:0] children] objectAtIndex:0];
+    color = [node.data objectForKey:HUFancyTextColorKey];
+    STAssertEqualObjects(color, [UIColor greenColor], @"class green's text color is %@", color);
+    node = [[[[fancyText.parsedResultTree childrenNodesWithClassName:@"yellow"] objectAtIndex:0] children] objectAtIndex:0];
+    color = [node.data objectForKey:HUFancyTextColorKey];
+    STAssertEqualObjects(color, [UIColor yellowColor], @"class yellow's text color is %@", color);
+    release(fancyText);
+    
+    
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"blue\" id=\"1\">c</p><span class='blue' id=2>e</span>"];
+    [fancyText parseStructure];
+    node = [[[fancyText.parsedResultTree childNodeWithID:@"1"] children] objectAtIndex:0];
+    color = [node.data objectForKey:HUFancyTextColorKey];
+    UIColor* white = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
+    STAssertEqualObjects(color, white, @"color is %@ but we expect white", color);
+    node = [[[fancyText.parsedResultTree childNodeWithID:@"2"] children] objectAtIndex:0];
+    color = [node.data objectForKey:HUFancyTextColorKey];
+    STAssertEqualObjects(color, [UIColor blueColor], @"class blue's text color is %@", color);
+    
+    
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"yellow>c</p><p class='green'>e</p>"];
+    [fancyText parseStructure];
+    count = fancyText.parsedResultTree.children.count;
+    STAssertEquals(count, 1, @"expecting 1 child but seeing %d", count);
+    
+}
+
+- (void)testLineBreak {
+    HUFancyText* fancyText = [[HUFancyText alloc] initWithMarkupText:@"<span class=green>Span 1</span><span>Span 2</span>"];
+    fancyText.width = 1000.f;
+    [fancyText generateLines];
+    int count = fancyText.lines.count;
+    STAssertEquals(count, 1, @"expecting 1 line but seeing %d", count);
+    release(fancyText);
+
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=green>1 <span>s</span></p>2<p>3</p>"];
+    fancyText.width = 1000.f;
+    [fancyText generateLines];
+    count = fancyText.lines.count;
+    STAssertEquals(count, 3, @"expecting 3 lines but seeing %d", count);
+    release(fancyText);
+    
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=green>Here is a long long long line.<span>s</span></p>2<p>3</p>"];
+    fancyText.width = [@"Here is a long long" sizeWithFont:[UIFont systemFontOfSize:14.f]].width;
+    [fancyText generateLines];
+    count = fancyText.lines.count;
+    STAssertEquals(count, 4, @"expecting 4 lines but seeing %d", count);
+    release(fancyText);
+    
+    
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=limit2>Here is a long long long long long long long long long long long long line.<span>s</span></p>2<p>3</p>"];
+    fancyText.width = [@"Here is a" sizeWithFont:[UIFont systemFontOfSize:14.f]].width;
+    [fancyText generateLines];
+    count = fancyText.lines.count;
+    STAssertEquals(count, 4, @"expecting 3 lines but seeing %d", count);
+    release(fancyText);
+}
+
+- (void)testContentChange {
+    HUFancyText* fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"blue\" id=\"1\">1 and something else like <span class='blue' id=2>e</span></p> <p> L2 </p>"];
+    [fancyText parseStructure];    
+    [fancyText changeNodeToText:@"Blah" forID:@"1"];
+    HUMarkupNode* changedNode = [fancyText.parsedResultTree childNodeWithID:@"1"];
+    int count = changedNode.children.count;
+    STAssertEquals(count, 1, @"expecting 1 child but seeing %d", count);
+    HUMarkupNode* child = [changedNode.children objectAtIndex:0];
+    NSString* text = [child.data objectForKey:HUFancyTextTextKey];
+    STAssertEqualObjects(text, @"Blah", @"text change failed. It's %@", text);
+    release(fancyText);
+    
+    
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"blue\" id=\"1\">1 and something else like <span class='blue' id=2>e</span> <lambda id=L></p> <p> L2 </p>"];
+    [fancyText parseStructure];
+    [fancyText changeNodeToStyledText:@"<strong>B</strong>lah" forID:@"1"];
+    changedNode = [fancyText.parsedResultTree childNodeWithID:@"1"];
+    count = changedNode.children.count;
+    STAssertEquals(count, 1, @"expecting 2 children but seeing %d", count);
+    HUMarkupNode* newRoot = [changedNode.children objectAtIndex:0];
+    STAssertEquals(newRoot.isContainer, YES, @"styled text change failed.");
+    STAssertTrue(newRoot.children.count == 2, @"inserted tree children count wrong: %d", newRoot.children.count);
+    child = [newRoot.children objectAtIndex:0];
+    STAssertEquals(child.isContainer, YES, @"styled text change failed.");
+    child = [child.children objectAtIndex:0];
+    text = [child.data objectForKey:HUFancyTextTextKey];
+    STAssertEqualObjects(text, @"B", @"styled text change failed. It's %@", text);
+    release(fancyText);
+}
+
+
+- (void)testStyleChange {
+    HUFancyText* fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"green\" id=\"1\">1 and something else like <span class='blue' id=2>e</span></p> <p> L2 </p>"];
+    [fancyText parseStructure];    
+    [fancyText applyClass:@"yellow" on:HUFancyTextID withName:@"1"];
+    HUMarkupNode* node1 = [fancyText.parsedResultTree childNodeWithID:@"1"];
+    HUMarkupNode* node2 = [fancyText.parsedResultTree childNodeWithID:@"2"];
+    UIColor* color = [node1.data objectForKey:HUFancyTextColorKey];
+    STAssertEqualObjects(color, [UIColor yellowColor], @"color apply failed. color is %@", color);
+    color = [node2.data objectForKey:HUFancyTextColorKey];
+    STAssertEqualObjects(color, [UIColor blueColor], @"color protection failed. color is %@", color);
+    NSString* fontStyle = [node1.data objectForKey:HUFancyTextFontStyleKey];
+    STAssertEqualObjects(fontStyle, @"italic", @"font style retain failed. style is %@", fontStyle);
+    
+    [fancyText changeStylesToClass:@"yellow" on:HUFancyTextID withName:@"1"];
+    fontStyle = [node1.data objectForKey:HUFancyTextFontStyleKey];
+    STAssertNil(fontStyle, @"italic", @"font style remove failed. style is %@", fontStyle);
+    
+    release(fancyText);
 }
 
 @end

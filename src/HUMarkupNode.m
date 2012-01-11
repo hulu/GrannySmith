@@ -241,8 +241,6 @@
     release(idMap);
     release(classesMap);
     
-//    NSLog(@"tree (right after copying):\n%@", [newGuy displayTree]);
-    
     return newGuy;
 }
 
@@ -334,7 +332,6 @@
         if (removeOldStyles) {
             stylesToRemoveForThisNode = [stylesToRemoveStack lastObject];
             [stylesToRemoveStack removeLastObject];
-//            NSLog(@"popped styles to remove: %@", stylesToRemoveForThisNode);
         }
         
         if (!node.children.count) {
@@ -366,8 +363,6 @@
                 [stylesForTheChild setValuesForKeysWithDictionary:stylesForThisNode];
                 
                 if (removeOldStyles) {
-//                    NSLog(@"styles to remove for child: %@", stylesToRemoveForChild);
-//                    NSLog(@"styles to remove for this node: %@", stylesToRemoveForThisNode);
                     [stylesToRemoveForChild addObjectsFromArray:stylesToRemoveForThisNode];
                 }
             }

@@ -87,7 +87,6 @@
     
     // search new child from root
     HUMarkupNode* firstChildOfNewNode = [[[testMarkupNode_ childNodeWithID:@"7"] children] objectAtIndex:0];
-    NSLog(@"new: %@", [firstChildOfNewNode.data objectForKey:HUFancyTextTextKey]);
     STAssertTrue([[firstChildOfNewNode.data objectForKey:HUFancyTextTextKey] isEqualToString:@"1234567"]==YES, @"Searching new children has some issue. We found %@", [firstChildOfNewNode.data objectForKey:HUFancyTextTextKey]);
 }
 
