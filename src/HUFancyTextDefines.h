@@ -136,12 +136,18 @@ extern NSString* const HUFancyTextHeightIsPercentageKey;  // @"line-height-is-pe
 #define HURetained(obj) obj
 #define HUAutorelease(obj) 
 #define HUAutoreleased(obj) obj
+#define HUWeak weak
+#define HUWeakPrefix __weak
+#define HUBridgePrefix __bridge
 #else
 #define HURelease(obj) [obj release]
 #define HURetain(obj) [obj retain]
 #define HURetained(obj) [obj retain]
 #define HUAutorelease(obj) [obj autorelease]
 #define HUAutoreleased(obj) [obj autorelease]
+#define HUWeak assign
+#define HUWeakPrefix 
+#define HUBridgePrefix 
 #endif
 
 

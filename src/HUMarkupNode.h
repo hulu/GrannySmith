@@ -21,11 +21,7 @@
     NSMutableDictionary* IDMap_;
     NSMutableDictionary* classesMap_;
     
-#ifdef ARC_ENABLED
-    __weak HUMarkupNode* parent_;
-#else
-    HUMarkupNode* parent_;
-#endif
+    HUWeakPrefix HUMarkupNode* parent_;
 }
 
 /** the data of the node.
@@ -54,11 +50,7 @@
 /** the parent node. Used for tracing back all the styles applied to this node.
  * @note If ARC is not enabled, it's __unsafe__unretained in order to avoid retain cycle, so use with caution.
  */
-#ifdef ARC_ENABLED
-@property (nonatomic, weak) HUMarkupNode* parent;
-#else
-@property (nonatomic, assign) HUMarkupNode* parent;
-#endif
+@property (nonatomic, HUWeak) HUMarkupNode* parent;
 
 /** append a node into the children array
  * @note this also sets the parent of the child node
