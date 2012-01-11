@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		EC3A594414BCE61A005CB196 /* HUStringParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3A594314BCE619005CB196 /* HUStringParserTest.m */; };
+		EC571FB914BD28DE00D7CBA0 /* HUFancyTextModelTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC571FB814BD28DE00D7CBA0 /* HUFancyTextModelTest.m */; };
 		EC61850314BCC17500E1DA2F /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A2D14BBE9D50016D910 /* SenTestingKit.framework */; };
 		EC61850414BCC17500E1DA2F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1514BBE9D40016D910 /* UIKit.framework */; };
 		EC61850514BCC17500E1DA2F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
 		EC61850B14BCC17500E1DA2F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC61850914BCC17500E1DA2F /* InfoPlist.strings */; };
-		EC61850E14BCC17500E1DA2F /* HUFancyTextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61850D14BCC17500E1DA2F /* HUFancyTextTest.m */; };
 		EC61851314BCC23E00E1DA2F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1914BBE9D40016D910 /* CoreGraphics.framework */; };
 		EC61852514BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851814BCC3F200E1DA2F /* GTMNSString+HTML.m */; };
 		EC61852614BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851814BCC3F200E1DA2F /* GTMNSString+HTML.m */; };
@@ -50,10 +50,10 @@
 
 /* Begin PBXFileReference section */
 		EC3A594314BCE619005CB196 /* HUStringParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUStringParserTest.m; sourceTree = "<group>"; };
+		EC571FB814BD28DE00D7CBA0 /* HUFancyTextModelTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUFancyTextModelTest.m; sourceTree = "<group>"; };
 		EC61850214BCC17500E1DA2F /* HUFancyTextTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HUFancyTextTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC61850814BCC17500E1DA2F /* HUFancyTextTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HUFancyTextTest-Info.plist"; sourceTree = "<group>"; };
 		EC61850A14BCC17500E1DA2F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		EC61850D14BCC17500E1DA2F /* HUFancyTextTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HUFancyTextTest.m; sourceTree = "<group>"; };
 		EC61850F14BCC17500E1DA2F /* HUFancyTextTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HUFancyTextTest-Prefix.pch"; sourceTree = "<group>"; };
 		EC61851614BCC3F200E1DA2F /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		EC61851714BCC3F200E1DA2F /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 		EC61850614BCC17500E1DA2F /* HUFancyTextTest */ = {
 			isa = PBXGroup;
 			children = (
-				EC61850D14BCC17500E1DA2F /* HUFancyTextTest.m */,
+				EC571FB814BD28DE00D7CBA0 /* HUFancyTextModelTest.m */,
 				EC3A594314BCE619005CB196 /* HUStringParserTest.m */,
 				EC785F8014BCFC7800D9DB6F /* HUMarkupNodeTest.m */,
 				EC61850714BCC17500E1DA2F /* Supporting Files */,
@@ -330,7 +330,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC61850E14BCC17500E1DA2F /* HUFancyTextTest.m in Sources */,
 				EC61852614BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */,
 				EC61852814BCC3F200E1DA2F /* HUFancyText.m in Sources */,
 				EC61852A14BCC3F200E1DA2F /* HUFancyTextDefines.m in Sources */,
@@ -340,6 +339,7 @@
 				EC61853214BCC3F200E1DA2F /* NSString+ParsingHelper.m in Sources */,
 				EC3A594414BCE61A005CB196 /* HUStringParserTest.m in Sources */,
 				EC785F8114BCFC7800D9DB6F /* HUMarkupNodeTest.m in Sources */,
+				EC571FB914BD28DE00D7CBA0 /* HUFancyTextModelTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
