@@ -91,10 +91,10 @@ static int lineID_ = 1;
 #ifdef ARC_ENABLED
 #else
 - (void)dealloc {
-    release(style_);
-    release(text_);
-    release(parsedTree_);
-    release(lambdaBlocks_);
+    HURelease(style_);
+    HURelease(text_);
+    HURelease(parsedTree_);
+    HURelease(lambdaBlocks_);
     [super dealloc];
 }
 #endif
@@ -177,8 +177,8 @@ static int lineID_ = 1;
         previousLineID = lineID;
     }
     
-    release(segments_);
-    return autoreleased(texts);
+    HURelease(segments_);
+    return HUAutoreleased(texts);
 }
 
 - (CGFloat)contentHeight {
@@ -193,7 +193,7 @@ static int lineID_ = 1;
         return parsedTree_;
     }
     
-    release(parsedTree_);
+    HURelease(parsedTree_);
     parsedTree_ = [[self class] newParsedMarkupString:text_ withStyleDict:style_];
     
     //NSLog(@"time to parse markup: %f", -[startTime timeIntervalSinceNow]);
@@ -215,7 +215,7 @@ static int lineID_ = 1;
     if (!width_) {
         return nil;
     }
-    release(lines_);
+    HURelease(lines_);
     lines_ = [[NSMutableArray alloc] initWithCapacity:segments_.count];
     
     __block float totalHeight = 0.f;
@@ -273,8 +273,8 @@ static int lineID_ = 1;
                 }
                 if (maxHeight_ && nextHeight > maxHeight_) {
                     contentHeight_ = totalHeight;
-                    release(currentLine);
-                    release(segments_);
+                    HURelease(currentLine);
+                    HURelease(segments_);
                     return NO;
                 }
                 [lines_ addObject: currentLine];                
@@ -282,12 +282,12 @@ static int lineID_ = 1;
                 totalHeight = nextHeight;
                 if (maxHeight_ == totalHeight) {
                     contentHeight_ = totalHeight;
-                    release(currentLine);
-                    release(segments_);
+                    HURelease(currentLine);
+                    HURelease(segments_);
                     return NO;
                 }
             }
-            release(currentLine);
+            HURelease(currentLine);
             currentLine = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
             currentLineSpaceLeft = width_;
             currentLineContentHeight = 0.f;
@@ -425,7 +425,7 @@ static int lineID_ = 1;
                 // update the currentLineLastText, when we are concluding the line, if it's right align, we need to trim trailing space from last text
                 currentLineLastText = lineText;
                 
-                release(piece);
+                HURelease(piece);
                 
                 // Regular case: if it is not the last line, it means that this line is long enough to cover a whole line
                 // Or: if the markup tag (aka p) requires it to be an independent line
@@ -449,8 +449,8 @@ static int lineID_ = 1;
         return lines_;
     }
     
-    release(segments_);
-    release(currentLine);
+    HURelease(segments_);
+    HURelease(currentLine);
     
 //    NSLog(@"the lines: %@", lines_);
 //    NSLog(@"time to generate line: %f", -[startTime timeIntervalSinceNow]);
@@ -497,7 +497,7 @@ typedef enum {
         nameParts = [currentText componentsSeparatedByString:@"."];
         
         if (nameParts.count==1) {
-            elementName = [fancyTextTrim(currentText) lowercaseString];
+            elementName = [HUTrim(currentText) lowercaseString];
             if (elementName.length) {
                 className = HUFancyTextDefaultClass;
             }
@@ -506,8 +506,8 @@ typedef enum {
             }
         }
         else if (nameParts.count==2){
-            className = [fancyTextTrim( [nameParts objectAtIndex:1]) lowercaseString];
-            elementName = [fancyTextTrim( [nameParts objectAtIndex:0]) lowercaseString];
+            className = [HUTrim( [nameParts objectAtIndex:1]) lowercaseString];
+            elementName = [HUTrim( [nameParts objectAtIndex:0]) lowercaseString];
             if (!elementName.length) {
                 elementName = HUFancyTextDefaultClass;
             }
@@ -529,12 +529,12 @@ typedef enum {
                 [cssDict setObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:propertyList, className, nil] forKey:elementName];
             }
         }
-        release(propertyList);
+        HURelease(propertyList);
         
         // after the inner content scan finished, the location is at }, so it should be skipped in the next scan's result
         lengthToSkip = 1;
     }
-    release(scanner);
+    HURelease(scanner);
     return cssDict;
 }
 
@@ -594,7 +594,7 @@ typedef enum {
         // NSLog(@"scanned text (inner): %@", currentText);
         switch (mode) {
             case ParsingAttribName:{
-                currentAttribName = [fancyTextTrim([NSString stringWithString:currentText]) lowercaseString];
+                currentAttribName = [HUTrim([NSString stringWithString:currentText]) lowercaseString];
                 int nextCharLocation;
                 NSString* next = [scanner.string firstNonWhitespaceCharacterSince:scanner.scanLocation+1 foundAt:&nextCharLocation];
                 if (!next.length) {
@@ -627,7 +627,7 @@ typedef enum {
                 break;
             case ParsingUnquotedValue:
                 mode = ParsingAttribName;
-                currentValue = fancyTextTrim(currentText);
+                currentValue = HUTrim(currentText);
 //                [propertyList setObject: [[self class] parsedValue:currentValue forKey:currentAttribName] forKey:currentAttribName];
                 [[self class] parseValue:currentValue forKey:currentAttribName intoDictionary:propertyList];
                 lengthToSkip = scanTo.length;
@@ -644,7 +644,7 @@ typedef enum {
 
 
 + (NSMutableDictionary*)parsedStyle:(NSString *)style {
-    return autoreleased([[self class] newParsedStyle:style]);
+    return HUAutoreleased([[self class] newParsedStyle:style]);
 }
 
 typedef enum {
@@ -722,7 +722,7 @@ typedef enum {
             
             [[containerStack lastObject] appendChild:currentSegment];
             
-            release(currentSegment);
+            HURelease(currentSegment);
         }
         
         NSMutableDictionary* stylesInTag = [[self class] newStyleFromCurrentTagInScanner:scanner withStyleDict:styleDict];
@@ -780,8 +780,8 @@ typedef enum {
             }
 
         }
-        release(nodeToAdd);
-        release(stylesInTag);
+        HURelease(nodeToAdd);
+        HURelease(stylesInTag);
         
 //        NSLog(@"after taking care of a tag. the location:%@", [scanner atCharacter]);
         lengthToSkip = 1;
@@ -790,16 +790,16 @@ typedef enum {
         // so we set a lengthToSkip to skip the > for the next scan
     }
     
-    release(scanner);
-    release(containerStack);
-    release(tagStack);
+    HURelease(scanner);
+    HURelease(containerStack);
+    HURelease(tagStack);
     // NSLog(@"segments: %@", segments);
     
     resultRoot.IDMap = idMap;
     resultRoot.classesMap = classesMap;
     
-    release(idMap);
-    release(classesMap);
+    HURelease(idMap);
+    HURelease(classesMap);
     
 //    NSLog(@"tree (right after generation):\n%@", [resultRoot displayTree]);
     
@@ -893,7 +893,7 @@ typedef enum {
         // handling read text
         switch (mode) {
             case ParsingTagName:
-                elementName = [fancyTextTrim(currentText) lowercaseString];
+                elementName = [HUTrim(currentText) lowercaseString];
                 
 //                NSLog(@"setting element name to %@", elementName);
                 [style setObject:elementName forKey: HUFancyTextElementNameKey];
@@ -922,11 +922,11 @@ typedef enum {
                 }
                 mode = ParsingLhs;
                 if (scanResult==ScanMeetTarget) {
-                    scanner.scanLocation += fancyTextTrim(scanTo).length;
+                    scanner.scanLocation += HUTrim(scanTo).length;
                 }
                 break;
             case ParsingLhs:{
-                attribName = fancyTextTrim(currentText);
+                attribName = HUTrim(currentText);
                 if ([attribName caseInsensitiveCompare:HUFancyTextClassKey]==NSOrderedSame) {
                     attrib = ReadingClass; // currently we only care about class=, otherwise we should use an enum instead of BOOL
                 }
@@ -957,7 +957,7 @@ typedef enum {
                 else {
                     mode = ParsingUnquotedRhs;
                     if (scanResult==ScanMeetTarget) {
-                        scanner.scanLocation += fancyTextTrim(scanTo).length;
+                        scanner.scanLocation += HUTrim(scanTo).length;
                     }
                 }
                 break;
@@ -967,7 +967,7 @@ typedef enum {
             case ParsingSingleQuotedRhs:
                 if (knownElement && !isClosing) {
                     if (attrib == ReadingClass) {
-                        classNames = fancyTextTrim(currentText);
+                        classNames = HUTrim(currentText);
                         
                         NSArray* individualClassNames = [classNames componentsSeparatedByString:@" "];
                         // apply class styles of all classes
@@ -987,22 +987,22 @@ typedef enum {
                     }
                     else if (attrib == ReadingLambdaAttrib) {
                         if ([attribName caseInsensitiveCompare:HUFancyTextIDKey]==NSOrderedSame) {
-                            [style setObject:fancyTextTrim(currentText) forKey:HUFancyTextInternalLambdaIDKey];
-                            [style setObject:fancyTextTrim(currentText) forKey:HUFancyTextIDKey];
+                            [style setObject:HUTrim(currentText) forKey:HUFancyTextInternalLambdaIDKey];
+                            [style setObject:HUTrim(currentText) forKey:HUFancyTextIDKey];
                         }
                         else {
-//                            [style setObject:[[self class] parsedValue:fancyTextTrim(currentText) forKey:attribName] forKey: attribName];
-                            [[self class] parseValue:fancyTextTrim(currentText) forKey:attribName intoDictionary:style];
+//                            [style setObject:[[self class] parsedValue:HUTrim(currentText) forKey:attribName] forKey: attribName];
+                            [[self class] parseValue:HUTrim(currentText) forKey:attribName intoDictionary:style];
                         }
                     }
                     else if ([attribName caseInsensitiveCompare:HUFancyTextIDKey]==NSOrderedSame) {
                         // save the ID as one attribute
-                        [style setObject:fancyTextTrim(currentText) forKey:HUFancyTextIDKey];
+                        [style setObject:HUTrim(currentText) forKey:HUFancyTextIDKey];
                     }
                 }
                 mode = ParsingLhs;
                 if (scanResult==ScanMeetTarget) {
-                    scanner.scanLocation += fancyTextTrim(scanTo).length;
+                    scanner.scanLocation += HUTrim(scanTo).length;
                 }
 //                NSLog(@"mode changed to parsingLHS, scanner at: %@", [scanner atCharacter]);
                 break;
@@ -1015,7 +1015,7 @@ typedef enum {
 
 
 + (HUMarkupNode*)parsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict {
-    return autoreleased([[self class] newParsedMarkupString:markup withStyleDict:styleDict]);
+    return HUAutoreleased([[self class] newParsedMarkupString:markup withStyleDict:styleDict]);
 }
 
 
@@ -1041,7 +1041,7 @@ typedef enum {
     else {
         object = [NSString stringWithString:value];
         // just to be consistent with other cases, return an autorelease copy instead of just value
-        // e.g. jic the code before this call is value=[[xxx alloc] init], and after this call there is a release(value)
+        // e.g. jic the code before this call is value=[[xxx alloc] init], and after this call there is a HURelease(value)
     }
     
     if (dict) {
@@ -1061,7 +1061,7 @@ typedef enum {
         
         [scanner setScanLocation:1]; // bypass '#' character
         [scanner scanHexInt:&result];
-        return fancyTextRGB(result);
+        return HURGB(result);
     }
     else if ([value rangeOfString:HUFancyTextRGBValue].location != NSNotFound) {
         value = [value stringByReplacingOccurrencesOfString:HUFancyTextRGBValue withString:@""];
@@ -1247,7 +1247,7 @@ static NSMutableDictionary* fontMemory_;
 #pragma mark - global style
 
 + (NSMutableDictionary*)parseStyleAndSetGlobal: (NSString*)styleSheet {
-    release(globalStyleDictionary_);
+    HURelease(globalStyleDictionary_);
     globalStyleDictionary_ = [[self class] newParsedStyle:styleSheet];
     return globalStyleDictionary_;
 }
@@ -1306,7 +1306,7 @@ static NSMutableDictionary* fontMemory_;
         }
     }
     else if (type == HUFancyTextClass){
-        changeList = retained([self.parsedResultTree childrenNodesWithClassName:name]);
+        changeList = HURetained([self.parsedResultTree childrenNodesWithClassName:name]);
     }
     return changeList;
 }
@@ -1330,7 +1330,7 @@ static NSMutableDictionary* fontMemory_;
 - (void)changeAttribute:(NSString*)attribute to:(id)value on:(HUFancyTextReferenceType)type withName:(NSString*)name {
     NSMutableDictionary* stylesToAdd = [[NSMutableDictionary alloc] initWithObjectsAndKeys:value, attribute, nil];
     [self addStyles:stylesToAdd on:type withName:name];
-    release(stylesToAdd);
+    HURelease(stylesToAdd);
 }
 
 - (void)addStyles:(NSMutableDictionary*)styles on:(HUFancyTextReferenceType)type withName:(NSString*)name {
@@ -1338,7 +1338,7 @@ static NSMutableDictionary* fontMemory_;
     for (HUMarkupNode* node in changeList) {
         [node applyAndSpreadStyles:styles removeOldStyles:NO];
     }
-    release(changeList);
+    HURelease(changeList);
 }
 
 - (void)applyClass:(NSString*)className on:(HUFancyTextReferenceType)type withName:(NSString*)name {
@@ -1347,9 +1347,9 @@ static NSMutableDictionary* fontMemory_;
         NSMutableDictionary* styles = [self newStylesFromClassName:className elementName:[node.data objectForKey:HUFancyTextElementNameKey]];
         [node applyAndSpreadStyles:styles removeOldStyles:NO];
 //        NSLog(@"node.child.style: %@", [[node.children objectAtIndex:0] data]);
-        release(styles);
+        HURelease(styles);
     }
-    release(changeList);
+    HURelease(changeList);
 }
 
 - (void)changeStylesToClass:(NSString*)className on:(HUFancyTextReferenceType)type withName:(NSString*)name {
@@ -1358,9 +1358,9 @@ static NSMutableDictionary* fontMemory_;
         NSMutableDictionary* styles = [self newStylesFromClassName:className elementName:[node.data objectForKey:HUFancyTextElementNameKey]];
         [node applyAndSpreadStyles:styles removeOldStyles:YES];
 //        NSLog(@"node.child.style: %@", [[node.children objectAtIndex:0] data]);
-        release(styles);
+        HURelease(styles);
     }
-    release(changeList);
+    HURelease(changeList);
 }
 
 #pragma mark - draw
@@ -1626,7 +1626,7 @@ static NSMutableDictionary* fontMemory_;
             }
         }
         
-        release(widthForSegment);
+        HURelease(widthForSegment);
         
         // Updating Y for the next line
         CGFloat lineHeight = [[[segments objectAtIndex:0] objectForKey:HUFancyTextLineHeightKey] floatValue];
@@ -1653,7 +1653,7 @@ static NSMutableDictionary* fontMemory_;
     }
     else {
         // copy the block onto the heap
-        void(^theBlock)(CGPoint) = autoreleased([drawingBlock copy]);
+        void(^theBlock)(CGPoint) = HUAutoreleased([drawingBlock copy]);
         [lambdaBlocks_ setObject:theBlock forKey:lambdaID];
     }
 }
@@ -1666,7 +1666,7 @@ static NSMutableDictionary* fontMemory_;
     if (!array) {
         array = [[NSMutableArray alloc] initWithObjects:object, nil];
         [dict setObject:array forKey:key];
-        release(array);
+        HURelease(array);
     }
     else {
         [array addObject:object];
@@ -1682,23 +1682,23 @@ static NSMutableDictionary* fontMemory_;
     if (self.parsedResultTree) {
         HUMarkupNode* newTree = [self.parsedResultTree copy];
         newFancyText = [[HUFancyText alloc] initWithParsedStructure:newTree];
-        release(newTree);
+        HURelease(newTree);
     }
     else {
         NSString* newText = [self.text copy];
         newFancyText = [[HUFancyText alloc] initWithMarkupText:newText];
-        release(newText);
+        HURelease(newText);
     }
     newFancyText.width = self.width;
     newFancyText.maxHeight = self.maxHeight;
     
     NSMutableDictionary* newStyle = [self.style copy];
     newFancyText.style = newStyle;
-    release(newStyle);
+    HURelease(newStyle);
     
     NSMutableDictionary* newlambdaBlocks = [self.lambdaBlocks copy];
     newFancyText.lambdaBlocks = newlambdaBlocks;
-    release(newlambdaBlocks);
+    HURelease(newlambdaBlocks);
  
     return newFancyText;
 }

@@ -17,14 +17,14 @@
 #ifdef ARC_ENABLED
 #else
 - (void)dealloc {
-    release(fancyText_);
+    HURelease(fancyText_);
     [super dealloc];
 }
 #endif
 
 -(id) initWithFrame:(CGRect)frame fancyText:(HUFancyText*)fancyText {
     if (( self = [super initWithFrame:frame] )) {
-        fancyText_ = retained(fancyText);
+        fancyText_ = HURetained(fancyText);
         fancyText_.width = frame.size.width;
         contentHeight_ = 0.f;
         self.backgroundColor = [UIColor clearColor];

@@ -34,9 +34,9 @@
 #ifdef ARC_ENABLED
 #else
 - (void)dealloc {
-    release(children_);
-    release(IDMap_);
-    release(classesMap_);
+    HURelease(children_);
+    HURelease(IDMap_);
+    HURelease(classesMap_);
     [super dealloc];
 }
 #endif
@@ -80,7 +80,7 @@
     // do something to let the new subtree have the styles
     [subtreeRoot applyAndSpreadStyles:stylesToPassDown removeOldStyles:NO];
     
-    release(stylesToPassDown);
+    HURelease(stylesToPassDown);
 }
 
 
@@ -117,8 +117,8 @@
         }
     }
     
-    release(stack);
-    release(indentStack);
+    HURelease(stack);
+    HURelease(indentStack);
     
     // also list the id, class map
     for (id key in [self.IDMap allKeys]) {
@@ -134,7 +134,7 @@
         [tree appendFormat:@"\n"];
     }
     
-    return autoreleased(tree);
+    return HUAutoreleased(tree);
 }
 
 - (NSArray*)newDepthFirstOrderDataArray {
@@ -156,7 +156,7 @@
             [stack addObject: child];
         }
     }
-    release(stack);
+    HURelease(stack);
     return array;
 }
 
@@ -232,14 +232,14 @@
         }
     }
     
-    release(oldTreeStack);
-    release(newTreeStack);
+    HURelease(oldTreeStack);
+    HURelease(newTreeStack);
     
     newGuy.IDMap = idMap;
     newGuy.classesMap = classesMap;
     
-    release(idMap);
-    release(classesMap);
+    HURelease(idMap);
+    HURelease(classesMap);
     
     return newGuy;
 }
@@ -282,7 +282,7 @@
         [newChild.data setValuesForKeysWithDictionary:self.data];
         [newChild.data setObject:text forKey:HUFancyTextTextKey];
         [self appendChild:newChild];
-        release(newChild);
+        HURelease(newChild);
     }
     
 }
@@ -314,7 +314,7 @@
     if (removeOldStyles) {
         stylesToRemoveStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
         [stylesToRemoveStack addObject: stylesToRemove];
-        autorelease(stylesToRemove); // can only autorelease because we need to use this object after popping it out of the stack
+        HUAutorelease(stylesToRemove); // can only autorelease because we need to use this object after popping it out of the stack
         
         if (!stylesToRemove.count) {
             removeOldStyles = NO; // if there's nothing necessary to remove, just don't bother checking every time
@@ -391,14 +391,14 @@
             }
             
             // has to be auto released because later we need to pop the stylesForTheChild out of stack and use it. so can't release here
-            autorelease(stylesForTheChild);
+            HUAutorelease(stylesForTheChild);
             if (removeOldStyles) {
-                autorelease(stylesToRemoveForChild);
+                HUAutorelease(stylesToRemoveForChild);
             }
         }
     }
-    release(stack);
-    release(styleStack);
+    HURelease(stack);
+    HURelease(styleStack);
 }
 
 @end

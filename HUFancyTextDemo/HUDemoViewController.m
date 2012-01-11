@@ -63,8 +63,8 @@ CGFloat const buttonMargin = 5;
     span.green {color:  'rgb(0, 255, 0)' ;font-family: 'Georgia'; font-size: 15px; font-style:'italic'   }\
     .right{text-align: right}\
     .yellow {color: yellow; font-family: Futura; font-SIzE: 18px}\
-    b.blue{color: blue}\
     .center{text-align: center}\
+    center {text-align: center}\
     .limit2{line-count:2; truncate-mode:tail}";
     
     [HUFancyText parseStyleAndSetGlobal:style];
@@ -183,7 +183,7 @@ CGFloat const buttonMargin = 5;
     fancyTextView_.fancyText = originalFancyText_;
     [fancyTextView_ updateWithCurrentFrame];
     
-    release(originalFancyText_);
+    HURelease(originalFancyText_);
     originalFancyText_ = [fancyTextView_.fancyText copy];
     
     self.contentSwitchButton.enabled = YES;

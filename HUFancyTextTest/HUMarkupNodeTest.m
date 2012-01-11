@@ -25,7 +25,7 @@
 }
 
 - (void)tearDown {
-    release(testMarkupNode_);
+    HURelease(testMarkupNode_);
 }
 
 - (void)testMarkupNodeChildren {
@@ -170,7 +170,7 @@
         traceUp = traceUp.parent;
     }
     STAssertTrue(traceUp == copied, @"new parent/ID hash relation was not correct");
-    release(copied);
+    HURelease(copied);
 }
 
 @end

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Hulu. All rights reserved.
 //
 
-#ifndef i2_HUFancyTextDefines_h
-#define i2_HUFancyTextDefines_h
+#ifndef HUFancyTextDefines_h
+#define HUFancyTextDefines_h
 
 
 //#warning Please set the ARC_ENABLED flag according your situation. Comment out this line once you read and understand this so that the warning will be disabled.
@@ -125,23 +125,23 @@ extern NSString* const HUFancyTextHeightIsPercentageKey;  // @"line-height-is-pe
 /// @ Handy tools
 ///---------------
 
-#define fancyTextTrim(s) [s stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]]
-#define fancyTextRGB(c) [UIColor colorWithRed:((c & 0xFF0000) >> 16)/255.0 green:((c & 0x00FF00) >> 8)/255.0 blue:(c & 0x0000FF)/255.0 alpha:1.0]
+#define HUTrim(s) [s stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]]
+#define HURGB(c) [UIColor colorWithRed:((c & 0xFF0000) >> 16)/255.0 green:((c & 0x00FF00) >> 8)/255.0 blue:(c & 0x0000FF)/255.0 alpha:1.0]
 
 
 /// ARC - non-ARC compatibility
 #ifdef ARC_ENABLED
-#define release(obj) 
-#define retain(obj)
-#define retained(obj) obj
-#define autorelease(obj) 
-#define autoreleased(obj) obj
+#define HURelease(obj) 
+#define HURetain(obj)
+#define HURetained(obj) obj
+#define HUAutorelease(obj) 
+#define HUAutoreleased(obj) obj
 #else
-#define release(obj) [obj release]
-#define retain(obj) [obj retain]
-#define retained(obj) [obj retain]
-#define autorelease(obj) [obj autorelease]
-#define autoreleased(obj) [obj autorelease]
+#define HURelease(obj) [obj release]
+#define HURetain(obj) [obj retain]
+#define HURetained(obj) [obj retain]
+#define HUAutorelease(obj) [obj autorelease]
+#define HUAutoreleased(obj) [obj autorelease]
 #endif
 
 

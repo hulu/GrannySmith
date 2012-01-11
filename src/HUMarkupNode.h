@@ -89,6 +89,10 @@
 - (NSArray*)newDepthFirstOrderDataArray;
 
 
+///-------------------------------
+/// @name ID/Class access
+///-------------------------------
+
 /** Get the tree node under this node that has the given nodeID
  * @return the right node. If no node is found by the ID or the method is called on a non-root node, return Nil
  * @note this method must be called on a root node, where ID hashmap is stored

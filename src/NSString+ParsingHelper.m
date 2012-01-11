@@ -41,8 +41,8 @@
     
         if (limitLineCount>0 && lines.count == limitLineCount-1) {
             [lines addObject:[self substringFromIndex:i]];
-            release(currentLine);
-            return autoreleased(lines);
+            HURelease(currentLine);
+            return HUAutoreleased(lines);
         }
         
         // if the rest of the string begins with \n
@@ -60,8 +60,8 @@
                 // before adding the next line, we need to check limitLineCount
                 if (limitLineCount>0 && lines.count == limitLineCount-1) {
                     [lines addObject:[self substringFromIndex:i]];
-                    release(currentLine);
-                    return autoreleased(lines);
+                    HURelease(currentLine);
+                    return HUAutoreleased(lines);
                 }
                 
             }
@@ -136,11 +136,11 @@
         [lines addObject: [NSString stringWithString:currentLine]];
     }
  
-    release(currentLine);
+    HURelease(currentLine);
     #ifdef DEBUG_MODE
     DebugLog(@"lines: %@", lines);
     #endif
-    return autoreleased(lines);
+    return HUAutoreleased(lines);
 }
 
 

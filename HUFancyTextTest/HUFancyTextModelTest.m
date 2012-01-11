@@ -73,7 +73,7 @@
     HUMarkupNode* node = [[[[fancyText.parsedResultTree childrenNodesWithClassName:@"green"] objectAtIndex:0] children] objectAtIndex:0];
     UIColor* color = [node.data objectForKey:HUFancyTextColorKey];
     STAssertEqualObjects(color, [UIColor greenColor], @"class green's text color is %@", color);
-    release(fancyText);
+    HURelease(fancyText);
     
     
     fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"yellow\">c</p><p class='green'>e</p>"];
@@ -86,7 +86,7 @@
     node = [[[[fancyText.parsedResultTree childrenNodesWithClassName:@"yellow"] objectAtIndex:0] children] objectAtIndex:0];
     color = [node.data objectForKey:HUFancyTextColorKey];
     STAssertEqualObjects(color, [UIColor yellowColor], @"class yellow's text color is %@", color);
-    release(fancyText);
+    HURelease(fancyText);
     
     
     fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"blue\" id=\"1\">c</p><span class='blue' id=2>e</span>"];
@@ -113,21 +113,21 @@
     [fancyText generateLines];
     int count = fancyText.lines.count;
     STAssertEquals(count, 1, @"expecting 1 line but seeing %d", count);
-    release(fancyText);
+    HURelease(fancyText);
 
     fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=green>1 <span>s</span></p>2<p>3</p>"];
     fancyText.width = 1000.f;
     [fancyText generateLines];
     count = fancyText.lines.count;
     STAssertEquals(count, 3, @"expecting 3 lines but seeing %d", count);
-    release(fancyText);
+    HURelease(fancyText);
     
     fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=green>Here is a long long long line.<span>s</span></p>2<p>3</p>"];
     fancyText.width = [@"Here is a long long" sizeWithFont:[UIFont systemFontOfSize:14.f]].width;
     [fancyText generateLines];
     count = fancyText.lines.count;
     STAssertEquals(count, 4, @"expecting 4 lines but seeing %d", count);
-    release(fancyText);
+    HURelease(fancyText);
     
     
     fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=limit2>Here is a long long long long long long long long long long long long line.<span>s</span></p>2<p>3</p>"];
@@ -135,7 +135,7 @@
     [fancyText generateLines];
     count = fancyText.lines.count;
     STAssertEquals(count, 4, @"expecting 3 lines but seeing %d", count);
-    release(fancyText);
+    HURelease(fancyText);
 }
 
 - (void)testContentChange {
@@ -148,7 +148,7 @@
     HUMarkupNode* child = [changedNode.children objectAtIndex:0];
     NSString* text = [child.data objectForKey:HUFancyTextTextKey];
     STAssertEqualObjects(text, @"Blah", @"text change failed. It's %@", text);
-    release(fancyText);
+    HURelease(fancyText);
     
     
     fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"blue\" id=\"1\">1 and something else like <span class='blue' id=2>e</span> <lambda id=L></p> <p> L2 </p>"];
@@ -165,7 +165,7 @@
     child = [child.children objectAtIndex:0];
     text = [child.data objectForKey:HUFancyTextTextKey];
     STAssertEqualObjects(text, @"B", @"styled text change failed. It's %@", text);
-    release(fancyText);
+    HURelease(fancyText);
 }
 
 
@@ -186,7 +186,7 @@
     fontStyle = [node1.data objectForKey:HUFancyTextFontStyleKey];
     STAssertNil(fontStyle, @"italic", @"font style remove failed. style is %@", fontStyle);
     
-    release(fancyText);
+    HURelease(fancyText);
 }
 
 @end
