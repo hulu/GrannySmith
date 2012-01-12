@@ -10,11 +10,8 @@
 		EC2F285E14BF7EF8007D8644 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC2F285514BF7EF8007D8644 /* InfoPlist.strings */; };
 		EC2F285F14BF7EF8007D8644 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC2F285514BF7EF8007D8644 /* InfoPlist.strings */; };
 		EC2F286014BF7EF8007D8644 /* GSFancyTextAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F285814BF7EF8007D8644 /* GSFancyTextAppDelegate.m */; };
-		EC2F286114BF7EF8007D8644 /* GSFancyTextAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F285814BF7EF8007D8644 /* GSFancyTextAppDelegate.m */; };
 		EC2F286214BF7EF8007D8644 /* GSFancyTextDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F285A14BF7EF8007D8644 /* GSFancyTextDemoViewController.m */; };
-		EC2F286314BF7EF8007D8644 /* GSFancyTextDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F285A14BF7EF8007D8644 /* GSFancyTextDemoViewController.m */; };
 		EC2F286614BF7EF8007D8644 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F285D14BF7EF8007D8644 /* main.m */; };
-		EC2F286714BF7EF8007D8644 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F285D14BF7EF8007D8644 /* main.m */; };
 		EC2F287014BF7F13007D8644 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC2F286914BF7F13007D8644 /* InfoPlist.strings */; };
 		EC2F287114BF7F13007D8644 /* GSFancyTextModelTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F286B14BF7F13007D8644 /* GSFancyTextModelTest.m */; };
 		EC2F287314BF7F13007D8644 /* GSMarkupNodeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F286E14BF7F13007D8644 /* GSMarkupNodeTest.m */; };
@@ -24,19 +21,12 @@
 		EC61850514BCC17500E1DA2F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
 		EC61851314BCC23E00E1DA2F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1914BBE9D40016D910 /* CoreGraphics.framework */; };
 		EC61852514BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851814BCC3F200E1DA2F /* GTMNSString+HTML.m */; };
-		EC61852614BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851814BCC3F200E1DA2F /* GTMNSString+HTML.m */; };
 		EC61852714BCC3F200E1DA2F /* GSFancyText.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851A14BCC3F200E1DA2F /* GSFancyText.m */; };
-		EC61852814BCC3F200E1DA2F /* GSFancyText.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851A14BCC3F200E1DA2F /* GSFancyText.m */; };
 		EC61852914BCC3F200E1DA2F /* GSFancyTextDefines.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851C14BCC3F200E1DA2F /* GSFancyTextDefines.m */; };
-		EC61852A14BCC3F200E1DA2F /* GSFancyTextDefines.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851C14BCC3F200E1DA2F /* GSFancyTextDefines.m */; };
 		EC61852B14BCC3F200E1DA2F /* GSFancyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851E14BCC3F200E1DA2F /* GSFancyTextView.m */; };
-		EC61852C14BCC3F200E1DA2F /* GSFancyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61851E14BCC3F200E1DA2F /* GSFancyTextView.m */; };
 		EC61852D14BCC3F200E1DA2F /* GSMarkupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852014BCC3F200E1DA2F /* GSMarkupNode.m */; };
-		EC61852E14BCC3F200E1DA2F /* GSMarkupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852014BCC3F200E1DA2F /* GSMarkupNode.m */; };
 		EC61852F14BCC3F200E1DA2F /* NSScanner+GSHierarchicalScan.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852214BCC3F200E1DA2F /* NSScanner+GSHierarchicalScan.m */; };
-		EC61853014BCC3F200E1DA2F /* NSScanner+GSHierarchicalScan.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852214BCC3F200E1DA2F /* NSScanner+GSHierarchicalScan.m */; };
 		EC61853114BCC3F200E1DA2F /* NSString+GSParsingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852414BCC3F200E1DA2F /* NSString+GSParsingHelper.m */; };
-		EC61853214BCC3F200E1DA2F /* NSString+GSParsingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EC61852414BCC3F200E1DA2F /* NSString+GSParsingHelper.m */; };
 		EC6B5A1614BBE9D40016D910 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1514BBE9D40016D910 /* UIKit.framework */; };
 		EC6B5A1814BBE9D40016D910 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
 		EC6B5A1A14BBE9D40016D910 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1914BBE9D40016D910 /* CoreGraphics.framework */; };
@@ -339,16 +329,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC61852614BCC3F200E1DA2F /* GTMNSString+HTML.m in Sources */,
-				EC61852814BCC3F200E1DA2F /* GSFancyText.m in Sources */,
-				EC61852A14BCC3F200E1DA2F /* GSFancyTextDefines.m in Sources */,
-				EC61852C14BCC3F200E1DA2F /* GSFancyTextView.m in Sources */,
-				EC61852E14BCC3F200E1DA2F /* GSMarkupNode.m in Sources */,
-				EC61853014BCC3F200E1DA2F /* NSScanner+GSHierarchicalScan.m in Sources */,
-				EC61853214BCC3F200E1DA2F /* NSString+GSParsingHelper.m in Sources */,
-				EC2F286114BF7EF8007D8644 /* GSFancyTextAppDelegate.m in Sources */,
-				EC2F286314BF7EF8007D8644 /* GSFancyTextDemoViewController.m in Sources */,
-				EC2F286714BF7EF8007D8644 /* main.m in Sources */,
 				EC2F287114BF7F13007D8644 /* GSFancyTextModelTest.m in Sources */,
 				EC2F287314BF7F13007D8644 /* GSMarkupNodeTest.m in Sources */,
 				EC2F287414BF7F13007D8644 /* GSParsingHelperTest.m in Sources */,

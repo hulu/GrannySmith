@@ -34,7 +34,7 @@
 }
 
 
-- (void)testStyleParsing {    
+- (void)testStyleParsing {
     NSMutableDictionary* css;
     
     css = [GSFancyText parsedStyle:@"p.small {font-size: 11; font-weigth: normal;}   p.medium {font-size:14px; font-style   :italic} p.large{   font-size:20.f}"];

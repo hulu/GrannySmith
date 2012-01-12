@@ -12,9 +12,8 @@
 @implementation NSString (GSParsingHelper)
 
 - (NSMutableArray*) linesWithWidth:(CGFloat)width font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
-    #ifdef DEBUG_MODE
-    DebugLog(@"LineBreak - The string: %@, 1st line: %f, other lines: %f", self, firstLineWidth, width);
-    #endif
+
+//    NSLog(@"LineBreak - The string: %@, 1st line: %f, other lines: %f", self, firstLineWidth, width);
     
     NSMutableString* firstLineBlocked = [NSMutableString string];
     if (firstLineWidth < width) {
@@ -50,7 +49,6 @@
                 
         // deal with \n first
         if (beginsWithBR){
-            //DebugLog(@"This block begins with BR");
             
             if (currentLine.length>0) {
                 //DebugLog(@"adding line before br: %@",currentLine);
@@ -63,7 +61,6 @@
                     GSRelease(currentLine);
                     return GSAutoreleased(lines);
                 }
-                
             }
             
             [lines addObject:@""];
@@ -74,9 +71,6 @@
         NSString* character = [self substringWithRange:NSMakeRange(i, i+step<=self.length?step:(self.length-i) )];
         int brPosition = [character rangeOfString:@"\n"].location;
         if (brPosition != NSNotFound) {
-            #ifdef DEBUG_MODE
-            DebugLog(@"Found BR in this block.. position: %d", brPosition);
-            #endif
             character = [character substringToIndex:brPosition];
             i = i + brPosition - step;
         }
@@ -94,9 +88,7 @@
                             constrainedToSize:CGSizeMake(width,1000.f) 
                             lineBreakMode:UILineBreakModeWordWrap];
         
-        #ifdef DEBUG_MODE
-        DebugLog(@"[%d] current line: %@. width to confine: %f, apple width: %f", i, currentLine, width, appleSize.width);
-        #endif
+//        NSLog(@"[%d] current line: %@. width to confine: %f, apple width: %f", i, currentLine, width, appleSize.width);
         
         if (appleSize.height > font.lineHeight) {
             // a new line is created
@@ -116,30 +108,19 @@
                 i--;
             }
             
-            #ifdef DEBUG_MODE
-            DebugLog(@"adding line: %@",currentLine);
-            #endif
+//            NSLog(@"adding line: %@",currentLine);
             
             [lines addObject: [NSString stringWithString:currentLine]];
             [currentLine setString:@""];
-            
-            #ifdef DEBUG_MODE
-            DebugLog(@"i rewinded to %d",i);
-            #endif
         }
         
     }
     if (currentLine.length>0) {
-        #ifdef DEBUG_MODE
-        DebugLog(@"adding line: %@",currentLine);
-        #endif
+//        NSLog(@"adding line: %@",currentLine);
         [lines addObject: [NSString stringWithString:currentLine]];
     }
  
     GSRelease(currentLine);
-    #ifdef DEBUG_MODE
-    DebugLog(@"lines: %@", lines);
-    #endif
     return GSAutoreleased(lines);
 }
 

@@ -178,7 +178,7 @@
     GSMarkupNode* newGuy = [[GSMarkupNode alloc] init];
 
     // new hashmaps for the newGuy (since it's copying, the address will be different, so the map should point to something different)
-    NSMutableDictionary* idMap = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];  // id must be unique, so the value is just an HUMarkupString node pointer
+    NSMutableDictionary* idMap = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];  // id must be unique, so the value is just an GSMarkupNode pointer
     NSMutableDictionary* classesMap = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize]; // classes won't be unique, so the value is an array
     
     
