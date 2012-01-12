@@ -1271,6 +1271,16 @@ static NSMutableDictionary* fontMemory_;
     }
 }
 
+- (void)appendStyledText:(NSString*)styledText toID:(NSString*)nodeID {
+    if (self.parsedResultTree) {
+        HUMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
+        if (theNode) {
+            HUMarkupNode* newTree = [[self class] parsedMarkupString:styledText withStyleDict:self.style];
+            [self.parsedResultTree appendSubtree:newTree underNode:theNode];
+        }
+    }
+}
+
 - (void)removeID: (NSString*)nodeID {
     if (self.parsedResultTree) {
         HUMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];

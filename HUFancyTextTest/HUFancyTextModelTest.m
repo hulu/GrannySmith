@@ -175,6 +175,18 @@
     text = [child.data objectForKey:HUFancyTextTextKey];
     STAssertEqualObjects(text, @"B", @"styled text change failed. It's %@", text);
     HURelease(fancyText);
+    
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=\"blue\" id=\"1\">1 and something else like <span class='blue' id=2>e</span> <lambda id=L></p> <p> L2 </p>"];
+    [fancyText parseStructure];
+    HUMarkupNode* id1 = [fancyText.parsedResultTree childNodeWithID:@"1"];
+    count = id1.children.count;
+    [fancyText appendStyledText:@"<strong>B</strong>lah" toID:@"1"];
+    STAssertTrue(id1.children.count == count + 1, @"appending node didn't give the right count");
+    newRoot = [changedNode.children lastObject]; // getting the new root
+    child = [newRoot.children lastObject];
+    text = [child.data objectForKey:HUFancyTextTextKey];
+    STAssertEqualObjects(text, @"lah", @"styled text change failed. It's %@", text);
+    HURelease(fancyText);
 }
 
 

@@ -186,6 +186,11 @@
  */
 - (void)changeNodeToStyledText:(NSString*)styledText forID:(NSString*)nodeID;
 
+/** append a styled text (to be parsed) to a node
+ * @example for "ABC <span id=x>123 <span>456</span> </span> DEF", if we append "a <em>e</em>" to "x", "a <em>e</em>" will go after <span>456</span>
+ */
+- (void)appendStyledText:(NSString*)text toID:(NSString*)nodeID;
+
 /** totally cut the node with the given ID
  * @example for "ABC <span id=x>123 <span>456</span> </span> DEF", removeID:@"x" will give "ABC  DEF"
  */
