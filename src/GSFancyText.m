@@ -397,8 +397,8 @@ static int lineID_ = 1;
                 piece = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
                 [piece setValuesForKeysWithDictionary:segment];// update other params like color
                 
-                // Special case: if it's a new line, truncate the leading white spaces
-                if (!currentLine.count && segmentAlign==GSTextAlignLeft) {
+                // Special case: if it's a new line, and it's not the first line of this line ID, truncate the leading white spaces
+                if (!currentLine.count && segmentAlign==GSTextAlignLeft && currentLineIDActualLineCount>0) {
                     lineText = [lineText stringByTrimmingLeadingWhitespace];
                 }
                 
