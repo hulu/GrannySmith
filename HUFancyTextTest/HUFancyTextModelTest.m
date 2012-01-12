@@ -187,6 +187,17 @@
     text = [child.data objectForKey:HUFancyTextTextKey];
     STAssertEqualObjects(text, @"lah", @"styled text change failed. It's %@", text);
     HURelease(fancyText);
+    
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p id=1 class=right>Real right. Fake <span id=2 class=center>center</span></p>"];
+    [fancyText parseStructure];
+    id1 = [fancyText.parsedResultTree childNodeWithID:@"1"];
+    HUMarkupNode* id2 = [fancyText.parsedResultTree childNodeWithID:@"2"];
+    HUMarkupNode* node = [id1.children objectAtIndex:0];
+    TextAlign align = [[node.data objectForKey:HUFancyTextTextAlignKey] intValue];
+    STAssertTrue(align==TextAlignRight, @"p align incorrect:%d", align);
+    node = [id2.children objectAtIndex:0];
+    align = [[node.data objectForKey:HUFancyTextTextAlignKey] intValue];
+    STAssertTrue(align==TextAlignRight, @"span align incorrect:%d", align);
 }
 
 

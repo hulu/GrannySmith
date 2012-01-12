@@ -307,24 +307,6 @@ static int lineID_ = 1;
         currentLineSpecifiedHeight = segmentLineHeight;
         currentLineSpecifiedHeightIsPct = segmentLineHeightIsPct;
         
-        // there are several properties that we need the whole line to be consistent
-        // in the drawRect method of fancy text view, we just read the first (the first object might not have that property set)
-        if (currentLine.count>1) {
-            if (segmentAlignNumber) {
-                [[currentLine objectAtIndex:0] setObject: segmentAlignNumber forKey:HUFancyTextTextAlignKey];
-            }
-            if (segmentLineHeightNumber) {
-                [[currentLine objectAtIndex:0] setObject: segmentLineHeightNumber forKey:HUFancyTextLineHeightKey];
-            }
-            if (segmentLineHeightIsPctNumber) {
-                [[currentLine objectAtIndex:0] setObject: segmentLineHeightIsPctNumber forKey:HUFancyTextHeightIsPercentageKey];
-            }
-            NSNumber* segmentTruncationModeNumber = [piece objectForKey:HUFancyTextTruncateModeKey];
-            if (segmentTruncationModeNumber) {
-                [[currentLine objectAtIndex:0] setObject: segmentTruncationModeNumber forKey:HUFancyTextTruncateModeKey];
-            }
-        }
-        
         // update the total line content height
         if (segmentContentHeight > currentLineContentHeight) {
             currentLineContentHeight = segmentContentHeight;
@@ -1004,6 +986,7 @@ typedef enum {
     }
     
 //    NSLog(@"end of tag: location: %@", [scanner atCharacter]);
+    [[self class] cleanStyleDict:style];
     return style;
 }
 
@@ -1674,6 +1657,15 @@ static NSMutableDictionary* fontMemory_;
     }
     else {
         [array addObject:object];
+    }
+}
+
++ (void)cleanStyleDict:(NSMutableDictionary*)dict {
+    if (![dict objectForKey:HUFancyTextLineIDKey]) {
+        [dict removeObjectForKey:HUFancyTextLineHeightKey];
+        [dict removeObjectForKey:HUFancyTextTextAlignKey];
+        [dict removeObjectForKey:HUFancyTextLineCountKey];
+        [dict removeObjectForKey:HUFancyTextTruncateModeKey];
     }
 }
 

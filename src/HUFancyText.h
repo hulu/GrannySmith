@@ -236,5 +236,13 @@
  */
 + (void)addObject:(NSObject*)object intoDict:(NSMutableDictionary*)dict underKey:(NSString*)key;
 
+/** clean up the conflicting keys
+ * @discussion we have this method because when we set styles, we copy attributes by a block
+ * And only in a few cases we want to block attributes. So we use this method.
+ * @example if dict does not have line-id key (which is from p) but it has text align, line-id, truncation-mode key, just kick them out
+ * @note this method is called at the tag parsing level, e.g if we have <span class=centerAlign> we just remove the text-align
+ */
++ (void)cleanStyleDict:(NSMutableDictionary*)dict;
+
 @end
 

@@ -64,15 +64,15 @@ CGFloat const buttonMargin = 5;
     .right{text-align: right}\
     .yellow {color: yellow; font-family: Futura; font-SIzE: 18px}\
     .center{text-align: center}\
-    center {text-align: center}\
-    .limit2{line-count:2; truncate-mode:tail}";
+    .limit2{line-count:2; truncate-mode:tail}\
+    .doublespace {line-height: 200%}";
     
     [HUFancyText parseStyleAndSetGlobal:style];
     
     
     // Creating the fancy text object
     
-    NSString* text = @"<em>Hello</em> iOS world. <span id='abc' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p><span class='green right'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p>A&lt;&amp;&gt;<span class=center>B</span></p>Ah I am <font style=color:red>going</font> to be a line.<p class=right>1<strong>2</strong>3</p><p id=eee class=limit2>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a <strong>lot</strong> of a lot of a lot of texts</p> END<f";
+    NSString* text = @"<em>Hello</em> iOS world. <span id='abc' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class=center>A&lt;&amp;&gt;B</p>Ah I am <font style=color:red>going</font> to be a line.<p class='right doublespace'>A line with <em>2</em> classes</p><p id=eee class=limit2>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a <strong>lot</strong> of a lot of a lot of texts</p> END<f";
     
     HUFancyText* fancyText = [[HUFancyText alloc] initWithMarkupText:text];
     
