@@ -59,7 +59,7 @@ CGFloat const buttonMargin = 5;
     
     // Preparing the style
     
-    NSString* style = @".default{color: #ffffff; vertical-align:middle}\n\
+    NSString* style = @".default{color: #ffffff; vertical-align:middle;}\n\
     span.green {color:  'rgb(0, 255, 0)' ;font-family: 'Georgia'; font-size: 15px; font-style:'italic'   }\
     .right{text-align: right}\
     .yellow {color: yellow; font-family: Futura; font-SIzE: 18px}\

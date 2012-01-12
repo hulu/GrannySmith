@@ -15,6 +15,8 @@
 // Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
  #define ARC_ENABLED 1
 
+// 
+#define HU_DEBUG_MODE 1
 
 /// The typical size involved in the text rendering process, including number of nodes in a tree, number of styles in a node.
 /// It is used for initWithCapacity method, so it doesn't really limit. It's just close guess for perf optimization
@@ -150,6 +152,13 @@ extern NSString* const HUFancyTextHeightIsPercentageKey;  // @"line-height-is-pe
 #define HUWeakPrefix 
 #define HUBridgePrefix 
 #endif
+
+#ifdef HU_DEBUG_MODE
+#define HUDebugLog(...) NSLog(__VA_ARGS__)
+#else
+#define HUDebugLog(...) 
+#endif
+
 
 
 #endif

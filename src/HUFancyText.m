@@ -36,12 +36,12 @@ static int lineID_ = 1;
  */
 + (NSObject*)parseValue: (NSString*)value forKey:(NSString*)key intoDictionary:(NSMutableDictionary*)dict;
 
-/** Parse color string
+/** Parse color and store into the dict
  * @return a UIColor object
  * @param value can be rgb(255,255,255), #ffffff, red, blue, etc. When text is used, there has to be a [UIColor xxxColor] method to match it
  * @note default return is black is the value isn't recoginized
  */
-+ (UIColor*)parsedColor:(NSString*)value;
++ (UIColor*)parseColor:(NSString*)value intoDictionary:(NSMutableDictionary*)dict;
 
 /** Parse line height and store into the dict
  * @param value can be either just a number (in px), or a percentage like 100%
@@ -49,23 +49,23 @@ static int lineID_ = 1;
 + (NSNumber*)parseLineHeight:(NSString *)value intoDictionary:(NSMutableDictionary*)dict;
 
 
-/** Parse text align
+/** Parse text align and store into the dict
  * @param value should be left, right or center
  * @return an NSNumber with TextAlign integer
  */
-+ (NSNumber*)parsedTextAlign: (NSString*)value;
++ (NSNumber*)parseTextAlign: (NSString*)value intoDictionary:(NSMutableDictionary*)dict;
 
-/** Parse vertical align
+/** Parse vertical align and store into the dict
  * @param value should be middle, top or bottom
  * @return an NSNumber with VerticalAlign integer
  */
-+ (NSNumber*)parsedVerticalAlign: (NSString*)value;
++ (NSNumber*)parseVerticalAlign: (NSString*)value intoDictionary:(NSMutableDictionary*)dict;
 
-/** Parse truncate mode
+/** Parse truncate mode and store into the dict
  * @param value should be tail, head, middle, clip
  * @return an NSNumber with a UILineBreakMode value
  */
-+ (NSNumber*)parsedTruncationMode: (NSString*)value;
++ (NSNumber*)parseTruncationMode: (NSString*)value intoDictionary:(NSMutableDictionary*)dict;
 
 /** Get a list of HUMarkupNode objects based on a class name or ID
  * @return a retained array. An emtpy array if there's no match.
@@ -998,39 +998,36 @@ typedef enum {
 
 + (NSObject*)parseValue: (NSString*)value forKey:(NSString*)key intoDictionary:(NSMutableDictionary*)dict {
     
-    if ([key caseInsensitiveCompare:HUFancyTextLineHeightKey]==NSOrderedSame) {
-        return [[self class] parseLineHeight:value intoDictionary:dict];
-    }
-    
     NSObject* object;
     if ([key caseInsensitiveCompare:HUFancyTextColorKey]==NSOrderedSame) {
-        object = [[self class] parsedColor:value];
+        object = [[self class] parseColor:value intoDictionary:dict];
+    }
+    else if ([key caseInsensitiveCompare:HUFancyTextLineHeightKey]==NSOrderedSame) {
+        object = [[self class] parseLineHeight:value intoDictionary:dict];
     }
     else if ([key caseInsensitiveCompare:HUFancyTextTextAlignKey]==NSOrderedSame) {
-        object = [[self class] parsedTextAlign:value];
+        object = [[self class] parseTextAlign:value intoDictionary:dict];
     }
     else if ([key caseInsensitiveCompare:HUFancyTextTruncateModeKey]==NSOrderedSame) {
-        object = [[self class] parsedTruncationMode:value];
+        object = [[self class] parseTruncationMode:value intoDictionary:dict];
     }
     else if ([key caseInsensitiveCompare:HUFancyTextVerticalAlignKey]==NSOrderedSame) {
-        object = [[self class] parsedVerticalAlign:value];
+        object = [[self class] parseVerticalAlign:value intoDictionary:dict];
     }
     else {
         object = [NSString stringWithString:value];
         // just to be consistent with other cases, return an autorelease copy instead of just value
         // e.g. jic the code before this call is value=[[xxx alloc] init], and after this call there is a HURelease(value)
-    }
-    
-    if (dict) {
         [dict setObject:object forKey:key];
     }
     return object;
 }
 
-+ (UIColor*)parsedColor:(NSString *)value_ {
++ (UIColor*)parseColor:(NSString *)value_ intoDictionary:(NSMutableDictionary*)dict {
     NSString* value = [value_ lowercaseString];
+    UIColor* color;
     if (!value.length) {
-        return [UIColor blackColor];
+        // fail
     }
     else if ([[value substringToIndex:1] isEqualToString:@"#"]) {
         unsigned result = 0;
@@ -1038,29 +1035,40 @@ typedef enum {
         
         [scanner setScanLocation:1]; // bypass '#' character
         [scanner scanHexInt:&result];
-        return HURGB(result);
+        color = HURGB(result);
     }
     else if ([value rangeOfString:HUFancyTextRGBValue].location != NSNotFound) {
         value = [value stringByReplacingOccurrencesOfString:HUFancyTextRGBValue withString:@""];
         value = [value stringByReplacingOccurrencesOfString:@"(" withString:@""];
         value = [value stringByReplacingOccurrencesOfString:@")" withString:@""];
         NSArray* colors = [value componentsSeparatedByString:@","];
-        if (colors.count != 3) {
-            return [UIColor blackColor];
+        if (colors.count == 3) {
+            CGFloat r = [(NSString*)[colors objectAtIndex:0] floatValue];
+            CGFloat g = [(NSString*)[colors objectAtIndex:1] floatValue];
+            CGFloat b = [(NSString*)[colors objectAtIndex:2] floatValue];
+            
+            if (r<=255.f && r>=0.f && g<=255.f && g>=0.f && b<=255.f && b>=0.f) {
+                color = [UIColor colorWithRed:r/255.f green:g/255.f blue:b/255.f alpha:1];
+            }
         }
-        CGFloat r = [(NSString*)[colors objectAtIndex:0] floatValue];
-        CGFloat g = [(NSString*)[colors objectAtIndex:1] floatValue];
-        CGFloat b = [(NSString*)[colors objectAtIndex:2] floatValue];
-        
-        return [UIColor colorWithRed:r/255.f green:g/255.f blue:b/255.f alpha:1];
     }
     else {
         SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%@Color", value]);
         if ([[UIColor class] respondsToSelector: sel]) {
-            return objc_msgSend([UIColor class], sel);
+            color = objc_msgSend([UIColor class], sel);
         }
     }
-    return [UIColor blackColor];
+    
+    if (color) {
+        [dict setObject:color forKey:HUFancyTextColorKey];
+        return color;
+    }
+    else {
+        #ifdef HU_DEBUG_MODE
+        HUDebugLog(@"\n[Warning]\nColor parsing error. \"%@\" is not recognized.\n\n", value_);
+        #endif
+        return nil;
+    }
 }
 
 + (NSNumber*)parseLineHeight:(NSString *)value intoDictionary:(NSMutableDictionary*)dict {
@@ -1087,47 +1095,81 @@ typedef enum {
 }
 
 
-+ (NSNumber*)parsedTextAlign: (NSString*)value {
++ (NSNumber*)parseTextAlign: (NSString*)value intoDictionary:(NSMutableDictionary*)dict {
+    NSNumber* textAlignNumber;
     if ([value caseInsensitiveCompare:HUFancyTextAlignCenterValue]==NSOrderedSame) {
-        return [NSNumber numberWithInt: TextAlignCenter];
+        textAlignNumber = [NSNumber numberWithInt: TextAlignCenter];
     }
     else if ([value caseInsensitiveCompare:HUFancyTextAlignRightValue]==NSOrderedSame ) {
-        return [NSNumber numberWithInt: TextAlignRight];
+        textAlignNumber = [NSNumber numberWithInt: TextAlignRight];
+    }
+    else if ([value caseInsensitiveCompare:HUFancyTextAlignLeftValue]==NSOrderedSame ) {
+        textAlignNumber = [NSNumber numberWithInt: TextAlignLeft];
+    }
+    
+    if (textAlignNumber) {
+        [dict setObject:textAlignNumber forKey:HUFancyTextTextAlignKey];
+        return textAlignNumber;
     }
     else {
-        return [NSNumber numberWithInt: TextAlignLeft];
+        #ifdef HU_DEBUG_MODE
+        HUDebugLog(@"\n[Warning]\nText alignment parsing error. \"%@\" is not recognized.\n\n", value);
+        #endif
+        return nil;
     }
 }
 
-+ (NSNumber*)parsedVerticalAlign: (NSString*)value {    
-    VerticalAlign result = VerticalAlignBaseline;
++ (NSNumber*)parseVerticalAlign: (NSString*)value intoDictionary:(NSMutableDictionary*)dict {
+    NSNumber* result;
     if ([value caseInsensitiveCompare:HUFancyTextVAlignMiddleValue]==NSOrderedSame) {
-        result = VerticalAlignMiddle;
+        result = [NSNumber numberWithInteger:VerticalAlignMiddle];
     }
     else if ([value caseInsensitiveCompare:HUFancyTextVAlignTopValue]==NSOrderedSame ) {
-        result = VerticalAlignTop;
+        result = [NSNumber numberWithInteger:VerticalAlignTop];
     }
     else if ([value caseInsensitiveCompare:HUFancyTextVAlignBottomValue]==NSOrderedSame ) {
-        result = VerticalAlignBottom;
+        result = [NSNumber numberWithInteger:VerticalAlignBottom];
     }
-    return [NSNumber numberWithInt: result];
-}
-
-+ (NSNumber*)parsedTruncationMode: (NSString*)value {
-    UILineBreakMode mode;
-    if ([value caseInsensitiveCompare:HUFancyTextTruncateHeadValue]==NSOrderedSame) {
-        mode = UILineBreakModeHeadTruncation;
+    else if ([value caseInsensitiveCompare:HUFancyTextVAlignBaselineValue]==NSOrderedSame ) {
+        result = [NSNumber numberWithInteger:VerticalAlignBaseline];
     }
-    else if ([value caseInsensitiveCompare:HUFancyTextTruncateMiddleValue]==NSOrderedSame) {
-        mode = UILineBreakModeMiddleTruncation;
-    }
-    else if ([value caseInsensitiveCompare:HUFancyTextTruncateClipValue]==NSOrderedSame) {
-        mode = UILineBreakModeClip;
+    
+    if (result) {
+        [dict setObject:result forKey:HUFancyTextVerticalAlignKey];
+        return result;
     }
     else {
-        mode = UILineBreakModeTailTruncation;
+        #ifdef HU_DEBUG_MODE
+        HUDebugLog(@"\n[Warning]\nVertical alignment parsing error. \"%@\" is not recognized.\n\n", value);
+        #endif
+        return nil;
     }
-    return [NSNumber numberWithInt: mode];
+}
+
++ (NSNumber*)parseTruncationMode: (NSString*)value intoDictionary:(NSString*)dict {
+    NSNumber* mode;
+    if ([value caseInsensitiveCompare:HUFancyTextTruncateHeadValue]==NSOrderedSame) {
+        mode = [NSNumber numberWithInt: UILineBreakModeHeadTruncation];
+    }
+    else if ([value caseInsensitiveCompare:HUFancyTextTruncateMiddleValue]==NSOrderedSame) {
+        mode = [NSNumber numberWithInt: UILineBreakModeMiddleTruncation];
+    }
+    else if ([value caseInsensitiveCompare:HUFancyTextTruncateClipValue]==NSOrderedSame) {
+        mode = [NSNumber numberWithInt: UILineBreakModeClip];
+    }
+    else if ([value caseInsensitiveCompare:HUFancyTextTruncateTailValue]==NSOrderedSame) {
+        mode = [NSNumber numberWithInt: UILineBreakModeTailTruncation];
+    }
+    if (mode) {
+        [dict setValue:mode forKey:HUFancyTextTruncateModeKey];
+        return mode;
+    }
+    else {
+        #ifdef HU_DEBUG_MODE
+        HUDebugLog(@"\n[Warning]\nTruncation mode parsing error. \"%@\" is not recognized.\n\n", value);
+        #endif
+        return nil;
+    }
 }
 
 
@@ -1430,7 +1472,7 @@ static NSMutableDictionary* fontMemory_;
         segments = [lines_ objectAtIndex:l];
         
         // determine if we need to calculate total width
-        TextAlign align = TextAlignLeft;
+        TextAlign align = 0;
         NSNumber* alignNumber = [[segments objectAtIndex:0] objectForKey:HUFancyTextTextAlignKey];
         if (alignNumber) {
             align = [alignNumber intValue];
@@ -1590,9 +1632,11 @@ static NSMutableDictionary* fontMemory_;
                     drawingBlock(rect);
 //                    NSLog(@"finished drawing %@ for %@...", lambdaID, [[segments_ objectAtIndex:0] objectForKey:HUFancyTextTextKey]);
                 }
-//                else {
-//                    NSLog(@"can't find %@ block for %@...", lambdaID, [[segments_ objectAtIndex:0] objectForKey:HUFancyTextTextKey]);
-//                }
+                #ifdef HU_DEBUG_MODE
+                else {
+                    HUDebugLog(@"\n[Warning]\nBlock %@... undefined. A blank space will be created.\n\n", lambdaID);
+                }
+                #endif
             }
             else {
                 // get color
@@ -1661,11 +1705,24 @@ static NSMutableDictionary* fontMemory_;
 }
 
 + (void)cleanStyleDict:(NSMutableDictionary*)dict {
+
     if (![dict objectForKey:HUFancyTextLineIDKey]) {
-        [dict removeObjectForKey:HUFancyTextLineHeightKey];
-        [dict removeObjectForKey:HUFancyTextTextAlignKey];
-        [dict removeObjectForKey:HUFancyTextLineCountKey];
-        [dict removeObjectForKey:HUFancyTextTruncateModeKey];
+        
+        NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:HUFancyTextTextAlignKey, HUFancyTextLineHeightKey, HUFancyTextLineCountKey, HUFancyTextTruncateModeKey, nil];
+        
+#ifdef HU_DEBUG_MODE
+        NSArray* classNames = [dict objectForKey: HUFancyTextClassKey];
+        NSString* elementName = [dict objectForKey: HUFancyTextElementNameKey];
+        NSString* message = @"\n[Warning]\nFound definition of %@ in a <%@> tag through class %@. It is supposed to be set in <p> tags, and will be ignored here.\n\n";
+        for (NSString* attrib in attribsForPOnly) {
+            if ([dict objectForKey:attrib]) {
+                HUDebugLog(message, attrib, elementName, classNames);
+            }
+        }
+#endif
+        for (NSString* attrib in attribsForPOnly) {
+            [dict removeObjectForKey:attrib];
+        }
     }
 }
 
