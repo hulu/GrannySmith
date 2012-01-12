@@ -63,6 +63,7 @@ extern NSString* const HUFancyTextVerticalAlignKey;  // @"vertical-align"
 /// some special attributes
 extern NSString* const HUFancyTextLineCountKey;  // @"line-count"
 extern NSString* const HUFancyTextTruncateModeKey;  // @"truncate-mode"
+extern NSString* const HUFancyTextAltKey;  // @"alt"
 
 /// values
 extern NSString* const HUFancyTextBoldValue;  // @"bold"

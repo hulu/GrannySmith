@@ -210,4 +210,11 @@
     HURelease(fancyText);
 }
 
+- (void)testPureText {
+    HUFancyText* fancyText = [[HUFancyText alloc] initWithMarkupText:@"<span>Hello</span>! <a>How</a> <dog>are</dog> you doing? <lambda id=x alt='Read me if you can'>"];
+    [fancyText parseStructure];
+    NSString* pureText = [fancyText pureText];
+    STAssertEqualObjects(pureText, @"Hello! How are you doing? Read me if you can", @"wrong pure text: %@", pureText);
+}
+
 @end

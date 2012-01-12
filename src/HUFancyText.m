@@ -174,6 +174,9 @@ static int lineID_ = 1;
         if (text) {
             [texts appendString:text];
         }
+        else if ([segment objectForKey:HUFancyTextInternalLambdaIDKey] && (text = [segment objectForKey: HUFancyTextAltKey])) {
+            [texts appendString:text];
+        }
         previousLineID = lineID;
     }
     

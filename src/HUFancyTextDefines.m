@@ -25,6 +25,7 @@ NSString* const HUFancyTextVerticalAlignKey  = @"vertical-align";
 
 NSString* const HUFancyTextLineCountKey  = @"line-count";
 NSString* const HUFancyTextTruncateModeKey  = @"truncate-mode";
+NSString* const HUFancyTextAltKey = @"alt";
 
 #pragma mark - values
 
