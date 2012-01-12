@@ -1,6 +1,6 @@
 //
-//  NSString+ParsingHelper.h
-//  -HUSFT-
+//  NSString+GSParsingHelper.h
+//  -GrannySmith-
 //
 //  Created by Bao Lei on 7/14/11.
 //  Copyright 2011 hulu. All rights reserved.
@@ -14,7 +14,7 @@
 /// String manipulation
 #define trim(s) [s stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]]
 
-@interface NSString (ParsingHelper)
+@interface NSString (GSParsingHelper)
 
 /** breaks one string into an array of lines, based on word wrapping
  * @param width is the width of the paragraph (the confinement of the text)

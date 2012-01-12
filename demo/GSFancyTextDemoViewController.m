@@ -1,14 +1,14 @@
 //
-//  HUDemoViewController.m
-//  HUFancyTextDemo
+//  GSFancyTextDemoViewController.m
+//  GSFancyTextDemo
 //
 //  Created by Bao Lei on 1/9/12.
 //  Copyright (c) 2012 Hulu. All rights reserved.
 //
 
-#import "HUDemoViewController.h"
+#import "GSFancyTextDemoViewController.h"
 
-#import "HUFancyTextView.h"
+#import "GSFancyTextView.h"
 
 CGFloat const textWidth = 300;
 CGFloat const maxHeight = 1000;
@@ -16,7 +16,7 @@ CGFloat const buttonWidth = 100;
 CGFloat const buttonHeight = 40;
 CGFloat const buttonMargin = 5;
 
-@interface HUDemoViewController (Private)
+@interface GSFancyTextDemoViewController (Private)
 
 - (void)setupButtons;
 - (void)demoTextSwap:(id)sender;
@@ -24,7 +24,7 @@ CGFloat const buttonMargin = 5;
 - (void)resetTextAndStyle:(id)sender;
 @end
 
-@implementation HUDemoViewController
+@implementation GSFancyTextDemoViewController
 
 @synthesize fancyTextView = fancyTextView_;
 @synthesize originalFancyText = originalFancyText_;
@@ -67,14 +67,14 @@ CGFloat const buttonMargin = 5;
     .limit2{line-count:2; truncate-mode:tail}\
     .doublespace {line-height: 200%}";
     
-    [HUFancyText parseStyleAndSetGlobal:style];
+    [GSFancyText parseStyleAndSetGlobal:style];
     
     
     // Creating the fancy text object
     
     NSString* text = @"<em>Hello</em> iOS world. <span id='abc' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class=center>A&lt;&amp;&gt;B</p>Ah I am <font style=color:red>going</font> to be a line.<p class='right doublespace'>A line with <em>2</em> classes</p><p id=eee class=limit2>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a <strong>lot</strong> of a lot of a lot of texts</p> END<f";
     
-    HUFancyText* fancyText = [[HUFancyText alloc] initWithMarkupText:text];
+    GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:text];
     
     // Set the drawing block
     void(^drawStarBlock) (CGRect) = ^(CGRect rect) {
@@ -93,7 +93,7 @@ CGFloat const buttonMargin = 5;
         xMargin = 100;
         yMargin = 100;
     }
-    fancyTextView_ = [[HUFancyTextView alloc] initWithFrame:CGRectMake(xMargin, yMargin, textWidth, maxHeight) fancyText:fancyText];
+    fancyTextView_ = [[GSFancyTextView alloc] initWithFrame:CGRectMake(xMargin, yMargin, textWidth, maxHeight) fancyText:fancyText];
     fancyTextView_.matchFrameHeightToContent = YES;
     fancyTextView_.backgroundColor = [UIColor blackColor];
     fancyTextView_.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
@@ -170,9 +170,9 @@ CGFloat const buttonMargin = 5;
 }
 
 - (void)demoStyleSwap:(id)sender {
-    [fancyTextView_.fancyText changeAttribute:@"color" to:[UIColor greenColor] on:HUFancyTextRoot withName:nil];
+    [fancyTextView_.fancyText changeAttribute:@"color" to:[UIColor greenColor] on:GSFancyTextRoot withName:nil];
     [fancyTextView_.fancyText appendStyleSheet:@".cyan {color:cyan}"];
-    [fancyTextView_.fancyText applyClass:@"cyan" on:HUFancyTextClass withName:@"green"];
+    [fancyTextView_.fancyText applyClass:@"cyan" on:GSFancyTextClass withName:@"green"];
     [fancyTextView_ updateWithCurrentFrame];
     
     self.styleSwitchButton.enabled = NO;
@@ -183,7 +183,7 @@ CGFloat const buttonMargin = 5;
     fancyTextView_.fancyText = originalFancyText_;
     [fancyTextView_ updateWithCurrentFrame];
     
-    HURelease(originalFancyText_);
+    GSRelease(originalFancyText_);
     originalFancyText_ = [fancyTextView_.fancyText copy];
     
     self.contentSwitchButton.enabled = YES;

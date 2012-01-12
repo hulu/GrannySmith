@@ -1,22 +1,22 @@
 //
-//  NSScanner+HierachicalScan.m
-//  -HUSFT-
+//  NSScanner+GSHierarchicalScan.m
+//  -GrannySmith-
 //
 //  Created by Bao Lei on 12/22/11.
 //  Copyright (c) 2011 Hulu. All rights reserved.
 //
 
-#import "NSScanner+HierarchicalScan.h"
-#import "HUFancyTextDefines.h"
+#import "NSScanner+GSHierarchicalScan.h"
+#import "GSFancyTextDefines.h"
 
-@implementation NSScanner (HierachicalScan)
+@implementation NSScanner (GSHierarchicalScan)
 
-- (ScanResult) scanUpToString:(NSString*)target endToken:(NSString*)endToken intoString:(NSString**)intoString {
+- (GSScanResult) scanUpToString:(NSString*)target endToken:(NSString*)endToken intoString:(NSString**)intoString {
     int locationBeforeScan = self.scanLocation;
     
     [self scanUpToString:target intoString:intoString];
     NSString* resultString = *intoString;
-    ScanResult result;
+    GSScanResult result;
     
     int endTokenLocation = [resultString rangeOfString:endToken].location;
     if (endTokenLocation != NSNotFound) {
@@ -36,7 +36,7 @@
     return result;
 }
 
-- (ScanResult) scanWithScanResultUpToString:(NSString*)target intoString:(NSString**)intoString {
+- (GSScanResult) scanWithGSScanResultUpToString:(NSString*)target intoString:(NSString**)intoString {
     [self scanUpToString:target intoString:intoString];
     if ([self isAtEnd]) {
         return ScanMeetEnd;

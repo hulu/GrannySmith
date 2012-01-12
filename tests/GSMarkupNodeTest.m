@@ -1,6 +1,6 @@
 //
-//  HUMarkupNodeTest.m
-//  HUFancyTextDemo
+//  GSMarkupNodeTest.m
+//  GSFancyTextTest
 //
 //  Created by Bao Lei on 1/10/12.
 //  Copyright (c) 2012 Hulu. All rights reserved.
@@ -8,38 +8,38 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 #import <UIKit/UIKit.h>
-#import "HUFancyTextDefines.h"
-#import "HUFancyText.h"
+#import "GSFancyTextDefines.h"
+#import "GSFancyText.h"
 
-@interface HUMarkupNodeTest : SenTestCase {
-    HUMarkupNode* testMarkupNode_;
+@interface GSMarkupNodeTest : SenTestCase {
+    GSMarkupNode* testMarkupNode_;
 }
 
 @end
 
-@implementation HUMarkupNodeTest
+@implementation GSMarkupNodeTest
 
 - (void)setUp {
     NSString* markupText = @"0 <p id=1 class=1>1 <p id=2 class=2>2</p> <p id=3 class=2>3</p> <p id=4><span id=5 class=5>5</span></p></p> 6";
-    testMarkupNode_ = [HUFancyText newParsedMarkupString:markupText withStyleDict:nil];
+    testMarkupNode_ = [GSFancyText newParsedMarkupString:markupText withStyleDict:nil];
 }
 
 - (void)tearDown {
-    HURelease(testMarkupNode_);
+    GSRelease(testMarkupNode_);
 }
 
 - (void)testMarkupNodeChildren {
     NSArray* rootChildren = [testMarkupNode_ children];
     STAssertTrue(rootChildren.count == 3, @"Root should have 3 kids, but we found %d", rootChildren.count);
     
-    for (HUMarkupNode* child in rootChildren) {
+    for (GSMarkupNode* child in rootChildren) {
         STAssertTrue(child.parent == testMarkupNode_, @"parent of a root's child isn't pointing back to the root");
     }
 }
 
 - (void)testIsContainer {
     NSArray* rootChildren = [testMarkupNode_ children];
-    HUMarkupNode* child;
+    GSMarkupNode* child;
     
     child = [rootChildren objectAtIndex:0];
     STAssertTrue(child.isContainer == NO, @"The 1st child of root is supposed to be content but it's not");
@@ -62,15 +62,15 @@
 
 
 - (void)testMarkupNodeIDMap {
-    HUMarkupNode* idRoot = [testMarkupNode_ childNodeWithID:HUFancyTextRootID];
+    GSMarkupNode* idRoot = [testMarkupNode_ childNodeWithID:GSFancyTextRootID];
     STAssertTrue(idRoot == testMarkupNode_, @"We are supposed to get root by ID root but we didn't");
     
-    HUMarkupNode* id3 = [testMarkupNode_ childNodeWithID:@"3"];
+    GSMarkupNode* id3 = [testMarkupNode_ childNodeWithID:@"3"];
     NSString* id3class = [[id3.data objectForKey:@"class"] objectAtIndex:0];
     STAssertTrue([id3class isEqualToString:@"2"], @"id3's class should be 2, but it's %@", [id3.data objectForKey:@"class"]);
     
-    HUMarkupNode* id5 = [testMarkupNode_ childNodeWithID:@"5"];
-    HUMarkupNode* traceUp = id5;
+    GSMarkupNode* id5 = [testMarkupNode_ childNodeWithID:@"5"];
+    GSMarkupNode* traceUp = id5;
     for(int i=0; i<3; i++) {
         traceUp = traceUp.parent;
     }
@@ -78,16 +78,16 @@
 }
 
 - (void)testAppendNode {
-    HUMarkupNode* hostingNode = [testMarkupNode_ childNodeWithID:@"4"];
+    GSMarkupNode* hostingNode = [testMarkupNode_ childNodeWithID:@"4"];
     int originalCount = hostingNode.children.count;
-    HUMarkupNode* newNode = [HUFancyText parsedMarkupString:@"I'm new <span id=7>1234567</span>" withStyleDict:nil];
+    GSMarkupNode* newNode = [GSFancyText parsedMarkupString:@"I'm new <span id=7>1234567</span>" withStyleDict:nil];
     [testMarkupNode_ appendSubtree:newNode underNode:hostingNode];
     STAssertTrue(hostingNode.children.count == originalCount + 1, @"before adding:%d, after adding 1: %d", originalCount, hostingNode.children.count);
     STAssertTrue(newNode.parent == hostingNode, @"after adding, parent of the child is not correctly set");
     
     // search new child from root
-    HUMarkupNode* firstChildOfNewNode = [[[testMarkupNode_ childNodeWithID:@"7"] children] objectAtIndex:0];
-    STAssertTrue([[firstChildOfNewNode.data objectForKey:HUFancyTextTextKey] isEqualToString:@"1234567"]==YES, @"Searching new children has some issue. We found %@", [firstChildOfNewNode.data objectForKey:HUFancyTextTextKey]);
+    GSMarkupNode* firstChildOfNewNode = [[[testMarkupNode_ childNodeWithID:@"7"] children] objectAtIndex:0];
+    STAssertTrue([[firstChildOfNewNode.data objectForKey:GSFancyTextTextKey] isEqualToString:@"1234567"]==YES, @"Searching new children has some issue. We found %@", [firstChildOfNewNode.data objectForKey:GSFancyTextTextKey]);
 }
 
 - (void)testCut {
@@ -103,29 +103,29 @@
 }
 
 - (void)testReplaceText {
-    HUMarkupNode* testNode = [testMarkupNode_ childNodeWithID:@"4"];
+    GSMarkupNode* testNode = [testMarkupNode_ childNodeWithID:@"4"];
     [testNode resetChildToText:@"Hello"];
     STAssertTrue(testNode.children.count == 1, @"we are expecting one text child but we see %d", testNode.children.count);
     
-    HUMarkupNode* textNode = [testNode.children lastObject];
-    NSString* newText = [textNode.data objectForKey:HUFancyTextTextKey];
+    GSMarkupNode* textNode = [testNode.children lastObject];
+    NSString* newText = [textNode.data objectForKey:GSFancyTextTextKey];
     STAssertTrue([newText isEqualToString:@"Hello"], @"we set Hello but get %@", newText);
     
-    HUMarkupNode* lambdaNode = [HUFancyText parsedMarkupString:@"<span id=9>ABC<lambda id=10></span>" withStyleDict:nil];
+    GSMarkupNode* lambdaNode = [GSFancyText parsedMarkupString:@"<span id=9>ABC<lambda id=10></span>" withStyleDict:nil];
     [testMarkupNode_ appendSubtree:lambdaNode underNode:testNode];
     testNode = [testMarkupNode_ childNodeWithID:@"9"];
     [testNode resetChildToText:@"123"];
     STAssertTrue(testNode.children.count == 2, @"we are expecting 2 children but we see %d", testNode.children.count);
     textNode = [testNode.children objectAtIndex:0];
-    STAssertTrue([[textNode.data objectForKey:HUFancyTextTextKey] isEqualToString:@"123"], @"we set Hello but get %@", newText);
+    STAssertTrue([[textNode.data objectForKey:GSFancyTextTextKey] isEqualToString:@"123"], @"we set Hello but get %@", newText);
 }
 
 - (void)testApplyStyle {
-    HUMarkupNode* id1 = [testMarkupNode_ childNodeWithID:@"1"];
-    HUMarkupNode* id2 = [testMarkupNode_ childNodeWithID:@"2"];
-    HUMarkupNode* id1Kid = [id1.children objectAtIndex:0];
-    HUMarkupNode* id2Kid = [id2.children objectAtIndex:0];
-    HUMarkupNode* rootKid = [testMarkupNode_.children objectAtIndex:0];
+    GSMarkupNode* id1 = [testMarkupNode_ childNodeWithID:@"1"];
+    GSMarkupNode* id2 = [testMarkupNode_ childNodeWithID:@"2"];
+    GSMarkupNode* id1Kid = [id1.children objectAtIndex:0];
+    GSMarkupNode* id2Kid = [id2.children objectAtIndex:0];
+    GSMarkupNode* rootKid = [testMarkupNode_.children objectAtIndex:0];
     
     NSMutableDictionary* style = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"white", @"color", nil];
     [testMarkupNode_ applyAndSpreadStyles:style removeOldStyles:NO];
@@ -159,18 +159,18 @@
 }
 
 - (void)testDeepCopy {
-    HUMarkupNode* copied = [testMarkupNode_ copy];
+    GSMarkupNode* copied = [testMarkupNode_ copy];
     int originalCount = copied.children.count;
     [testMarkupNode_ dismissAllChildren];
     STAssertTrue(copied.children.count == originalCount, @"shallow copy");
     
-    HUMarkupNode* newID5 = [copied childNodeWithID:@"5"];
-    HUMarkupNode* traceUp = newID5;
+    GSMarkupNode* newID5 = [copied childNodeWithID:@"5"];
+    GSMarkupNode* traceUp = newID5;
     while(traceUp.parent != nil) {
         traceUp = traceUp.parent;
     }
     STAssertTrue(traceUp == copied, @"new parent/ID hash relation was not correct");
-    HURelease(copied);
+    GSRelease(copied);
 }
 
 @end

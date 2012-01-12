@@ -1,15 +1,15 @@
 //
-//  NSString+ParsingHelper.m
-//  -HUSFT-
+//  NSString+GSParsingHelper.m
+//  -GrannySmith-
 //
 //  Created by Bao Lei on 7/14/11.
 //  Copyright 2011 hulu. All rights reserved.
 //
 
-#import "NSString+ParsingHelper.h"
-#import "HUFancyTextDefines.h"
+#import "NSString+GSParsingHelper.h"
+#import "GSFancyTextDefines.h"
 
-@implementation NSString (ParsingHelper)
+@implementation NSString (GSParsingHelper)
 
 - (NSMutableArray*) linesWithWidth:(CGFloat)width font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
     #ifdef DEBUG_MODE
@@ -41,8 +41,8 @@
     
         if (limitLineCount>0 && lines.count == limitLineCount-1) {
             [lines addObject:[self substringFromIndex:i]];
-            HURelease(currentLine);
-            return HUAutoreleased(lines);
+            GSRelease(currentLine);
+            return GSAutoreleased(lines);
         }
         
         // if the rest of the string begins with \n
@@ -60,8 +60,8 @@
                 // before adding the next line, we need to check limitLineCount
                 if (limitLineCount>0 && lines.count == limitLineCount-1) {
                     [lines addObject:[self substringFromIndex:i]];
-                    HURelease(currentLine);
-                    return HUAutoreleased(lines);
+                    GSRelease(currentLine);
+                    return GSAutoreleased(lines);
                 }
                 
             }
@@ -136,11 +136,11 @@
         [lines addObject: [NSString stringWithString:currentLine]];
     }
  
-    HURelease(currentLine);
+    GSRelease(currentLine);
     #ifdef DEBUG_MODE
     DebugLog(@"lines: %@", lines);
     #endif
-    return HUAutoreleased(lines);
+    return GSAutoreleased(lines);
 }
 
 

@@ -1,14 +1,14 @@
 //
-//  HUFancyTextView.m
-//  -HUSFT-
+//  GSFancyTextView.m
+//  -GrannySmith-
 //
 //  Created by Bao Lei on 12/15/11.
 //  Copyright (c) 2011 Hulu. All rights reserved.
 //
 
-#import "HUFancyTextView.h"
+#import "GSFancyTextView.h"
 
-@implementation HUFancyTextView
+@implementation GSFancyTextView
 
 @synthesize contentHeight = contentHeight_;
 @synthesize fancyText = fancyText_;
@@ -17,14 +17,14 @@
 #ifdef ARC_ENABLED
 #else
 - (void)dealloc {
-    HURelease(fancyText_);
+    GSRelease(fancyText_);
     [super dealloc];
 }
 #endif
 
--(id) initWithFrame:(CGRect)frame fancyText:(HUFancyText*)fancyText {
+-(id) initWithFrame:(CGRect)frame fancyText:(GSFancyText*)fancyText {
     if (( self = [super initWithFrame:frame] )) {
-        fancyText_ = HURetained(fancyText);
+        fancyText_ = GSRetained(fancyText);
         fancyText_.width = frame.size.width;
         contentHeight_ = 0.f;
         self.backgroundColor = [UIColor clearColor];

@@ -1,6 +1,6 @@
 //
-//  HUFancyText.h
-//  -HUSFT-
+//  GSFancyText.h
+//  -GrannySmith-
 //
 //  Created by Bao Lei on 12/15/11.
 //  Copyright (c) 2011 Hulu. All rights reserved.
@@ -9,16 +9,15 @@
 /// A structure that stores tree based markup parsing result, and arrays of lines.
 /// @discussion The initialization can be from an unparsed markup string, or a parsed result tree.
 /// It also stores a dictionary of styles, which can be used in markup parsing, as well as style switching afterwards
-/// @note This is a model class. It only processes strings and generate arrays. To create a view, see HUFancyTextView
+/// @note This is a model class. It only processes strings and generate arrays. To create a view, see GSFancyTextView
 
 #import <Foundation/Foundation.h>
 
-#import "HUFancyTextDefines.h"
-#import "HUMarkupNode.h"
-#import "HUFancyTextDefines.h"
+#import "GSFancyTextDefines.h"
+#import "GSMarkupNode.h"
 
 
-@interface HUFancyText : NSObject  {
+@interface GSFancyText : NSObject  {
     NSMutableArray* lines_; // each line is also an array of styled texts
     CGFloat width_;
     CGFloat maxHeight_;
@@ -29,7 +28,7 @@
     
     NSMutableDictionary* lambdaBlocks_; // key is lambda id, value is a block for drawing code with 1 parameter: the starting point
     
-    HUMarkupNode* parsedTree_; // root of the parsed result (in tree structure). ready after parseStructure
+    GSMarkupNode* parsedTree_; // root of the parsed result (in tree structure). ready after parseStructure
 }
 
 @property (nonatomic, retain) NSMutableDictionary* lambdaBlocks;
@@ -51,11 +50,11 @@
 /** init with a parsed structure.
  * @discussion in this way you can re-use a parsing result
  * e.g. structure = [fancyText1 parse];
- * fancyText2 = [[HUFancyText alloc] initWithParsedStructure: structure];
+ * fancyText2 = [[GSFancyText alloc] initWithParsedStructure: structure];
  * [fancyText2 changeNodeToText:@"new text" forID:@"123"];
  * @note the width and max height are set to 0, but can be changed later
  */
-- (id)initWithParsedStructure:(HUMarkupNode*)structure;
+- (id)initWithParsedStructure:(GSMarkupNode*)structure;
 
 /** keep the original style sheet and append a new one on that.
  * If there is any conflicted class, follow the newStyleSheet.
@@ -66,12 +65,12 @@
  * @return the root of the result tree
  * @note after parsing, we can always call parsedResultTree to retrieve the result tree
  */
-- (HUMarkupNode*)parseStructure;
+- (GSMarkupNode*)parseStructure;
 
 /** result of parseStructure
  * @return the root of the result tree
  */
-- (HUMarkupNode*)parsedResultTree;
+- (GSMarkupNode*)parsedResultTree;
 
 
 /** generate lines based on a parsed text
@@ -132,13 +131,13 @@
 
 /** A standalone parser for a markup styled string
  * @return a parsed result tree
- * @discussion this is similar to instance method parseStructure, but the difference is that we don't need to instantiate an HUFancyText object, and we don't need to worry about width, max height and all line breaking related stuff
+ * @discussion this is similar to instance method parseStructure, but the difference is that we don't need to instantiate an GSFancyText object, and we don't need to worry about width, max height and all line breaking related stuff
  */
-+ (HUMarkupNode*)parsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict;
++ (GSMarkupNode*)parsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict;
 
 /** Does the same thing as parsedMarkupString:withStyleDict:, the only difference is that it returns a retained object, and you have to release it manually
  */
-+ (HUMarkupNode*)newParsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict;
++ (GSMarkupNode*)newParsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict;
 
 
 ///-------------------
@@ -182,7 +181,7 @@
 
 /** change a node to a styled text (to be parsed).
  * @discussion it's similar to changeNodeToText:forID: but the styledText can have markup tags, e.g. <strong>text</strong>
- * It can also refer to classes that is either stored in this HUFancyText instance or the global/default style sheet
+ * It can also refer to classes that is either stored in this GSFancyText instance or the global/default style sheet
  */
 - (void)changeNodeToStyledText:(NSString*)styledText forID:(NSString*)nodeID;
 
@@ -198,34 +197,34 @@
 
 
 /** change the value of a single attribute to an ID or a class.
- * @param type can be either HUFancyTextID or HUFancyTextClass
+ * @param type can be either GSFancyTextID or GSFancyTextClass
  * @param name is the ID or the class name (in case it's root no name is required, it can be nil or anything)
  */
-- (void)changeAttribute:(NSString*)attribute to:(id)value on:(HUFancyTextReferenceType)type withName:(NSString*)name;
+- (void)changeAttribute:(NSString*)attribute to:(id)value on:(GSFancyTextReferenceType)type withName:(NSString*)name;
 
 /** add styles defined in a dictionary to an ID or a class.
- * @param type can be either HUFancyTextID or HUFancyTextClass or HUFancyTextRoot 
+ * @param type can be either GSFancyTextID or GSFancyTextClass or GSFancyTextRoot 
  * @param name is the ID or the class name (in case it's root no name is required, it can be nil or anything)
  */
-- (void)addStyles:(NSMutableDictionary*)styles on:(HUFancyTextReferenceType)type withName:(NSString*)name;
+- (void)addStyles:(NSMutableDictionary*)styles on:(GSFancyTextReferenceType)type withName:(NSString*)name;
 
 /** apply styles defined in a class to an ID or a class. (also keeps the old styles)
- * @param type can be either HUFancyTextID or HUFancyTextClass
+ * @param type can be either GSFancyTextID or GSFancyTextClass
  * @param name is the ID or the class name  (in case it's root no name is required, it can be nil or anything)
  * @note this just changes styles, but doesn't change class mapping.
- * e.g. if we have <p class=a>123</p>, and we called applyClass:b on:HUFancyTextClass withName:a, the styles of 123 are based on b now.
+ * e.g. if we have <p class=a>123</p>, and we called applyClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
  * But searching 123 would be still based on class=a
  */
-- (void)applyClass:(NSString*)className on:(HUFancyTextReferenceType)type withName:(NSString*)name;
+- (void)applyClass:(NSString*)className on:(GSFancyTextReferenceType)type withName:(NSString*)name;
 
 /** apply styles defined in a class to an ID or a class. (old styles get removed first)
- * @param type can be either HUFancyTextID or HUFancyTextClass
+ * @param type can be either GSFancyTextID or GSFancyTextClass
  * @param name is the ID or the class name (in case it's root no name is required, it can be nil or anything)
  * @note this just changes styles, but doesn't change class mapping.
- * e.g. if we have <p class=a>123</p>, and we called changeStylesToClass:b on:HUFancyTextClass withName:a, the styles of 123 are based on b now.
+ * e.g. if we have <p class=a>123</p>, and we called changeStylesToClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
  * But searching 123 would be still based on class=a
  */
-- (void)changeStylesToClass:(NSString*)className on:(HUFancyTextReferenceType)type withName:(NSString*)name;
+- (void)changeStylesToClass:(NSString*)className on:(GSFancyTextReferenceType)type withName:(NSString*)name;
 
 ///--------------
 /// @name helper

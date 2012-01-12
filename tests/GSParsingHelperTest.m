@@ -1,6 +1,6 @@
 //
-//  HUStringParserTest.m
-//  HUFancyTextDemo
+//  GSStringParserTest.m
+//  GSFancyTextTest
 //
 //  Created by Bao Lei on 1/10/12.
 //  Copyright (c) 2012 Hulu. All rights reserved.
@@ -8,16 +8,16 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 #import <UIKit/UIKit.h>
-#import "NSString+ParsingHelper.h"
-#import "HUFancyTextDefines.h"
+#import "NSString+GSParsingHelper.h"
+#import "GSFancyTextDefines.h"
 
-@interface HUStringParserTest : SenTestCase {
+@interface GSParsingHelperTest : SenTestCase {
     NSString* testString_;
 }
 
 @end
 
-@implementation HUStringParserTest
+@implementation GSParsingHelperTest
 
 - (void)setUp {
     testString_ = @"This application requires a Hulu Plus subscription.\n\
@@ -25,11 +25,11 @@
     Hulu Plus. The Hulu You Know + More Shows and Movies + More Ways to Watch. Stream thousands of episodes from hundreds of current and classic TV shows to your iPad, iPhone 3GS, iPhone 4, 3rd generation iPod Touch, computer, TV, and other devices with a Hulu Plus subscription. \n\
     \n\
     Hulu Plus subscribers receive many exclusive benefits";
-    HURetain(testString_);
+    GSRetain(testString_);
 }
 
 - (void)tearDown {
-    HURelease(testString_);
+    GSRelease(testString_);
 }
 
 - (void)testMath
@@ -45,7 +45,7 @@
     //DebugLog(@"test array: %@", testArray);
     STAssertTrue(testArray.count == 15, @"Line break didn't give line count result");
     
-    NSString* unmatched = HUAutoreleased([testString_ copy]);
+    NSString* unmatched = GSAutoreleased([testString_ copy]);
     for (int i=0; i<testArray.count; i++) {
         NSString* line = [testArray objectAtIndex:i];
         STAssertTrue([line sizeWithFont:systemFont].width <= limitWidth, @"Line %d is longer than limit", i);
@@ -65,7 +65,7 @@
         NSArray* testArray = [testString_ linesWithWidth:limitWidth font:systemFont firstLineWidth:limitWidth limitLineCount:lineCount];
         STAssertTrue(testArray.count == lineCount, @"Line breaker's line count limit not working properly");
         
-        NSString* unmatched = HUAutoreleased([testString_ copy]);
+        NSString* unmatched = GSAutoreleased([testString_ copy]);
         for (int i=0; i<testArray.count - 1; i++) {
             NSString* line = [testArray objectAtIndex:i];
             STAssertTrue([line sizeWithFont:systemFont].width <= limitWidth, @"Line %d is longer than limit", i);
@@ -87,7 +87,7 @@
     CGFloat firstLine = 100;
     NSArray* testArray = [testString_ linesWithWidth:limitWidth font:systemFont firstLineWidth:firstLine limitLineCount:0];
     
-    NSString* unmatched = HUAutoreleased([testString_ copy]);
+    NSString* unmatched = GSAutoreleased([testString_ copy]);
     for (int i=0; i<testArray.count; i++) {
         NSString* line = [testArray objectAtIndex:i];
         if (i==0) {

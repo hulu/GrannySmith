@@ -1,6 +1,6 @@
 //
-//  HUFancyTextView.h
-//  -HUSFT-
+//  GSFancyTextView.h
+//  -GrannySmith-
 //
 //  Created by Bao Lei on 12/15/11.
 //  Copyright (c) 2011 Hulu. All rights reserved.
@@ -8,21 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-#import "HUFancyTextDefines.h"
-#import "HUFancyText.h"
+#import "GSFancyTextDefines.h"
+#import "GSFancyText.h"
 
 /// The view class
-/// based on HUFancyText model.
+/// based on GSFancyText model.
 /// Added features include: setting accessibility lable, auto-resizing, updating view frame height based on content height, etc
 
-@interface HUFancyTextView : UIView {
-    HUFancyText* fancyText_;
+@interface GSFancyTextView : UIView {
+    GSFancyText* fancyText_;
     CGFloat contentHeight_;
     
     BOOL matchFrameHeightToContent_;
 }
 
-@property (nonatomic, retain) HUFancyText* fancyText;
+@property (nonatomic, retain) GSFancyText* fancyText;
 @property (nonatomic, assign) CGFloat contentHeight;
 
 /** If matchFrameHeightToContent is set to YES, the frame content height will be set to match the content height
@@ -32,7 +32,7 @@
 
 /** initialize a fancy text view with a frame and a fancyText
  */
-- (id)initWithFrame:(CGRect)frame fancyText:(HUFancyText*)fancyText;
+- (id)initWithFrame:(CGRect)frame fancyText:(GSFancyText*)fancyText;
 
 /** enable and update the accessibility label
  */

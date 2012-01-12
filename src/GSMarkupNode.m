@@ -1,15 +1,15 @@
 //
-//  HUMarkupNode.m
-//  -HUSFT-
+//  GSMarkupNode.m
+//  -GrannySmith-
 //
 //  Created by Bao Lei on 1/4/12.
 //  Copyright (c) 2012 Hulu. All rights reserved.
 //
 
-#import "HUMarkupNode.h"
-#import "HUFancyText.h"
+#import "GSMarkupNode.h"
+#import "GSFancyText.h"
 
-@implementation HUMarkupNode
+@implementation GSMarkupNode
 
 @synthesize children = children_;
 @synthesize data = data_;
@@ -21,12 +21,12 @@
 
 - (id)init {
     if (( self = [super init])) {
-        data_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
-        children_ = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+        data_ = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
+        children_ = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
         parent_ = nil;
         isContainer_ = NO;
-        IDMap_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
-        classesMap_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+        IDMap_ = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
+        classesMap_ = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
     }
     return self;
 }
@@ -34,19 +34,19 @@
 #ifdef ARC_ENABLED
 #else
 - (void)dealloc {
-    HURelease(children_);
-    HURelease(IDMap_);
-    HURelease(classesMap_);
+    GSRelease(children_);
+    GSRelease(IDMap_);
+    GSRelease(classesMap_);
     [super dealloc];
 }
 #endif
 
-- (void)appendChild:(HUMarkupNode*)node {
+- (void)appendChild:(GSMarkupNode*)node {
     [children_ addObject:node];
     node.parent = self;
 }
 
-- (void)appendSubtree:(HUMarkupNode*)subtreeRoot underNode:(HUMarkupNode*)node {
+- (void)appendSubtree:(GSMarkupNode*)subtreeRoot underNode:(GSMarkupNode*)node {
     [node appendChild:subtreeRoot];
     
     // upstream: the ID, class hashmap
@@ -54,16 +54,16 @@
 
     for (NSString* className in [subtreeRoot.classesMap allKeys]) {
         NSArray* objects = [subtreeRoot.classesMap objectForKey:className];
-        for (HUMarkupNode* object in objects) {
-            [HUFancyText addObject:object intoDict:self.classesMap underKey:className];
+        for (GSMarkupNode* object in objects) {
+            [GSFancyText addObject:object intoDict:self.classesMap underKey:className];
         }
     }
     
     // downstream: the styles
     // first prepare the styles to be applied, bottom up
-    NSMutableDictionary* stylesToPassDown = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableDictionary* stylesToPassDown = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
 
-    HUMarkupNode* styleGroup = node;
+    GSMarkupNode* styleGroup = node;
     while (styleGroup) {
         
         for (id key in [styleGroup.data allKeys]) {
@@ -80,7 +80,7 @@
     // do something to let the new subtree have the styles
     [subtreeRoot applyAndSpreadStyles:stylesToPassDown removeOldStyles:NO];
     
-    HURelease(stylesToPassDown);
+    GSRelease(stylesToPassDown);
 }
 
 
@@ -88,14 +88,14 @@
     
     NSMutableString* tree = [[NSMutableString alloc] init];
     
-    NSMutableArray* stack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
-    NSMutableArray* indentStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* stack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
+    NSMutableArray* indentStack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
     
     [stack addObject:self];
     [indentStack addObject:[NSNumber numberWithInt:0]];
     
     while ([stack count]) {
-        HUMarkupNode* node = [stack lastObject];
+        GSMarkupNode* node = [stack lastObject];
         [stack removeLastObject];
         int indent = [[indentStack lastObject] intValue];
         [indentStack removeLastObject];
@@ -103,7 +103,7 @@
         for (int i=0; i<indent; i++) {
             [tree appendString:@"  "];
         }
-        NSString* text = [node.data objectForKey:HUFancyTextTextKey];
+        NSString* text = [node.data objectForKey:GSFancyTextTextKey];
         [tree appendString: text? text : @"*"];
         if (!text) {
             [tree appendFormat:@" (%p)", node];
@@ -111,14 +111,14 @@
         [tree appendString:@"\n"];
         
         for (int i=node.children.count-1; i>=0; i--) {
-            HUMarkupNode* child = [node.children objectAtIndex:i];
+            GSMarkupNode* child = [node.children objectAtIndex:i];
             [stack addObject: child];
             [indentStack addObject: [NSNumber numberWithInt:(indent+1)]];
         }
     }
     
-    HURelease(stack);
-    HURelease(indentStack);
+    GSRelease(stack);
+    GSRelease(indentStack);
     
     // also list the id, class map
     for (id key in [self.IDMap allKeys]) {
@@ -128,41 +128,41 @@
     for (NSString* key in [self.classesMap allKeys]) {
         [tree appendFormat:@"class %@ : ", key];
         NSArray* nodes = [self.classesMap objectForKey:key];
-        for (HUMarkupNode* node in nodes) {
+        for (GSMarkupNode* node in nodes) {
             [tree appendFormat:@"%p ", node];
         }
         [tree appendFormat:@"\n"];
     }
     
-    return HUAutoreleased(tree);
+    return GSAutoreleased(tree);
 }
 
 - (NSArray*)newDepthFirstOrderDataArray {
-    NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
     
-    NSMutableArray* stack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* stack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
     
     [stack addObject:self];
     
     while ([stack count]) {
-        HUMarkupNode* node = [stack lastObject];
+        GSMarkupNode* node = [stack lastObject];
         [stack removeLastObject];
         
         if (!node.isContainer) {
             [array addObject:node.data];
         }
         for (int i=node.children.count-1; i>=0; i--) {
-            HUMarkupNode* child = [node.children objectAtIndex:i];
+            GSMarkupNode* child = [node.children objectAtIndex:i];
             [stack addObject: child];
         }
     }
-    HURelease(stack);
+    GSRelease(stack);
     return array;
 }
 
-- (HUMarkupNode*)childNodeWithID:(NSString*)nodeID {
-    HUMarkupNode* node = [self.IDMap objectForKey:nodeID];
-    if (!node && [nodeID caseInsensitiveCompare:HUFancyTextRootID]==NSOrderedSame) {
+- (GSMarkupNode*)childNodeWithID:(NSString*)nodeID {
+    GSMarkupNode* node = [self.IDMap objectForKey:nodeID];
+    if (!node && [nodeID caseInsensitiveCompare:GSFancyTextRootID]==NSOrderedSame) {
         node = self;
     }
     return node;
@@ -175,24 +175,24 @@
 
 - (id)copy {
     
-    HUMarkupNode* newGuy = [[HUMarkupNode alloc] init];
+    GSMarkupNode* newGuy = [[GSMarkupNode alloc] init];
 
     // new hashmaps for the newGuy (since it's copying, the address will be different, so the map should point to something different)
-    NSMutableDictionary* idMap = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];  // id must be unique, so the value is just an HUMarkupString node pointer
-    NSMutableDictionary* classesMap = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize]; // classes won't be unique, so the value is an array
+    NSMutableDictionary* idMap = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];  // id must be unique, so the value is just an HUMarkupString node pointer
+    NSMutableDictionary* classesMap = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize]; // classes won't be unique, so the value is an array
     
     
-    NSMutableArray* oldTreeStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
-    NSMutableArray* newTreeStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* oldTreeStack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
+    NSMutableArray* newTreeStack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
     
     [oldTreeStack addObject:self];
     [newTreeStack addObject:newGuy];
     
     while ([oldTreeStack count]) {
-        HUMarkupNode* nodeInOldTree = [oldTreeStack lastObject];
+        GSMarkupNode* nodeInOldTree = [oldTreeStack lastObject];
         [oldTreeStack removeLastObject];
         
-        HUMarkupNode* nodeInNewTree = [newTreeStack lastObject];
+        GSMarkupNode* nodeInNewTree = [newTreeStack lastObject];
         [newTreeStack removeLastObject];
         
         // copy dictionary data
@@ -201,45 +201,45 @@
         
         // then we have to manually update the hashmaps, based on the new tree node address
         if (nodeInNewTree.isContainer) {
-            NSString* tagID = [nodeInNewTree.data objectForKey: HUFancyTextIDKey];
+            NSString* tagID = [nodeInNewTree.data objectForKey: GSFancyTextIDKey];
             if (tagID) {
                 [idMap setObject:nodeInNewTree forKey:tagID];
             }
-            NSArray* tagClassNames = [nodeInNewTree.data objectForKey: HUFancyTextClassKey];
+            NSArray* tagClassNames = [nodeInNewTree.data objectForKey: GSFancyTextClassKey];
             if (tagClassNames) {
                 for (NSString* className in tagClassNames) {
-                    [HUFancyText addObject:nodeInNewTree intoDict:classesMap underKey:className];
+                    [GSFancyText addObject:nodeInNewTree intoDict:classesMap underKey:className];
                 }
             }
         }
-        NSString* lambdaID = [nodeInNewTree.data objectForKey: HUFancyTextInternalLambdaIDKey];
+        NSString* lambdaID = [nodeInNewTree.data objectForKey: GSFancyTextInternalLambdaIDKey];
         if (lambdaID) {
             [idMap setObject:nodeInNewTree forKey:lambdaID];
         }
         
         // create enough children for the new node
         for (int i=0; i<nodeInOldTree.children.count; i++) {
-            HUMarkupNode* childForNewTree = [[HUMarkupNode alloc] init];
+            GSMarkupNode* childForNewTree = [[GSMarkupNode alloc] init];
             [nodeInNewTree appendChild: childForNewTree]; // declare child relation
         }
         
         for (int i=nodeInOldTree.children.count-1; i>=0; i--) {
-            HUMarkupNode* childInOldTree = [nodeInOldTree.children objectAtIndex:i];
+            GSMarkupNode* childInOldTree = [nodeInOldTree.children objectAtIndex:i];
             [oldTreeStack addObject: childInOldTree];
             
-            HUMarkupNode* childInNewTree = [nodeInNewTree.children objectAtIndex:i];
+            GSMarkupNode* childInNewTree = [nodeInNewTree.children objectAtIndex:i];
             [newTreeStack addObject: childInNewTree];
         }
     }
     
-    HURelease(oldTreeStack);
-    HURelease(newTreeStack);
+    GSRelease(oldTreeStack);
+    GSRelease(newTreeStack);
     
     newGuy.IDMap = idMap;
     newGuy.classesMap = classesMap;
     
-    HURelease(idMap);
-    HURelease(classesMap);
+    GSRelease(idMap);
+    GSRelease(classesMap);
     
     return newGuy;
 }
@@ -252,7 +252,7 @@
 }
 
 - (void)dismissAllChildren {
-    for (HUMarkupNode* child in self.children) {
+    for (GSMarkupNode* child in self.children) {
         child.parent = nil;
     }
     [self.children removeAllObjects];
@@ -264,25 +264,25 @@
     // 2. otherwise, remove all text children (lambda not included) and add the text node. E.g. <span><span>1</span><span>2</span></span>
     BOOL found = NO;
     for (int i=self.children.count-1; i>=0; i--) {
-        HUMarkupNode* child = [self.children objectAtIndex:i];
-        if (!found && [child.data objectForKey:HUFancyTextTextKey] && !child.children.count) {
-            [child.data setObject:text forKey:HUFancyTextTextKey];
+        GSMarkupNode* child = [self.children objectAtIndex:i];
+        if (!found && [child.data objectForKey:GSFancyTextTextKey] && !child.children.count) {
+            [child.data setObject:text forKey:GSFancyTextTextKey];
             // just change the text and leave other styles
             found = YES;
         }
         else {
-            if (![[child.data allKeys] containsObject:HUFancyTextInternalLambdaIDKey]) {
+            if (![[child.data allKeys] containsObject:GSFancyTextInternalLambdaIDKey]) {
                 [child cutFromParent];
             }
         }
     }
     
     if (!found) {
-        HUMarkupNode* newChild = [[HUMarkupNode alloc] init];
+        GSMarkupNode* newChild = [[GSMarkupNode alloc] init];
         [newChild.data setValuesForKeysWithDictionary:self.data];
-        [newChild.data setObject:text forKey:HUFancyTextTextKey];
+        [newChild.data setObject:text forKey:GSFancyTextTextKey];
         [self appendChild:newChild];
-        HURelease(newChild);
+        GSRelease(newChild);
     }
     
 }
@@ -304,17 +304,17 @@
     // a DFS traversal to apply the styles to children and grandchildren etc
     // but a class node will block the penetration
     
-    NSMutableArray* stack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
-    NSMutableArray* styleStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* stack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
+    NSMutableArray* styleStack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
     NSMutableArray* stylesToRemoveStack;
     
     [stack addObject:self];
     [styleStack addObject:styles];
     
     if (removeOldStyles) {
-        stylesToRemoveStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+        stylesToRemoveStack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
         [stylesToRemoveStack addObject: stylesToRemove];
-        HUAutorelease(stylesToRemove); // can only autorelease because we need to use this object after popping it out of the stack
+        GSAutorelease(stylesToRemove); // can only autorelease because we need to use this object after popping it out of the stack
         
         if (!stylesToRemove.count) {
             removeOldStyles = NO; // if there's nothing necessary to remove, just don't bother checking every time
@@ -322,7 +322,7 @@
     }
     
     while ([stack count]) {
-        HUMarkupNode* node = [stack lastObject];
+        GSMarkupNode* node = [stack lastObject];
         [stack removeLastObject];
         
         NSMutableDictionary* stylesForThisNode = [styleStack lastObject];
@@ -345,17 +345,17 @@
             }
             
             [node.data setValuesForKeysWithDictionary:stylesForThisNode];
-            [HUFancyText createFontKeyForDict:node.data];
+            [GSFancyText createFontKeyForDict:node.data];
         }
         
         for (int i=node.children.count-1; i>=0; i--) {
-            HUMarkupNode* child = [node.children objectAtIndex:i];
+            GSMarkupNode* child = [node.children objectAtIndex:i];
 
-            NSMutableDictionary* stylesForTheChild = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+            NSMutableDictionary* stylesForTheChild = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
             NSMutableArray* stylesToRemoveForChild;
             
             if (removeOldStyles) {
-                stylesToRemoveForChild = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+                stylesToRemoveForChild = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
             }
             
             if (!child.children.count) {
@@ -391,14 +391,14 @@
             }
             
             // has to be auto released because later we need to pop the stylesForTheChild out of stack and use it. so can't release here
-            HUAutorelease(stylesForTheChild);
+            GSAutorelease(stylesForTheChild);
             if (removeOldStyles) {
-                HUAutorelease(stylesToRemoveForChild);
+                GSAutorelease(stylesToRemoveForChild);
             }
         }
     }
-    HURelease(stack);
-    HURelease(styleStack);
+    GSRelease(stack);
+    GSRelease(styleStack);
 }
 
 @end

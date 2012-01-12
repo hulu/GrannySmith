@@ -1,14 +1,14 @@
 //
-//  HUAppDelegate.m
-//  HUFancyTextDemo
+//  GSFancyTextAppDelegate.m
+//  GSFancyTextDemo
 //
 //  Created by Bao Lei on 1/9/12.
 //  Copyright (c) 2012 Hulu. All rights reserved.
 //
 
-#import "HUAppDelegate.h"
+#import "GSFancyTextAppDelegate.h"
 
-@implementation HUAppDelegate
+@implementation GSFancyTextAppDelegate
 
 @synthesize window = _window;
 
@@ -19,7 +19,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    demoViewController_ = [[HUDemoViewController alloc] init];
+    demoViewController_ = [[GSFancyTextDemoViewController alloc] init];
     demoViewController_.view.frame = self.window.bounds;
     [self.window addSubview:demoViewController_.view];
     

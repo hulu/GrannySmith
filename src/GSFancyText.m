@@ -1,6 +1,6 @@
 //
-//  HUFancyText.m
-//  -HUSFT-
+//  GSFancyText.m
+//  -GrannySmith-
 //
 //  Created by Bao Lei on 12/15/11.
 //  Copyright (c) 2011 Hulu. All rights reserved.
@@ -8,9 +8,9 @@
 
 #import "GTMNSString+HTML.h"
 
-#import "HUFancyText.h"
-#import "NSString+ParsingHelper.h"
-#import "NSScanner+HierarchicalScan.h"
+#import "GSFancyText.h"
+#import "NSString+GSParsingHelper.h"
+#import "NSScanner+GSHierarchicalScan.h"
 #import <objc/message.h>
 
 /// globalStyleDictionary_ is a parsed style dictionary that can be accessed globally
@@ -19,7 +19,7 @@ static NSMutableDictionary* globalStyleDictionary_;
 /// lineID_ is a tracker or P tags. Each P tag has a unique lineID so line breaking is based on that.
 static int lineID_ = 1;
 
-@interface HUFancyText (Private)
+@interface GSFancyText (Private)
 
 
 /** Part of newParsedStyle:
@@ -51,13 +51,13 @@ static int lineID_ = 1;
 
 /** Parse text align and store into the dict
  * @param value should be left, right or center
- * @return an NSNumber with TextAlign integer
+ * @return an NSNumber with GSTextAlign integer
  */
 + (NSNumber*)parseTextAlign: (NSString*)value intoDictionary:(NSMutableDictionary*)dict;
 
 /** Parse vertical align and store into the dict
  * @param value should be middle, top or bottom
- * @return an NSNumber with VerticalAlign integer
+ * @return an NSNumber with GSVerticalAlign integer
  */
 + (NSNumber*)parseVerticalAlign: (NSString*)value intoDictionary:(NSMutableDictionary*)dict;
 
@@ -67,11 +67,11 @@ static int lineID_ = 1;
  */
 + (NSNumber*)parseTruncationMode: (NSString*)value intoDictionary:(NSMutableDictionary*)dict;
 
-/** Get a list of HUMarkupNode objects based on a class name or ID
+/** Get a list of GSMarkupNode objects based on a class name or ID
  * @return a retained array. An emtpy array if there's no match.
  * @note call this after parsing 
  */
-- (NSArray*)newChangeListBasedOnType:(HUFancyTextReferenceType)type withName:(NSString*)name;
+- (NSArray*)newChangeListBasedOnType:(GSFancyTextReferenceType)type withName:(NSString*)name;
 
 /** get styles from a class defined in the style dictionary (parsed from css-like style sheet)
  */
@@ -80,7 +80,7 @@ static int lineID_ = 1;
 
 @end
 
-@implementation HUFancyText
+@implementation GSFancyText
 
 @synthesize lambdaBlocks = lambdaBlocks_;
 @synthesize style = style_;
@@ -91,10 +91,10 @@ static int lineID_ = 1;
 #ifdef ARC_ENABLED
 #else
 - (void)dealloc {
-    HURelease(style_);
-    HURelease(text_);
-    HURelease(parsedTree_);
-    HURelease(lambdaBlocks_);
+    GSRelease(style_);
+    GSRelease(text_);
+    GSRelease(parsedTree_);
+    GSRelease(lambdaBlocks_);
     [super dealloc];
 }
 #endif
@@ -106,7 +106,7 @@ static int lineID_ = 1;
         self.style = styleDict;
         self.text = text;
         contentHeight_ = 0.f;
-        lambdaBlocks_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+        lambdaBlocks_ = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
     }
     return self;
 }
@@ -116,12 +116,12 @@ static int lineID_ = 1;
 }
 
 
-- (id)initWithParsedStructure:(HUMarkupNode*)tree {
+- (id)initWithParsedStructure:(GSMarkupNode*)tree {
     if ((self = [super init])) {
         width_ = 0.f;
         maxHeight_ = 0.f;
         parsedTree_ = [tree copy];
-        lambdaBlocks_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+        lambdaBlocks_ = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
         self.style = globalStyleDictionary_;
         self.text = @"";
     }
@@ -146,7 +146,7 @@ static int lineID_ = 1;
     return lines_;
 }
 
-- (HUMarkupNode*)parsedResultTree {
+- (GSMarkupNode*)parsedResultTree {
     return parsedTree_;
 }
 
@@ -166,29 +166,29 @@ static int lineID_ = 1;
     // if there is a forced line break, we add a stop sign.
     
     for (NSMutableDictionary* segment in segments_) {
-        lineID = [[segment objectForKey:HUFancyTextLineIDKey] intValue];
+        lineID = [[segment objectForKey:GSFancyTextLineIDKey] intValue];
         if (lineID != previousLineID && texts.length) {
             [texts appendString:@". "];
         }
-        NSString* text = [segment objectForKey: HUFancyTextTextKey];
+        NSString* text = [segment objectForKey: GSFancyTextTextKey];
         if (text) {
             [texts appendString:text];
         }
-        else if ([segment objectForKey:HUFancyTextInternalLambdaIDKey] && (text = [segment objectForKey: HUFancyTextAltKey])) {
+        else if ([segment objectForKey:GSFancyTextInternalLambdaIDKey] && (text = [segment objectForKey: GSFancyTextAltKey])) {
             [texts appendString:text];
         }
         previousLineID = lineID;
     }
     
-    HURelease(segments_);
-    return HUAutoreleased(texts);
+    GSRelease(segments_);
+    return GSAutoreleased(texts);
 }
 
 - (CGFloat)contentHeight {
     return contentHeight_;
 }
 
-- (HUMarkupNode*)parseStructure {
+- (GSMarkupNode*)parseStructure {
     //NSDate* startTime = [NSDate date];
     
     if (!text_ || !text_.length) {
@@ -196,7 +196,7 @@ static int lineID_ = 1;
         return parsedTree_;
     }
     
-    HURelease(parsedTree_);
+    GSRelease(parsedTree_);
     parsedTree_ = [[self class] newParsedMarkupString:text_ withStyleDict:style_];
     
     //NSLog(@"time to parse markup: %f", -[startTime timeIntervalSinceNow]);
@@ -218,19 +218,19 @@ static int lineID_ = 1;
     if (!width_) {
         return nil;
     }
-    HURelease(lines_);
+    GSRelease(lines_);
     lines_ = [[NSMutableArray alloc] initWithCapacity:segments_.count];
     
     __block float totalHeight = 0.f;
     
     // line level vars
     
-    __block NSMutableArray* currentLine = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    __block NSMutableArray* currentLine = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
     __block CGFloat currentLineSpaceLeft = width_;
     __block int currentLineIDActualLineCount = 0;
     __block int currentLineIDLineCountLimit = 0;
     __block NSString* currentLineLastText;
-    __block TextAlign currentLineLastTextAlign;
+    __block GSTextAlign currentLineLastTextAlign;
     __block CGFloat currentLineContentHeight = 0.f;
     __block CGFloat currentLineSpecifiedHeight = 0.f;
     __block BOOL currentLineSpecifiedHeightIsPct = YES;
@@ -244,7 +244,7 @@ static int lineID_ = 1;
     __block int segmentLineCount;
     // the alignment will not affect line breaking, but will determine whether we need to trim the trailing whitespace of last one in line
     __block NSNumber* segmentAlignNumber;
-    __block TextAlign segmentAlign;
+    __block GSTextAlign segmentAlign;
     // some segment info that will be used to calculate the final height of a line
     __block CGFloat segmentContentHeight;
     __block NSNumber* segmentLineHeightNumber;
@@ -258,9 +258,9 @@ static int lineID_ = 1;
         // return NO means it already reached max line height and there's no need to add more
         if (currentLine.count) {
             
-            if (currentLineLastTextAlign==TextAlignRight) {
+            if (currentLineLastTextAlign==GSTextAlignRight) {
                 NSString* lineText = [currentLineLastText stringByTrimmingTrailingWhitespace];
-                [[currentLine lastObject] setObject:lineText forKey:HUFancyTextTextKey];
+                [[currentLine lastObject] setObject:lineText forKey:GSFancyTextTextKey];
             }
             
             if (currentLineIDLineCountLimit && currentLineIDActualLineCount >= currentLineIDLineCountLimit) {
@@ -276,8 +276,8 @@ static int lineID_ = 1;
                 }
                 if (maxHeight_ && nextHeight > maxHeight_) {
                     contentHeight_ = totalHeight;
-                    HURelease(currentLine);
-                    HURelease(segments_);
+                    GSRelease(currentLine);
+                    GSRelease(segments_);
                     return NO;
                 }
                 [lines_ addObject: currentLine];                
@@ -285,13 +285,13 @@ static int lineID_ = 1;
                 totalHeight = nextHeight;
                 if (maxHeight_ == totalHeight) {
                     contentHeight_ = totalHeight;
-                    HURelease(currentLine);
-                    HURelease(segments_);
+                    GSRelease(currentLine);
+                    GSRelease(segments_);
                     return NO;
                 }
             }
-            HURelease(currentLine);
-            currentLine = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+            GSRelease(currentLine);
+            currentLine = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
             currentLineSpaceLeft = width_;
             currentLineContentHeight = 0.f;
         }
@@ -317,7 +317,7 @@ static int lineID_ = 1;
         segment = [segments_ objectAtIndex:i];
         
         // Special case: a new line is required due to some elements like <p>
-        NSNumber* lineIDNumber = [segment objectForKey:HUFancyTextLineIDKey];
+        NSNumber* lineIDNumber = [segment objectForKey:GSFancyTextLineIDKey];
         segmentLineID = lineIDNumber ? [lineIDNumber intValue] : 0;
         if (segmentLineID != previousSegmentLineID) {
             if (!insertLineBlock() ) {
@@ -328,23 +328,23 @@ static int lineID_ = 1;
         previousSegmentLineID = segmentLineID;
         
         // retrieve some common segment info (required by adding both lambda or text)
-        NSString* segmentLineCountString = [segment objectForKey:HUFancyTextLineCountKey];
+        NSString* segmentLineCountString = [segment objectForKey:GSFancyTextLineCountKey];
         segmentLineCount = segmentLineCountString ? [segmentLineCountString intValue] : 0;
-        segmentAlignNumber = [segment objectForKey:HUFancyTextTextAlignKey];
-        segmentAlign = segmentAlignNumber ? [segmentAlignNumber intValue] : TextAlignLeft;
-        segmentLineHeightNumber = [segment objectForKey:HUFancyTextLineHeightKey];
+        segmentAlignNumber = [segment objectForKey:GSFancyTextTextAlignKey];
+        segmentAlign = segmentAlignNumber ? [segmentAlignNumber intValue] : 0;
+        segmentLineHeightNumber = [segment objectForKey:GSFancyTextLineHeightKey];
         segmentLineHeight = segmentLineHeightNumber ? [segmentLineHeightNumber floatValue] : 1.f;
-        segmentLineHeightIsPctNumber = [segment objectForKey:HUFancyTextHeightIsPercentageKey];
+        segmentLineHeightIsPctNumber = [segment objectForKey:GSFancyTextHeightIsPercentageKey];
         segmentLineHeightIsPct = segmentLineHeightIsPctNumber ? [segmentLineHeightIsPctNumber boolValue] : YES;
         
         // adding the segment(s)
         
-        if ([[segment allKeys] containsObject:HUFancyTextInternalLambdaIDKey]) {
+        if ([[segment allKeys] containsObject:GSFancyTextInternalLambdaIDKey]) {
             // a lambda segment
             
             // retrieve some lambda segment specific info
-            CGFloat segmentWidth = [[segment objectForKey:HUFancyTextWidthKey] floatValue];
-            segmentContentHeight = [[segment objectForKey:HUFancyTextHeightKey] floatValue];
+            CGFloat segmentWidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
+            segmentContentHeight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
 
             // conclude the previous line if it's too long
             if (currentLine.count && currentLineSpaceLeft<segmentWidth) {
@@ -370,8 +370,8 @@ static int lineID_ = 1;
             // text segment
             
             // retrieve some text segment specific info
-            segmentText = [segment objectForKey:HUFancyTextTextKey];
-            segmentFont = [segment objectForKey:HUFancyTextFontKey];
+            segmentText = [segment objectForKey:GSFancyTextTextKey];
+            segmentFont = [segment objectForKey:GSFancyTextFontKey];
             segmentContentHeight = [segmentFont lineHeight];
             
             // split the lines 
@@ -394,23 +394,23 @@ static int lineID_ = 1;
                 }
                 
                 // Setting fonts and properties for all cases
-                piece = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+                piece = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
                 [piece setValuesForKeysWithDictionary:segment];// update other params like color
                 
                 // Special case: if it's a new line, truncate the leading white spaces
-                if (!currentLine.count && segmentAlign==TextAlignLeft) {
+                if (!currentLine.count && segmentAlign==GSTextAlignLeft) {
                     lineText = [lineText stringByTrimmingLeadingWhitespace];
                 }
                 
                 // Add the current piece to the current line
-                [piece setObject:lineText forKey: HUFancyTextTextKey];
+                [piece setObject:lineText forKey: GSFancyTextTextKey];
                 
                 insertPieceForCurrentLineBlock(piece);
                 
                 // update the currentLineLastText, when we are concluding the line, if it's right align, we need to trim trailing space from last text
                 currentLineLastText = lineText;
                 
-                HURelease(piece);
+                GSRelease(piece);
                 
                 // Regular case: if it is not the last line, it means that this line is long enough to cover a whole line
                 // Or: if the markup tag (aka p) requires it to be an independent line
@@ -422,7 +422,7 @@ static int lineID_ = 1;
                 else {
                     // for any unfinished line, calculate the width left for the current line
                     CGFloat widthUsed = [lineText sizeWithFont:segmentFont].width;
-                    // NSLog(@"piece:%@, width used: %f", [piece objectForKey:HUFancyTextTextKey], widthUsed);
+                    // NSLog(@"piece:%@, width used: %f", [piece objectForKey:GSFancyTextTextKey], widthUsed);
                     currentLineSpaceLeft = currentLineSpaceLeft - widthUsed;
                 }
             }
@@ -434,8 +434,8 @@ static int lineID_ = 1;
         return lines_;
     }
     
-    HURelease(segments_);
-    HURelease(currentLine);
+    GSRelease(segments_);
+    GSRelease(currentLine);
     
 //    NSLog(@"the lines: %@", lines_);
 //    NSLog(@"time to generate line: %f", -[startTime timeIntervalSinceNow]);
@@ -457,7 +457,7 @@ typedef enum {
 
 + (NSMutableDictionary*)newParsedStyle: (NSString*)styleString {
 
-    NSMutableDictionary* cssDict = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableDictionary* cssDict = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
     
     // scanner and scan parameters
     NSScanner* scanner = [[NSScanner alloc] initWithString:styleString];
@@ -482,19 +482,19 @@ typedef enum {
         nameParts = [currentText componentsSeparatedByString:@"."];
         
         if (nameParts.count==1) {
-            elementName = [HUTrim(currentText) lowercaseString];
+            elementName = [GSTrim(currentText) lowercaseString];
             if (elementName.length) {
-                className = HUFancyTextDefaultClass;
+                className = GSFancyTextDefaultClass;
             }
             else {
                 className = @"";
             }
         }
         else if (nameParts.count==2){
-            className = [HUTrim( [nameParts objectAtIndex:1]) lowercaseString];
-            elementName = [HUTrim( [nameParts objectAtIndex:0]) lowercaseString];
+            className = [GSTrim( [nameParts objectAtIndex:1]) lowercaseString];
+            elementName = [GSTrim( [nameParts objectAtIndex:0]) lowercaseString];
             if (!elementName.length) {
-                elementName = HUFancyTextDefaultClass;
+                elementName = GSFancyTextDefaultClass;
             }
         }
         else {
@@ -514,12 +514,12 @@ typedef enum {
                 [cssDict setObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:propertyList, className, nil] forKey:elementName];
             }
         }
-        HURelease(propertyList);
+        GSRelease(propertyList);
         
         // after the inner content scan finished, the location is at }, so it should be skipped in the next scan's result
         lengthToSkip = 1;
     }
-    HURelease(scanner);
+    GSRelease(scanner);
     return cssDict;
 }
 
@@ -533,7 +533,7 @@ typedef enum {
 
 + (NSMutableDictionary*)newParsedStyleAttributesFromScanner:(NSScanner*)scanner {
     
-    NSMutableDictionary* propertyList = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableDictionary* propertyList = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
     
     NSString* currentText;
     NSString* currentAttribName;
@@ -541,7 +541,7 @@ typedef enum {
     AttributeParseMode mode = ParsingAttribName;
     NSString* scanTo;
     int lengthToSkip = 1; // initial skip length is 1 because the scanner is currently at the "{" location
-    ScanResult scanResult = ScanMeetTarget;
+    GSScanResult scanResult = ScanMeetTarget;
     
     while ((![scanner isAtEnd]) && scanResult!=ScanMeetEndToken) {
         // setting scan target
@@ -570,7 +570,7 @@ typedef enum {
                 break;
             case ParsingSingleQuotedValue:
             case ParsingDoubleQuotedValue:
-                scanResult = [scanner scanWithScanResultUpToString:scanTo intoString: &currentText];
+                scanResult = [scanner scanWithGSScanResultUpToString:scanTo intoString: &currentText];
                 break;
         }
         currentText = [currentText substringFromIndex: lengthToSkip];
@@ -579,7 +579,7 @@ typedef enum {
         // NSLog(@"scanned text (inner): %@", currentText);
         switch (mode) {
             case ParsingAttribName:{
-                currentAttribName = [HUTrim([NSString stringWithString:currentText]) lowercaseString];
+                currentAttribName = [GSTrim([NSString stringWithString:currentText]) lowercaseString];
                 int nextCharLocation;
                 NSString* next = [scanner.string firstNonWhitespaceCharacterSince:scanner.scanLocation+1 foundAt:&nextCharLocation];
                 if (!next.length) {
@@ -612,7 +612,7 @@ typedef enum {
                 break;
             case ParsingUnquotedValue:
                 mode = ParsingAttribName;
-                currentValue = HUTrim(currentText);
+                currentValue = GSTrim(currentText);
 //                [propertyList setObject: [[self class] parsedValue:currentValue forKey:currentAttribName] forKey:currentAttribName];
                 [[self class] parseValue:currentValue forKey:currentAttribName intoDictionary:propertyList];
                 lengthToSkip = scanTo.length;
@@ -629,7 +629,7 @@ typedef enum {
 
 
 + (NSMutableDictionary*)parsedStyle:(NSString *)style {
-    return HUAutoreleased([[self class] newParsedStyle:style]);
+    return GSAutoreleased([[self class] newParsedStyle:style]);
 }
 
 typedef enum {
@@ -640,18 +640,18 @@ typedef enum {
 } ParseMode;
 
 
-+ (HUMarkupNode*)newParsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict {
++ (GSMarkupNode*)newParsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict {
     // result container
-    HUMarkupNode* resultRoot = [[HUMarkupNode alloc] init];
+    GSMarkupNode* resultRoot = [[GSMarkupNode alloc] init];
     resultRoot.isContainer = YES;
     
-    NSMutableDictionary* idMap = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];  // id must be unique, so the value is just an HUMarkupString node pointer
-    NSMutableDictionary* classesMap = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize]; // classes won't be unique, so the value is an array
+    NSMutableDictionary* idMap = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];  // id must be unique, so the value is just an HUMarkupString node pointer
+    NSMutableDictionary* classesMap = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize]; // classes won't be unique, so the value is an array
     // the two maps will be added to the data of root node eventually 
     
     // 2 stacks were used to help maintain the containers and styles
-    NSMutableArray* tagStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
-    NSMutableArray* containerStack = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableArray* tagStack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
+    NSMutableArray* containerStack = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
     [containerStack addObject:resultRoot];
     
     // data structure preparation
@@ -659,19 +659,19 @@ typedef enum {
     NSString* currentSegmentText;
     NSString* lookFor = @"<";
     int lengthToSkip=0;
-    NSMutableDictionary* defaultStyle = [NSMutableDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], HUFancyTextColorKey,
-                                         HUFancyTextDefaultFontFamily, HUFancyTextFontNameKey,
-                                         [NSNumber numberWithFloat:[UIFont systemFontSize]], HUFancyTextFontSizeKey,
+    NSMutableDictionary* defaultStyle = [NSMutableDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], GSFancyTextColorKey,
+                                         GSFancyTextDefaultFontFamily, GSFancyTextFontNameKey,
+                                         [NSNumber numberWithFloat:[UIFont systemFontSize]], GSFancyTextFontSizeKey,
                                          nil];
-    NSMutableDictionary* allClasses = [styleDict objectForKey:HUFancyTextDefaultClass];
+    NSMutableDictionary* allClasses = [styleDict objectForKey:GSFancyTextDefaultClass];
     if (allClasses) {
-        [defaultStyle setValuesForKeysWithDictionary:[allClasses objectForKey:HUFancyTextDefaultClass]];
+        [defaultStyle setValuesForKeysWithDictionary:[allClasses objectForKey:GSFancyTextDefaultClass]];
     }
     
     // set the default font here
     [[self class] createFontKeyForDict: defaultStyle];
 
-    HUMarkupNode* currentSegment;
+    GSMarkupNode* currentSegment;
     
     // Let the parsing begin!
     while (![scanner isAtEnd]) {
@@ -691,11 +691,11 @@ typedef enum {
         // NSLog(@"segment text:%@ (length=%d)", currentSegmentText, currentSegmentText.length);
         
         if (currentSegmentText.length) {
-            currentSegment = [[HUMarkupNode alloc] init];
-            [currentSegment.data setObject:[NSString stringWithString:currentSegmentText] forKey:HUFancyTextTextKey];
+            currentSegment = [[GSMarkupNode alloc] init];
+            [currentSegment.data setObject:[NSString stringWithString:currentSegmentText] forKey:GSFancyTextTextKey];
             [currentSegment.data setValuesForKeysWithDictionary:defaultStyle];
             // apply all the styles in the stack.
-            for (HUMarkupNode* node in containerStack) {
+            for (GSMarkupNode* node in containerStack) {
                 [currentSegment.data setValuesForKeysWithDictionary: node.data];
             }
             currentSegment.isContainer = NO;
@@ -707,29 +707,29 @@ typedef enum {
             
             [[containerStack lastObject] appendChild:currentSegment];
             
-            HURelease(currentSegment);
+            GSRelease(currentSegment);
         }
         
         NSMutableDictionary* stylesInTag = [[self class] newStyleFromCurrentTagInScanner:scanner withStyleDict:styleDict];
 
         // whether it's a lambda tag or style tag, there is going to be a tree node to insert
-        HUMarkupNode* nodeToAdd = [[HUMarkupNode alloc] init];
+        GSMarkupNode* nodeToAdd = [[GSMarkupNode alloc] init];
         
         if ([stylesInTag allKeys].count) {
             
             // handling several special keys: elementName, isClosingTag, ID, class
-            NSString* elementName = [stylesInTag objectForKey: HUFancyTextElementNameKey];
-//            NSLog(@"getting HUFancyTextElementNameKey name as %@", elementName);
+            NSString* elementName = [stylesInTag objectForKey: GSFancyTextElementNameKey];
+//            NSLog(@"getting GSFancyTextElementNameKey name as %@", elementName);
             
-            BOOL isClosingTag = [[stylesInTag objectForKey:HUFancyTextTagClosingKey] boolValue];
-            [stylesInTag removeObjectForKey:HUFancyTextTagClosingKey];
+            BOOL isClosingTag = [[stylesInTag objectForKey:GSFancyTextTagClosingKey] boolValue];
+            [stylesInTag removeObjectForKey:GSFancyTextTagClosingKey];
             
-            NSString* tagID = [stylesInTag objectForKey: HUFancyTextIDKey];
+            NSString* tagID = [stylesInTag objectForKey: GSFancyTextIDKey];
             if (tagID) {
                 [idMap setObject:nodeToAdd forKey:tagID];
             }
             
-            NSArray* tagClassNames = [stylesInTag objectForKey: HUFancyTextClassKey];
+            NSArray* tagClassNames = [stylesInTag objectForKey: GSFancyTextClassKey];
             if (tagClassNames) {
                 for (NSString* className in tagClassNames) {
                     [[self class] addObject:nodeToAdd intoDict:classesMap underKey:className];
@@ -737,15 +737,15 @@ typedef enum {
             }
             
             // handle the tag based on if it's a lambda or opening tag or closing tag
-            if ([elementName caseInsensitiveCompare: HUFancyTextLambdaElement]==NSOrderedSame) {
+            if ([elementName caseInsensitiveCompare: GSFancyTextLambdaElement]==NSOrderedSame) {
                 [nodeToAdd.data setValuesForKeysWithDictionary:stylesInTag];
-                for (HUMarkupNode* node in containerStack) {
+                for (GSMarkupNode* node in containerStack) {
                     [nodeToAdd.data setValuesForKeysWithDictionary: node.data];
                 }
                 nodeToAdd.isContainer = NO;
                 [[containerStack lastObject] appendChild:nodeToAdd];
-                NSString* lambdaID = [nodeToAdd.data objectForKey:HUFancyTextInternalLambdaIDKey];
-                [nodeToAdd.data setObject:lambdaID forKey:HUFancyTextIDKey];
+                NSString* lambdaID = [nodeToAdd.data objectForKey:GSFancyTextInternalLambdaIDKey];
+                [nodeToAdd.data setObject:lambdaID forKey:GSFancyTextIDKey];
                 [idMap setObject:nodeToAdd forKey:lambdaID]; // lambda ID also needs to be saved in hash map
             }
             else if (isClosingTag) {
@@ -765,8 +765,8 @@ typedef enum {
             }
 
         }
-        HURelease(nodeToAdd);
-        HURelease(stylesInTag);
+        GSRelease(nodeToAdd);
+        GSRelease(stylesInTag);
         
 //        NSLog(@"after taking care of a tag. the location:%@", [scanner atCharacter]);
         lengthToSkip = 1;
@@ -775,16 +775,16 @@ typedef enum {
         // so we set a lengthToSkip to skip the > for the next scan
     }
     
-    HURelease(scanner);
-    HURelease(containerStack);
-    HURelease(tagStack);
+    GSRelease(scanner);
+    GSRelease(containerStack);
+    GSRelease(tagStack);
     // NSLog(@"segments: %@", segments);
     
     resultRoot.IDMap = idMap;
     resultRoot.classesMap = classesMap;
     
-    HURelease(idMap);
-    HURelease(classesMap);
+    GSRelease(idMap);
+    GSRelease(classesMap);
     
 //    NSLog(@"tree (right after generation):\n%@", [resultRoot displayTree]);
     
@@ -809,11 +809,11 @@ typedef enum {
 
 + (NSMutableDictionary*)newStyleFromCurrentTagInScanner:(NSScanner*)scanner withStyleDict:(NSDictionary*)styleDict {
     
-    NSMutableDictionary* style = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableDictionary* style = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
     
     // scanning params
     InTagParsingMode mode = ParsingTagName;
-    ScanResult scanResult = ScanMeetTarget;
+    GSScanResult scanResult = ScanMeetTarget;
     NSString* scanTo;
     NSString* currentText;
     
@@ -838,7 +838,7 @@ typedef enum {
         isClosing = NO;
         scanner.scanLocation = nextCharLocation;
     }
-    [style setObject:[NSNumber numberWithBool:isClosing] forKey:HUFancyTextTagClosingKey];
+    [style setObject:[NSNumber numberWithBool:isClosing] forKey:GSFancyTextTagClosingKey];
     
     while (![scanner isAtEnd] && scanResult!=ScanMeetEndToken) {
         // setting target
@@ -868,7 +868,7 @@ typedef enum {
                 break;
             case ParsingDoubleQuotedRhs:
             case ParsingSingleQuotedRhs:
-                scanResult = [scanner scanWithScanResultUpToString:scanTo intoString:&currentText];
+                scanResult = [scanner scanWithGSScanResultUpToString:scanTo intoString:&currentText];
                 break;
         }
         
@@ -877,36 +877,36 @@ typedef enum {
         // handling read text
         switch (mode) {
             case ParsingTagName:
-                elementName = [HUTrim(currentText) lowercaseString];
+                elementName = [GSTrim(currentText) lowercaseString];
                 
 //                NSLog(@"setting element name to %@", elementName);
-                [style setObject:elementName forKey: HUFancyTextElementNameKey];
+                [style setObject:elementName forKey: GSFancyTextElementNameKey];
                 
                 /** Some supported markup tags
                  */
                 if (!isClosing) {
-                    if ([elementName caseInsensitiveCompare:HUFancyTextStrongElement]==NSOrderedSame) {
-                        [style setObject:@"bold" forKey:HUFancyTextFontWeightKey];
+                    if ([elementName caseInsensitiveCompare:GSFancyTextStrongElement]==NSOrderedSame) {
+                        [style setObject:@"bold" forKey:GSFancyTextFontWeightKey];
                     }
-                    else if ([elementName caseInsensitiveCompare:HUFancyTextEmElement]==NSOrderedSame) {
-                        [style setObject:@"italic" forKey:HUFancyTextFontStyleKey];
+                    else if ([elementName caseInsensitiveCompare:GSFancyTextEmElement]==NSOrderedSame) {
+                        [style setObject:@"italic" forKey:GSFancyTextFontStyleKey];
                     }
-                    else if ([elementName caseInsensitiveCompare:HUFancyTextPElement]==NSOrderedSame) {
+                    else if ([elementName caseInsensitiveCompare:GSFancyTextPElement]==NSOrderedSame) {
                         lineID_++;
-                        [style setObject:[NSNumber numberWithInt: lineID_ ] forKey:HUFancyTextLineIDKey];
+                        [style setObject:[NSNumber numberWithInt: lineID_ ] forKey:GSFancyTextLineIDKey];
                     }
                 }
                 mode = ParsingLhs;
                 if (scanResult==ScanMeetTarget) {
-                    scanner.scanLocation += HUTrim(scanTo).length;
+                    scanner.scanLocation += GSTrim(scanTo).length;
                 }
                 break;
             case ParsingLhs:{
-                attribName = HUTrim(currentText);
-                if ([attribName caseInsensitiveCompare:HUFancyTextClassKey]==NSOrderedSame) {
+                attribName = GSTrim(currentText);
+                if ([attribName caseInsensitiveCompare:GSFancyTextClassKey]==NSOrderedSame) {
                     attrib = ReadingClass; // currently we only care about class=, otherwise we should use an enum instead of BOOL
                 }
-                else if ([elementName caseInsensitiveCompare:HUFancyTextLambdaElement]==NSOrderedSame) {
+                else if ([elementName caseInsensitiveCompare:GSFancyTextLambdaElement]==NSOrderedSame) {
                     attrib = ReadingLambdaAttrib;
                 }
                 else {
@@ -933,7 +933,7 @@ typedef enum {
                 else {
                     mode = ParsingUnquotedRhs;
                     if (scanResult==ScanMeetTarget) {
-                        scanner.scanLocation += HUTrim(scanTo).length;
+                        scanner.scanLocation += GSTrim(scanTo).length;
                     }
                 }
                 break;
@@ -943,42 +943,42 @@ typedef enum {
             case ParsingSingleQuotedRhs:
                 if (!isClosing) {
                     if (attrib == ReadingClass) {
-                        classNames = HUTrim(currentText);
+                        classNames = GSTrim(currentText);
                         
                         NSArray* individualClassNames = [classNames componentsSeparatedByString:@" "];
                         // apply class styles of all classes
                         for (NSString* className in individualClassNames) {
-                            NSMutableDictionary* allClasses = [styleDict objectForKey:HUFancyTextDefaultClass];
+                            NSMutableDictionary* allClasses = [styleDict objectForKey:GSFancyTextDefaultClass];
                             if (allClasses) {
                                 //[style setValuesForKeysWithDictionary:[allClasses objectForKey: HU_FANCY_TEXT_ALL_VALUE]];//don't need this because the default default is already applied outside
                                 [style setValuesForKeysWithDictionary:[allClasses objectForKey: className]];
                             }
                             NSMutableDictionary* elementClasses = [styleDict objectForKey:elementName];
                             if (elementClasses) {
-                                [style setValuesForKeysWithDictionary:[elementClasses objectForKey: HUFancyTextDefaultClass]];
+                                [style setValuesForKeysWithDictionary:[elementClasses objectForKey: GSFancyTextDefaultClass]];
                                 [style setValuesForKeysWithDictionary:[elementClasses objectForKey: className]];
                             }
                         }
-                        [style setValue: individualClassNames forKey:HUFancyTextClassKey];
+                        [style setValue: individualClassNames forKey:GSFancyTextClassKey];
                     }
                     else if (attrib == ReadingLambdaAttrib) {
-                        if ([attribName caseInsensitiveCompare:HUFancyTextIDKey]==NSOrderedSame) {
-                            [style setObject:HUTrim(currentText) forKey:HUFancyTextInternalLambdaIDKey];
-                            [style setObject:HUTrim(currentText) forKey:HUFancyTextIDKey];
+                        if ([attribName caseInsensitiveCompare:GSFancyTextIDKey]==NSOrderedSame) {
+                            [style setObject:GSTrim(currentText) forKey:GSFancyTextInternalLambdaIDKey];
+                            [style setObject:GSTrim(currentText) forKey:GSFancyTextIDKey];
                         }
                         else {
-//                            [style setObject:[[self class] parsedValue:HUTrim(currentText) forKey:attribName] forKey: attribName];
-                            [[self class] parseValue:HUTrim(currentText) forKey:attribName intoDictionary:style];
+//                            [style setObject:[[self class] parsedValue:GSTrim(currentText) forKey:attribName] forKey: attribName];
+                            [[self class] parseValue:GSTrim(currentText) forKey:attribName intoDictionary:style];
                         }
                     }
-                    else if ([attribName caseInsensitiveCompare:HUFancyTextIDKey]==NSOrderedSame) {
+                    else if ([attribName caseInsensitiveCompare:GSFancyTextIDKey]==NSOrderedSame) {
                         // save the ID as one attribute
-                        [style setObject:HUTrim(currentText) forKey:HUFancyTextIDKey];
+                        [style setObject:GSTrim(currentText) forKey:GSFancyTextIDKey];
                     }
                 }
                 mode = ParsingLhs;
                 if (scanResult==ScanMeetTarget) {
-                    scanner.scanLocation += HUTrim(scanTo).length;
+                    scanner.scanLocation += GSTrim(scanTo).length;
                 }
 //                NSLog(@"mode changed to parsingLHS, scanner at: %@", [scanner atCharacter]);
                 break;
@@ -991,33 +991,33 @@ typedef enum {
 }
 
 
-+ (HUMarkupNode*)parsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict {
-    return HUAutoreleased([[self class] newParsedMarkupString:markup withStyleDict:styleDict]);
++ (GSMarkupNode*)parsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict {
+    return GSAutoreleased([[self class] newParsedMarkupString:markup withStyleDict:styleDict]);
 }
 
 
 + (NSObject*)parseValue: (NSString*)value forKey:(NSString*)key intoDictionary:(NSMutableDictionary*)dict {
     
     NSObject* object;
-    if ([key caseInsensitiveCompare:HUFancyTextColorKey]==NSOrderedSame) {
+    if ([key caseInsensitiveCompare:GSFancyTextColorKey]==NSOrderedSame) {
         object = [[self class] parseColor:value intoDictionary:dict];
     }
-    else if ([key caseInsensitiveCompare:HUFancyTextLineHeightKey]==NSOrderedSame) {
+    else if ([key caseInsensitiveCompare:GSFancyTextLineHeightKey]==NSOrderedSame) {
         object = [[self class] parseLineHeight:value intoDictionary:dict];
     }
-    else if ([key caseInsensitiveCompare:HUFancyTextTextAlignKey]==NSOrderedSame) {
+    else if ([key caseInsensitiveCompare:GSFancyTextTextAlignKey]==NSOrderedSame) {
         object = [[self class] parseTextAlign:value intoDictionary:dict];
     }
-    else if ([key caseInsensitiveCompare:HUFancyTextTruncateModeKey]==NSOrderedSame) {
+    else if ([key caseInsensitiveCompare:GSFancyTextTruncateModeKey]==NSOrderedSame) {
         object = [[self class] parseTruncationMode:value intoDictionary:dict];
     }
-    else if ([key caseInsensitiveCompare:HUFancyTextVerticalAlignKey]==NSOrderedSame) {
+    else if ([key caseInsensitiveCompare:GSFancyTextVerticalAlignKey]==NSOrderedSame) {
         object = [[self class] parseVerticalAlign:value intoDictionary:dict];
     }
     else {
         object = [NSString stringWithString:value];
         // just to be consistent with other cases, return an autorelease copy instead of just value
-        // e.g. jic the code before this call is value=[[xxx alloc] init], and after this call there is a HURelease(value)
+        // e.g. jic the code before this call is value=[[xxx alloc] init], and after this call there is a GSRelease(value)
         [dict setObject:object forKey:key];
     }
     return object;
@@ -1035,10 +1035,10 @@ typedef enum {
         
         [scanner setScanLocation:1]; // bypass '#' character
         [scanner scanHexInt:&result];
-        color = HURGB(result);
+        color = GSRgb(result);
     }
-    else if ([value rangeOfString:HUFancyTextRGBValue].location != NSNotFound) {
-        value = [value stringByReplacingOccurrencesOfString:HUFancyTextRGBValue withString:@""];
+    else if ([value rangeOfString:GSFancyTextRGBValue].location != NSNotFound) {
+        value = [value stringByReplacingOccurrencesOfString:GSFancyTextRGBValue withString:@""];
         value = [value stringByReplacingOccurrencesOfString:@"(" withString:@""];
         value = [value stringByReplacingOccurrencesOfString:@")" withString:@""];
         NSArray* colors = [value componentsSeparatedByString:@","];
@@ -1060,12 +1060,12 @@ typedef enum {
     }
     
     if (color) {
-        [dict setObject:color forKey:HUFancyTextColorKey];
+        [dict setObject:color forKey:GSFancyTextColorKey];
         return color;
     }
     else {
-        #ifdef HU_DEBUG_MODE
-        HUDebugLog(@"\n[Warning]\nColor parsing error. \"%@\" is not recognized.\n\n", value_);
+        #ifdef GS_DEBUG_MODE
+        GSDebugLog(@"\n[Warning]\nColor parsing error. \"%@\" is not recognized.\n\n", value_);
         #endif
         return nil;
     }
@@ -1080,7 +1080,7 @@ typedef enum {
             percentage = 100;
         }
         object = [NSNumber numberWithFloat: percentage/100.f];
-        [dict setObject:[NSNumber numberWithBool:YES] forKey:HUFancyTextHeightIsPercentageKey];
+        [dict setObject:[NSNumber numberWithBool:YES] forKey:GSFancyTextHeightIsPercentageKey];
     }
     else {
         float px = [value floatValue];
@@ -1088,32 +1088,32 @@ typedef enum {
             return [NSNumber numberWithFloat: 1];
         }
         object = [NSNumber numberWithFloat: px]; // only use the px value when it's > 10
-        [dict setObject:[NSNumber numberWithBool:NO] forKey:HUFancyTextHeightIsPercentageKey];
+        [dict setObject:[NSNumber numberWithBool:NO] forKey:GSFancyTextHeightIsPercentageKey];
     }
-    [dict setObject:object forKey:HUFancyTextLineHeightKey];
+    [dict setObject:object forKey:GSFancyTextLineHeightKey];
     return object;
 }
 
 
 + (NSNumber*)parseTextAlign: (NSString*)value intoDictionary:(NSMutableDictionary*)dict {
     NSNumber* textAlignNumber;
-    if ([value caseInsensitiveCompare:HUFancyTextAlignCenterValue]==NSOrderedSame) {
-        textAlignNumber = [NSNumber numberWithInt: TextAlignCenter];
+    if ([value caseInsensitiveCompare:GSFancyTextAlignCenterValue]==NSOrderedSame) {
+        textAlignNumber = [NSNumber numberWithInt: GSTextAlignCenter];
     }
-    else if ([value caseInsensitiveCompare:HUFancyTextAlignRightValue]==NSOrderedSame ) {
-        textAlignNumber = [NSNumber numberWithInt: TextAlignRight];
+    else if ([value caseInsensitiveCompare:GSFancyTextAlignRightValue]==NSOrderedSame ) {
+        textAlignNumber = [NSNumber numberWithInt: GSTextAlignRight];
     }
-    else if ([value caseInsensitiveCompare:HUFancyTextAlignLeftValue]==NSOrderedSame ) {
-        textAlignNumber = [NSNumber numberWithInt: TextAlignLeft];
+    else if ([value caseInsensitiveCompare:GSFancyTextAlignLeftValue]==NSOrderedSame ) {
+        textAlignNumber = [NSNumber numberWithInt: GSTextAlignLeft];
     }
     
     if (textAlignNumber) {
-        [dict setObject:textAlignNumber forKey:HUFancyTextTextAlignKey];
+        [dict setObject:textAlignNumber forKey:GSFancyTextTextAlignKey];
         return textAlignNumber;
     }
     else {
-        #ifdef HU_DEBUG_MODE
-        HUDebugLog(@"\n[Warning]\nText alignment parsing error. \"%@\" is not recognized.\n\n", value);
+        #ifdef GS_DEBUG_MODE
+        GSDebugLog(@"\n[Warning]\nText alignment parsing error. \"%@\" is not recognized.\n\n", value);
         #endif
         return nil;
     }
@@ -1121,26 +1121,26 @@ typedef enum {
 
 + (NSNumber*)parseVerticalAlign: (NSString*)value intoDictionary:(NSMutableDictionary*)dict {
     NSNumber* result;
-    if ([value caseInsensitiveCompare:HUFancyTextVAlignMiddleValue]==NSOrderedSame) {
-        result = [NSNumber numberWithInteger:VerticalAlignMiddle];
+    if ([value caseInsensitiveCompare:GSFancyTextVAlignMiddleValue]==NSOrderedSame) {
+        result = [NSNumber numberWithInteger:GSVerticalAlignMiddle];
     }
-    else if ([value caseInsensitiveCompare:HUFancyTextVAlignTopValue]==NSOrderedSame ) {
-        result = [NSNumber numberWithInteger:VerticalAlignTop];
+    else if ([value caseInsensitiveCompare:GSFancyTextVAlignTopValue]==NSOrderedSame ) {
+        result = [NSNumber numberWithInteger:GSVerticalAlignTop];
     }
-    else if ([value caseInsensitiveCompare:HUFancyTextVAlignBottomValue]==NSOrderedSame ) {
-        result = [NSNumber numberWithInteger:VerticalAlignBottom];
+    else if ([value caseInsensitiveCompare:GSFancyTextVAlignBottomValue]==NSOrderedSame ) {
+        result = [NSNumber numberWithInteger:GSVerticalAlignBottom];
     }
-    else if ([value caseInsensitiveCompare:HUFancyTextVAlignBaselineValue]==NSOrderedSame ) {
-        result = [NSNumber numberWithInteger:VerticalAlignBaseline];
+    else if ([value caseInsensitiveCompare:GSFancyTextVAlignBaselineValue]==NSOrderedSame ) {
+        result = [NSNumber numberWithInteger:GSVerticalAlignBaseline];
     }
     
     if (result) {
-        [dict setObject:result forKey:HUFancyTextVerticalAlignKey];
+        [dict setObject:result forKey:GSFancyTextVerticalAlignKey];
         return result;
     }
     else {
-        #ifdef HU_DEBUG_MODE
-        HUDebugLog(@"\n[Warning]\nVertical alignment parsing error. \"%@\" is not recognized.\n\n", value);
+        #ifdef GS_DEBUG_MODE
+        GSDebugLog(@"\n[Warning]\nVertical alignment parsing error. \"%@\" is not recognized.\n\n", value);
         #endif
         return nil;
     }
@@ -1148,25 +1148,25 @@ typedef enum {
 
 + (NSNumber*)parseTruncationMode: (NSString*)value intoDictionary:(NSString*)dict {
     NSNumber* mode;
-    if ([value caseInsensitiveCompare:HUFancyTextTruncateHeadValue]==NSOrderedSame) {
+    if ([value caseInsensitiveCompare:GSFancyTextTruncateHeadValue]==NSOrderedSame) {
         mode = [NSNumber numberWithInt: UILineBreakModeHeadTruncation];
     }
-    else if ([value caseInsensitiveCompare:HUFancyTextTruncateMiddleValue]==NSOrderedSame) {
+    else if ([value caseInsensitiveCompare:GSFancyTextTruncateMiddleValue]==NSOrderedSame) {
         mode = [NSNumber numberWithInt: UILineBreakModeMiddleTruncation];
     }
-    else if ([value caseInsensitiveCompare:HUFancyTextTruncateClipValue]==NSOrderedSame) {
+    else if ([value caseInsensitiveCompare:GSFancyTextTruncateClipValue]==NSOrderedSame) {
         mode = [NSNumber numberWithInt: UILineBreakModeClip];
     }
-    else if ([value caseInsensitiveCompare:HUFancyTextTruncateTailValue]==NSOrderedSame) {
+    else if ([value caseInsensitiveCompare:GSFancyTextTruncateTailValue]==NSOrderedSame) {
         mode = [NSNumber numberWithInt: UILineBreakModeTailTruncation];
     }
     if (mode) {
-        [dict setValue:mode forKey:HUFancyTextTruncateModeKey];
+        [dict setValue:mode forKey:GSFancyTextTruncateModeKey];
         return mode;
     }
     else {
-        #ifdef HU_DEBUG_MODE
-        HUDebugLog(@"\n[Warning]\nTruncation mode parsing error. \"%@\" is not recognized.\n\n", value);
+        #ifdef GS_DEBUG_MODE
+        GSDebugLog(@"\n[Warning]\nTruncation mode parsing error. \"%@\" is not recognized.\n\n", value);
         #endif
         return nil;
     }
@@ -1177,13 +1177,13 @@ static NSMutableDictionary* fontMemory_;
 + (UIFont*)fontWithName:(NSString*)name size:(CGFloat)size weight:(NSString*)weight style:(NSString*)style {    
     
     if (!fontMemory_) {
-        fontMemory_ = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+        fontMemory_ = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
     }
     
     NSString* realFontName = name;
     
-    BOOL bold = weight? [weight caseInsensitiveCompare:HUFancyTextBoldValue]==NSOrderedSame : NO;
-    BOOL italic = style? [style caseInsensitiveCompare:HUFancyTextItalicValue]==NSOrderedSame : NO;
+    BOOL bold = weight? [weight caseInsensitiveCompare:GSFancyTextBoldValue]==NSOrderedSame : NO;
+    BOOL italic = style? [style caseInsensitiveCompare:GSFancyTextItalicValue]==NSOrderedSame : NO;
     
     if (!size) {
         size = [UIFont systemFontSize];
@@ -1196,12 +1196,12 @@ static NSMutableDictionary* fontMemory_;
         familyName = name;
     }
     else {
-        familyName = HUFancyTextDefaultFontFamily;
+        familyName = GSFancyTextDefaultFontFamily;
     }
     NSArray* availableFontNames = [UIFont fontNamesForFamilyName:familyName];
     
     if (!availableFontNames.count) {
-        familyName = HUFancyTextDefaultFontFamily;
+        familyName = GSFancyTextDefaultFontFamily;
         availableFontNames = [UIFont fontNamesForFamilyName:familyName];
     }
     
@@ -1238,18 +1238,18 @@ static NSMutableDictionary* fontMemory_;
 }
 
 + (void)createFontKeyForDict:(NSMutableDictionary*)dict {
-    UIFont* finalFont = [[self class] fontWithName: [dict objectForKey:HUFancyTextFontNameKey]
-                                              size: [[dict objectForKey:HUFancyTextFontSizeKey] floatValue]
-                                            weight: [dict objectForKey:HUFancyTextFontWeightKey]
-                                             style: [dict objectForKey:HUFancyTextFontStyleKey]
+    UIFont* finalFont = [[self class] fontWithName: [dict objectForKey:GSFancyTextFontNameKey]
+                                              size: [[dict objectForKey:GSFancyTextFontSizeKey] floatValue]
+                                            weight: [dict objectForKey:GSFancyTextFontWeightKey]
+                                             style: [dict objectForKey:GSFancyTextFontStyleKey]
                          ];
-    [dict setObject:finalFont forKey:HUFancyTextFontKey];
+    [dict setObject:finalFont forKey:GSFancyTextFontKey];
     
     // keep these individual keys because we might need to change one of them later and regenerate the font
-//    [dict removeObjectForKey: HUFancyTextFontNameKey];
-//    [dict removeObjectForKey: HUFancyTextFontSizeKey];
-//    [dict removeObjectForKey: HUFancyTextFontWeightKey];
-//    [dict removeObjectForKey: HUFancyTextFontStyleKey];
+//    [dict removeObjectForKey: GSFancyTextFontNameKey];
+//    [dict removeObjectForKey: GSFancyTextFontSizeKey];
+//    [dict removeObjectForKey: GSFancyTextFontWeightKey];
+//    [dict removeObjectForKey: GSFancyTextFontStyleKey];
 }
 
 + (NSString*)availableFonts {
@@ -1266,7 +1266,7 @@ static NSMutableDictionary* fontMemory_;
 #pragma mark - global style
 
 + (NSMutableDictionary*)parseStyleAndSetGlobal: (NSString*)styleSheet {
-    HURelease(globalStyleDictionary_);
+    GSRelease(globalStyleDictionary_);
     globalStyleDictionary_ = [[self class] newParsedStyle:styleSheet];
     return globalStyleDictionary_;
 }
@@ -1279,7 +1279,7 @@ static NSMutableDictionary* fontMemory_;
 
 - (void)changeNodeToText:(NSString*)text forID:(NSString*)nodeID {
     if (self.parsedResultTree) {
-        HUMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
+        GSMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
         if (theNode) {
             [theNode resetChildToText:text];
         }
@@ -1288,12 +1288,12 @@ static NSMutableDictionary* fontMemory_;
 
 - (void)changeNodeToStyledText:(NSString*)styledText forID:(NSString*)nodeID {
     if (self.parsedResultTree) {
-        HUMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
+        GSMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
         if (theNode) {
-            // do it only when the current HUFancyText is parsed and has the nodeID
+            // do it only when the current GSFancyText is parsed and has the nodeID
             
             [theNode dismissAllChildren];
-            HUMarkupNode* newTree = [[self class] parsedMarkupString:styledText withStyleDict:self.style];
+            GSMarkupNode* newTree = [[self class] parsedMarkupString:styledText withStyleDict:self.style];
             [self.parsedResultTree appendSubtree:newTree underNode:theNode];
         }
     }
@@ -1301,9 +1301,9 @@ static NSMutableDictionary* fontMemory_;
 
 - (void)appendStyledText:(NSString*)styledText toID:(NSString*)nodeID {
     if (self.parsedResultTree) {
-        HUMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
+        GSMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
         if (theNode) {
-            HUMarkupNode* newTree = [[self class] parsedMarkupString:styledText withStyleDict:self.style];
+            GSMarkupNode* newTree = [[self class] parsedMarkupString:styledText withStyleDict:self.style];
             [self.parsedResultTree appendSubtree:newTree underNode:theNode];
         }
     }
@@ -1311,7 +1311,7 @@ static NSMutableDictionary* fontMemory_;
 
 - (void)removeID: (NSString*)nodeID {
     if (self.parsedResultTree) {
-        HUMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
+        GSMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
         if (theNode) {
             [theNode cutFromParent];
         }
@@ -1320,13 +1320,13 @@ static NSMutableDictionary* fontMemory_;
 
 #pragma mark - Style switch
 
-- (NSArray*)newChangeListBasedOnType:(HUFancyTextReferenceType)type withName:(NSString*)name {
+- (NSArray*)newChangeListBasedOnType:(GSFancyTextReferenceType)type withName:(NSString*)name {
     NSArray* changeList;
-    if (type == HUFancyTextRoot) {
+    if (type == GSFancyTextRoot) {
         changeList = [[NSMutableArray alloc] initWithObjects:self.parsedResultTree, nil];
     }
-    else if (type == HUFancyTextID) {
-        HUMarkupNode* theNode = [self.parsedResultTree childNodeWithID:name];
+    else if (type == GSFancyTextID) {
+        GSMarkupNode* theNode = [self.parsedResultTree childNodeWithID:name];
         if (theNode) {
             changeList = [[NSMutableArray alloc] initWithObjects:theNode, nil];
         }
@@ -1334,16 +1334,16 @@ static NSMutableDictionary* fontMemory_;
             changeList = [[NSMutableArray alloc] initWithCapacity:1];
         }
     }
-    else if (type == HUFancyTextClass){
-        changeList = HURetained([self.parsedResultTree childrenNodesWithClassName:name]);
+    else if (type == GSFancyTextClass){
+        changeList = GSRetained([self.parsedResultTree childrenNodesWithClassName:name]);
     }
     return changeList;
 }
 
 - (NSMutableDictionary*)newStylesFromClassName:(NSString*)className elementName:(NSString*)elementName {
-    NSMutableDictionary* resultStyles = [[NSMutableDictionary alloc] initWithCapacity:HUFancyTextTypicalSize];
+    NSMutableDictionary* resultStyles = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
     
-    NSMutableDictionary* allClasses = [self.style objectForKey:HUFancyTextDefaultClass];
+    NSMutableDictionary* allClasses = [self.style objectForKey:GSFancyTextDefaultClass];
     if (allClasses) {
         [resultStyles setValuesForKeysWithDictionary:[allClasses objectForKey: className]];
     }
@@ -1351,45 +1351,45 @@ static NSMutableDictionary* fontMemory_;
     if (elementClasses) {
         [resultStyles setValuesForKeysWithDictionary:[elementClasses objectForKey: className]];
     }
-    [resultStyles setValue: className forKey:HUFancyTextClassKey];
+    [resultStyles setValue: className forKey:GSFancyTextClassKey];
     
     return resultStyles;
 }
 
-- (void)changeAttribute:(NSString*)attribute to:(id)value on:(HUFancyTextReferenceType)type withName:(NSString*)name {
+- (void)changeAttribute:(NSString*)attribute to:(id)value on:(GSFancyTextReferenceType)type withName:(NSString*)name {
     NSMutableDictionary* stylesToAdd = [[NSMutableDictionary alloc] initWithObjectsAndKeys:value, attribute, nil];
     [self addStyles:stylesToAdd on:type withName:name];
-    HURelease(stylesToAdd);
+    GSRelease(stylesToAdd);
 }
 
-- (void)addStyles:(NSMutableDictionary*)styles on:(HUFancyTextReferenceType)type withName:(NSString*)name {
+- (void)addStyles:(NSMutableDictionary*)styles on:(GSFancyTextReferenceType)type withName:(NSString*)name {
     NSArray* changeList = [self newChangeListBasedOnType:type withName:name];
-    for (HUMarkupNode* node in changeList) {
+    for (GSMarkupNode* node in changeList) {
         [node applyAndSpreadStyles:styles removeOldStyles:NO];
     }
-    HURelease(changeList);
+    GSRelease(changeList);
 }
 
-- (void)applyClass:(NSString*)className on:(HUFancyTextReferenceType)type withName:(NSString*)name {
+- (void)applyClass:(NSString*)className on:(GSFancyTextReferenceType)type withName:(NSString*)name {
     NSArray* changeList = [self newChangeListBasedOnType:type withName:name];
-    for (HUMarkupNode* node in changeList) {
-        NSMutableDictionary* styles = [self newStylesFromClassName:className elementName:[node.data objectForKey:HUFancyTextElementNameKey]];
+    for (GSMarkupNode* node in changeList) {
+        NSMutableDictionary* styles = [self newStylesFromClassName:className elementName:[node.data objectForKey:GSFancyTextElementNameKey]];
         [node applyAndSpreadStyles:styles removeOldStyles:NO];
 //        NSLog(@"node.child.style: %@", [[node.children objectAtIndex:0] data]);
-        HURelease(styles);
+        GSRelease(styles);
     }
-    HURelease(changeList);
+    GSRelease(changeList);
 }
 
-- (void)changeStylesToClass:(NSString*)className on:(HUFancyTextReferenceType)type withName:(NSString*)name {
+- (void)changeStylesToClass:(NSString*)className on:(GSFancyTextReferenceType)type withName:(NSString*)name {
     NSArray* changeList = [self newChangeListBasedOnType:type withName:name];
-    for (HUMarkupNode* node in changeList) {
-        NSMutableDictionary* styles = [self newStylesFromClassName:className elementName:[node.data objectForKey:HUFancyTextElementNameKey]];
+    for (GSMarkupNode* node in changeList) {
+        NSMutableDictionary* styles = [self newStylesFromClassName:className elementName:[node.data objectForKey:GSFancyTextElementNameKey]];
         [node applyAndSpreadStyles:styles removeOldStyles:YES];
 //        NSLog(@"node.child.style: %@", [[node.children objectAtIndex:0] data]);
-        HURelease(styles);
+        GSRelease(styles);
     }
-    HURelease(changeList);
+    GSRelease(changeList);
 }
 
 #pragma mark - draw
@@ -1429,12 +1429,12 @@ static NSMutableDictionary* fontMemory_;
     
     void(^getSegmentAtIndexBlock) (int) = ^(int index) {
         segment = [segments objectAtIndex:index];
-        segmentIsLambda = [[segment allKeys] containsObject:HUFancyTextInternalLambdaIDKey];
+        segmentIsLambda = [[segment allKeys] containsObject:GSFancyTextInternalLambdaIDKey];
     };
     
     void(^getSegmentInfoBlock) () = ^(void) {
-        segmentFont = [segment objectForKey:HUFancyTextFontKey];
-        segmentText = [segment objectForKey: HUFancyTextTextKey];
+        segmentFont = [segment objectForKey:GSFancyTextFontKey];
+        segmentText = [segment objectForKey: GSFancyTextTextKey];
         segmentBaseline = (segmentFont.lineHeight - segmentFont.ascender - segmentFont.descender)/2.f;
         //note that descender is a negative number. -descender is the absolute height of descender from the baseline
         
@@ -1443,7 +1443,7 @@ static NSMutableDictionary* fontMemory_;
     void(^getSegmentInfoWithWidthBlock) () = ^(void) {
         
         if (segmentIsLambda) {
-            segmentWidth = [[segment objectForKey:HUFancyTextWidthKey] floatValue];
+            segmentWidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
         }
         else {
             getSegmentInfoBlock();
@@ -1456,10 +1456,10 @@ static NSMutableDictionary* fontMemory_;
     };
     void(^updateLineTextHeightBlock) () = ^(void) {
         if (segmentIsLambda) {
-            segmentHeight = [[segment objectForKey:HUFancyTextHeightKey] floatValue];
+            segmentHeight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
         }
         else {
-            segmentHeight = [(UIFont*)[segment objectForKey:HUFancyTextFontKey] lineHeight];
+            segmentHeight = [(UIFont*)[segment objectForKey:GSFancyTextFontKey] lineHeight];
         }
         if (segmentHeight > h) {
             h = segmentHeight;
@@ -1472,13 +1472,13 @@ static NSMutableDictionary* fontMemory_;
         segments = [lines_ objectAtIndex:l];
         
         // determine if we need to calculate total width
-        TextAlign align = 0;
-        NSNumber* alignNumber = [[segments objectAtIndex:0] objectForKey:HUFancyTextTextAlignKey];
+        GSTextAlign align = 0;
+        NSNumber* alignNumber = [[segments objectAtIndex:0] objectForKey:GSFancyTextTextAlignKey];
         if (alignNumber) {
             align = [alignNumber intValue];
         }
         UILineBreakMode truncateMode = UILineBreakModeTailTruncation;
-        NSNumber* truncateNumber = [[segments objectAtIndex:0] objectForKey:HUFancyTextTruncateModeKey];
+        NSNumber* truncateNumber = [[segments objectAtIndex:0] objectForKey:GSFancyTextTruncateModeKey];
         if (truncateNumber) {
             truncateMode = [truncateNumber intValue];
         }
@@ -1490,7 +1490,7 @@ static NSMutableDictionary* fontMemory_;
         NSMutableArray* widthForSegment = nil; // the width for each segment. Use this only for head and middle truncation.
         // because for tail truncation and clip, space assignment is first come first serve.
         if (truncateMode == UILineBreakModeHeadTruncation) {
-            widthForSegment = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+            widthForSegment = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
             for (int i = segments.count-1 ; i>=0; i--) {
                 if (w >= frameWidth) {
                     [widthForSegment insertObject:[NSNumber numberWithFloat:0] atIndex:0];
@@ -1507,7 +1507,7 @@ static NSMutableDictionary* fontMemory_;
             }
         }
         else if (truncateMode == UILineBreakModeMiddleTruncation) {
-            widthForSegment = [[NSMutableArray alloc] initWithCapacity:HUFancyTextTypicalSize];
+            widthForSegment = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
             int i;
             if (segments.count == 1) {
                 [widthForSegment addObject:[NSNumber numberWithFloat:frameWidth]];
@@ -1548,7 +1548,7 @@ static NSMutableDictionary* fontMemory_;
                 getSegmentAtIndexBlock(i);
                 getSegmentInfoBlock();
                 updateLineTextHeightBlock();
-                BOOL needTotalLength = (align==TextAlignCenter || align==TextAlignRight);
+                BOOL needTotalLength = (align==GSTextAlignCenter || align==GSTextAlignRight);
                 if (needTotalLength) {
                     getSegmentInfoWithWidthBlock();
                     w += segmentWidth;
@@ -1557,13 +1557,13 @@ static NSMutableDictionary* fontMemory_;
         }
         
         // Calculating starting X
-        if (align==TextAlignLeft) {
+        if (align==GSTextAlignLeft) {
             x = 0.f;
         }
-        else if (align == TextAlignCenter) {
+        else if (align == GSTextAlignCenter) {
             x = (frameWidth - w)/2.f;
         }
-        else if (align == TextAlignRight) {
+        else if (align == GSTextAlignRight) {
             x = frameWidth - w;
         }
         if (x<0) {
@@ -1580,7 +1580,7 @@ static NSMutableDictionary* fontMemory_;
             
             // get text(if necessary) and height, baseline
             if (segmentIsLambda) {
-                segmentHeight = [[segment objectForKey:HUFancyTextHeightKey] floatValue];
+                segmentHeight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
                 segmentBaseline = 0;
             }
             else {
@@ -1600,20 +1600,20 @@ static NSMutableDictionary* fontMemory_;
             }
             
             // get vertical align
-            NSNumber* valignNumber = [segment objectForKey:HUFancyTextVerticalAlignKey];
-            VerticalAlign valign = valignNumber ? [valignNumber intValue] : 0; // 0 is always the default, no matter what the default is
+            NSNumber* valignNumber = [segment objectForKey:GSFancyTextVerticalAlignKey];
+            GSVerticalAlign valign = valignNumber ? [valignNumber intValue] : 0; // 0 is always the default, no matter what the default is
             CGFloat actualY;
             switch (valign) {
-                case VerticalAlignBaseline:
+                case GSVerticalAlignBaseline:
                     actualY = y + h - segmentHeight - (baseline - segmentBaseline);
                     break;
-                case VerticalAlignBottom:
+                case GSVerticalAlignBottom:
                     actualY = y + h - segmentHeight;
                     break;
-                case VerticalAlignMiddle:
+                case GSVerticalAlignMiddle:
                     actualY = y + (h-segmentHeight)/2;
                     break;
-                case VerticalAlignTop:
+                case GSVerticalAlignTop:
                     actualY = y;
                     break;
             }
@@ -1623,24 +1623,24 @@ static NSMutableDictionary* fontMemory_;
             // draw
             if (segmentIsLambda) {
                 // to do: call block method
-                NSString* lambdaID = [segment objectForKey:HUFancyTextInternalLambdaIDKey];
-                CGFloat lwidth = [[segment objectForKey:HUFancyTextWidthKey] floatValue];
-                CGFloat lheight = [[segment objectForKey:HUFancyTextHeightKey] floatValue];
+                NSString* lambdaID = [segment objectForKey:GSFancyTextInternalLambdaIDKey];
+                CGFloat lwidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
+                CGFloat lheight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
                 void(^drawingBlock)(CGRect);
                 if ((drawingBlock = [lambdaBlocks_ objectForKey:lambdaID])) {
                     CGRect rect = CGRectMake(x, actualY, lwidth, lheight);
                     drawingBlock(rect);
-//                    NSLog(@"finished drawing %@ for %@...", lambdaID, [[segments_ objectAtIndex:0] objectForKey:HUFancyTextTextKey]);
+//                    NSLog(@"finished drawing %@ for %@...", lambdaID, [[segments_ objectAtIndex:0] objectForKey:GSFancyTextTextKey]);
                 }
-                #ifdef HU_DEBUG_MODE
+                #ifdef GS_DEBUG_MODE
                 else {
-                    HUDebugLog(@"\n[Warning]\nBlock %@... undefined. A blank space will be created.\n\n", lambdaID);
+                    GSDebugLog(@"\n[Warning]\nBlock %@... undefined. A blank space will be created.\n\n", lambdaID);
                 }
                 #endif
             }
             else {
                 // get color
-                UIColor* segmentColor = [segment objectForKey:HUFancyTextColorKey];
+                UIColor* segmentColor = [segment objectForKey:GSFancyTextColorKey];
                 CGContextSetFillColorWithColor(ctx, [segmentColor CGColor]);
                 CGContextSetStrokeColorWithColor(ctx, [segmentColor CGColor]);
                 
@@ -1657,14 +1657,14 @@ static NSMutableDictionary* fontMemory_;
             }
         }
         
-        HURelease(widthForSegment);
+        GSRelease(widthForSegment);
         
         // Updating Y for the next line
-        CGFloat lineHeight = [[[segments objectAtIndex:0] objectForKey:HUFancyTextLineHeightKey] floatValue];
+        CGFloat lineHeight = [[[segments objectAtIndex:0] objectForKey:GSFancyTextLineHeightKey] floatValue];
         if (!lineHeight) {
             lineHeight = h;
         }
-        else if ([[[segments objectAtIndex:0] objectForKey:HUFancyTextHeightIsPercentageKey] boolValue]) { // percentage
+        else if ([[[segments objectAtIndex:0] objectForKey:GSFancyTextHeightIsPercentageKey] boolValue]) { // percentage
             lineHeight = lineHeight * h;
         }
         y += lineHeight;
@@ -1684,7 +1684,7 @@ static NSMutableDictionary* fontMemory_;
     }
     else {
         // copy the block onto the heap
-        void(^theBlock)(CGPoint) = HUAutoreleased([drawingBlock copy]);
+        void(^theBlock)(CGPoint) = GSAutoreleased([drawingBlock copy]);
         [lambdaBlocks_ setObject:theBlock forKey:lambdaID];
     }
 }
@@ -1697,7 +1697,7 @@ static NSMutableDictionary* fontMemory_;
     if (!array) {
         array = [[NSMutableArray alloc] initWithObjects:object, nil];
         [dict setObject:array forKey:key];
-        HURelease(array);
+        GSRelease(array);
     }
     else {
         [array addObject:object];
@@ -1706,17 +1706,17 @@ static NSMutableDictionary* fontMemory_;
 
 + (void)cleanStyleDict:(NSMutableDictionary*)dict {
 
-    if (![dict objectForKey:HUFancyTextLineIDKey]) {
+    if (![dict objectForKey:GSFancyTextLineIDKey]) {
         
-        NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:HUFancyTextTextAlignKey, HUFancyTextLineHeightKey, HUFancyTextLineCountKey, HUFancyTextTruncateModeKey, nil];
+        NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:GSFancyTextTextAlignKey, GSFancyTextLineHeightKey, GSFancyTextLineCountKey, GSFancyTextTruncateModeKey, nil];
         
-#ifdef HU_DEBUG_MODE
-        NSArray* classNames = [dict objectForKey: HUFancyTextClassKey];
-        NSString* elementName = [dict objectForKey: HUFancyTextElementNameKey];
+#ifdef GS_DEBUG_MODE
+        NSArray* classNames = [dict objectForKey: GSFancyTextClassKey];
+        NSString* elementName = [dict objectForKey: GSFancyTextElementNameKey];
         NSString* message = @"\n[Warning]\nFound definition of %@ in a <%@> tag through class %@. It is supposed to be set in <p> tags, and will be ignored here.\n\n";
         for (NSString* attrib in attribsForPOnly) {
             if ([dict objectForKey:attrib]) {
-                HUDebugLog(message, attrib, elementName, classNames);
+                GSDebugLog(message, attrib, elementName, classNames);
             }
         }
 #endif
@@ -1731,27 +1731,27 @@ static NSMutableDictionary* fontMemory_;
 /// @note: it will only copy user set info and parsing result, but not line generating result (including content height)
 - (id)copy {
     // if the original one is parsed, then just copy the parsed result tree
-    HUFancyText* newFancyText;
+    GSFancyText* newFancyText;
     if (self.parsedResultTree) {
-        HUMarkupNode* newTree = [self.parsedResultTree copy];
-        newFancyText = [[HUFancyText alloc] initWithParsedStructure:newTree];
-        HURelease(newTree);
+        GSMarkupNode* newTree = [self.parsedResultTree copy];
+        newFancyText = [[GSFancyText alloc] initWithParsedStructure:newTree];
+        GSRelease(newTree);
     }
     else {
         NSString* newText = [self.text copy];
-        newFancyText = [[HUFancyText alloc] initWithMarkupText:newText];
-        HURelease(newText);
+        newFancyText = [[GSFancyText alloc] initWithMarkupText:newText];
+        GSRelease(newText);
     }
     newFancyText.width = self.width;
     newFancyText.maxHeight = self.maxHeight;
     
     NSMutableDictionary* newStyle = [self.style copy];
     newFancyText.style = newStyle;
-    HURelease(newStyle);
+    GSRelease(newStyle);
     
     NSMutableDictionary* newlambdaBlocks = [self.lambdaBlocks copy];
     newFancyText.lambdaBlocks = newlambdaBlocks;
-    HURelease(newlambdaBlocks);
+    GSRelease(newlambdaBlocks);
  
     return newFancyText;
 }

@@ -1,6 +1,6 @@
 //
-//  HUMarkupNode.h
-//  -HUSFT-
+//  GSMarkupNode.h
+//  -GrannySmith-
 //
 //  Created by Bao Lei on 1/4/12.
 //  Copyright (c) 2012 Hulu. All rights reserved.
@@ -10,9 +10,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "HUFancyTextDefines.h"
+#import "GSFancyTextDefines.h"
 
-@interface HUMarkupNode : NSObject {
+@interface GSMarkupNode : NSObject {
 
     NSMutableDictionary* data_;
     NSMutableArray* children_;
@@ -21,7 +21,7 @@
     NSMutableDictionary* IDMap_;
     NSMutableDictionary* classesMap_;
     
-    HUWeakPrefix HUMarkupNode* parent_;
+    GSWeakPrefix GSMarkupNode* parent_;
 }
 
 /** the data of the node.
@@ -30,7 +30,7 @@
  */
 @property (nonatomic, retain) NSMutableDictionary* data;
 
-/** the children array. each object is an HUMarkupNode object
+/** the children array. each object is an GSMarkupNode object
  * @note for a child-less leaf the children array is an empty array, instead of nil
  */
 @property (nonatomic, retain) NSMutableArray* children;
@@ -50,20 +50,20 @@
 /** the parent node. Used for tracing back all the styles applied to this node.
  * @note If ARC is not enabled, it's __unsafe__unretained in order to avoid retain cycle, so use with caution.
  */
-@property (nonatomic, HUWeak) HUMarkupNode* parent;
+@property (nonatomic, GSWeak) GSMarkupNode* parent;
 
 /** append a node into the children array
  * @note this also sets the parent of the child node
  * @warning it only establishes child/parent relationship, but doesn't pass styles and hashmaps. So it's mainly used during construction stage.
  */
-- (void)appendChild:(HUMarkupNode*)node;
+- (void)appendChild:(GSMarkupNode*)node;
 
 
 /** add subtree under a child node of this tree, and add the map info in subtree root into the root of this tree (assuming it's this node)
  * @note call this method only on the root node, and make sure that node is an offsprint under this node
  * @warning if the subtree has a conflicting ID with the original tree, the ID will refer to the one in the new subtree
  */
-- (void)appendSubtree:(HUMarkupNode*)subtreeRoot underNode:(HUMarkupNode*)node;
+- (void)appendSubtree:(GSMarkupNode*)subtreeRoot underNode:(GSMarkupNode*)node;
 
 
 /** display the information of the tree starting from this node, nonrecursively
@@ -88,9 +88,9 @@
 /** Get the tree node under this node that has the given nodeID
  * @return the right node. If no node is found by the ID or the method is called on a non-root node, return Nil
  * @note this method must be called on a root node, where ID hashmap is stored
- * @note you can can use @"root" (HUFancyTextRootID) to refer to the root of the tree (this node)
+ * @note you can can use @"root" (GSFancyTextRootID) to refer to the root of the tree (this node)
  */
-- (HUMarkupNode*)childNodeWithID:(NSString*)nodeID;
+- (GSMarkupNode*)childNodeWithID:(NSString*)nodeID;
 
 /** Get all the tree nodes under this node that has the given class name
  * @note this method must be called on a root node, where class hashmap is stored
