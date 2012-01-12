@@ -1,6 +1,6 @@
 //
 //  NSString+ParsingHelper.h
-//  i2
+//  -HUSFT-
 //
 //  Created by Bao Lei on 7/14/11.
 //  Copyright 2011 hulu. All rights reserved.

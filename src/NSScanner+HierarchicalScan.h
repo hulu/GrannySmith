@@ -1,6 +1,6 @@
 //
 //  NSScanner+HierachicalScan.h
-//  i2
+//  -HUSFT-
 //
 //  Created by Bao Lei on 12/22/11.
 //  Copyright (c) 2011 Hulu. All rights reserved.

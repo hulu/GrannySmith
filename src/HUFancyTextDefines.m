@@ -1,6 +1,6 @@
 //
 //  HUFancyTextDefines.m
-//  i2
+//  -HUSFT-
 //
 //  Created by Bao Lei on 1/9/12.
 //  Copyright (c) 2012 Hulu. All rights reserved.
