@@ -105,6 +105,15 @@
     count = fancyText.parsedResultTree.children.count;
     STAssertEquals(count, 1, @"expecting 1 child but seeing %d", count);
     
+    
+    fancyText = [[HUFancyText alloc] initWithMarkupText:@"<p class=green><ufo class=yellow id=1>c</ufo><span class='green'>e</span></p>"];
+    [fancyText parseStructure];
+    node = [fancyText.parsedResultTree childNodeWithID:@"1"];
+    node = [node.children objectAtIndex:0];
+    NSString* text = [node.data objectForKey:HUFancyTextTextKey];
+    STAssertEqualObjects(text, @"c", @"text inside special tag parsing error: %@", text);
+    color = [node.data objectForKey:HUFancyTextColorKey];
+    STAssertEqualObjects(color, [UIColor yellowColor], @"color inside special tag parsing error: %@", color);
 }
 
 - (void)testLineBreak {

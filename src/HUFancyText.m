@@ -835,7 +835,6 @@ typedef enum {
     // result containers
     NSString* elementName = nil;
     NSString* classNames = nil;
-    BOOL knownElement = YES;
     NSString* attribName = nil;
     InTagAttrib attrib = ReadingNothing;
     
@@ -911,14 +910,6 @@ typedef enum {
                         lineID_++;
                         [style setObject:[NSNumber numberWithInt: lineID_ ] forKey:HUFancyTextLineIDKey];
                     }
-                    else if ([elementName caseInsensitiveCompare:HUFancyTextSpanElement]==NSOrderedSame ||
-                             [elementName caseInsensitiveCompare:HUFancyTextLambdaElement]==NSOrderedSame
-                             ) {
-                        // don't set the line ID in this case, so if there's an outer <p>, it inherits
-                    }
-                    else {
-                        knownElement = NO;
-                    }
                 }
                 mode = ParsingLhs;
                 if (scanResult==ScanMeetTarget) {
@@ -965,7 +956,7 @@ typedef enum {
             case ParsingUnquotedRhs:
             case ParsingDoubleQuotedRhs:
             case ParsingSingleQuotedRhs:
-                if (knownElement && !isClosing) {
+                if (!isClosing) {
                     if (attrib == ReadingClass) {
                         classNames = HUTrim(currentText);
                         
