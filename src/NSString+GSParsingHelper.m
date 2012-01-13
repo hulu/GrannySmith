@@ -13,7 +13,9 @@
 
 - (NSMutableArray*) linesWithWidth:(CGFloat)width font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
 
-//    NSLog(@"LineBreak - The string: %@, 1st line: %f, other lines: %f", self, firstLineWidth, width);
+    #ifdef GS_DEBUG_CODE
+    GSDebugLog(@"LineBreak - The string: %@, 1st line: %f, other lines: %f", self, firstLineWidth, width);
+    #endif
     
     NSMutableString* firstLineBlocked = [NSMutableString string];
     if (firstLineWidth < width) {
@@ -50,10 +52,14 @@
                 
         // deal with \n first
         if (beginsWithBR){
-            NSLog(@"found \\n at [%d]", i);
+            #ifdef GS_DEBUG_CODE
+            GSDebugLog(@"found \\n at [%d]", i);
+            #endif
             
             if (currentLine.length>0) {
-                NSLog(@"adding line: %@. i=[%d]",currentLine, i);
+                #ifdef GS_DEBUG_CODE
+                GSDebugLog(@"adding line: %@. i=[%d]",currentLine, i);
+                #endif
                 [lines addObject: [NSString stringWithString:currentLine]];
                 [currentLine setString:@""];
                 
@@ -77,14 +83,12 @@
             step = self.length - i;
         }
         
-        NSLog(@"i=%d, step=%d, length=%d", i, step, self.length);
         NSString* characters = [self substringWithRange:NSMakeRange(i, step)];
         
         // if we have a \n in the characters read...
         int brPosition = [characters rangeOfString:@"\n"].location;
         if (brPosition != NSNotFound) {
             characters = [characters substringToIndex:brPosition];
-            NSLog(@"string before \\n: %@", characters);
             i = i + brPosition; // set the index to the "\n" position, continue and let the next cycle handle the "\n".
         }
         else {
@@ -107,8 +111,9 @@
                             constrainedToSize:CGSizeMake(width,1000.f) 
                             lineBreakMode:UILineBreakModeWordWrap];
         
-        NSLog(@"[%d] current line: %@. width to confine: %f, apple width: %f", i, currentLine, width, appleSize.width);
-        
+        #ifdef GS_DEBUG_CODE
+        GSDebugLog(@"[%d] current line: %@. width to confine: %f, apple width: %f", i, currentLine, width, appleSize.width);
+        #endif
         
         // if we unestimated the number of characters need, add until we exceed the line
         while (appleSize.height <= font.lineHeight) {
@@ -134,7 +139,9 @@
                          sizeWithFont:font
                          constrainedToSize:CGSizeMake(width,1000.f) 
                          lineBreakMode:UILineBreakModeWordWrap];
-            NSLog(@"advanced to [%d]: %@ (height=%f, targeting:>%f)", i-1, lineToCalcWidth, appleSize.height, font.lineHeight);
+            // #ifdef GS_DEBUG_CODE
+            // GSDebugLog(@"advanced to [%d]: %@ (height=%f, targeting:>%f)", i-1, lineToCalcWidth, appleSize.height, font.lineHeight);
+            // #endif // this code should be fine, but just in case
         }
         
         if (appleSize.height > font.lineHeight) {
@@ -153,23 +160,20 @@
                 [currentLine deleteCharactersInRange:NSMakeRange(currentLine.length-1, 1)];
                 lineToCalcWidth = (lines.count || !firstLineBlocked.length) ? currentLine : [NSString stringWithFormat:@"%@%@", firstLineBlocked, currentLine];
                 i--;
-                NSLog(@"retreat to [%d]: %@ (width=%f, targeting:%f)", i-1, lineToCalcWidth, [lineToCalcWidth sizeWithFont:font].width, idealWidth);
+                // #ifdef GS_DEBUG_CODE
+                // GSDebugLog(@"retreat to [%d]: %@ (width=%f, targeting:%f)", i-1, lineToCalcWidth, [lineToCalcWidth sizeWithFont:font].width, idealWidth);
+                // #endif // this code should be fine, but just in case
             }
             
-            NSLog(@"adding line: %@. i=[%d]",currentLine, i);
+            #ifdef GS_DEBUG_CODE
+            GSDebugLog(@"adding line: %@. i=[%d]",currentLine, i);
+            #endif
             
             [lines addObject: [NSString stringWithString:currentLine]];
             [currentLine setString:@""];
         }
         
     }
-    if (currentLine.length>0) {
-        NSLog(@"THIS SHOULD NEVER HAPPEN");
-        NSLog(@"adding line: %@. (last line)",currentLine);
-        [lines addObject: [NSString stringWithString:currentLine]];
-    }
- 
-//    NSLog(@"lines: %@", lines);
     
     GSRelease(currentLine);
     return GSAutoreleased(lines);

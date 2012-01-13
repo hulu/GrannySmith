@@ -15,11 +15,10 @@
 // Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
  #define GS_ARC_ENABLED 1
 
-// Uncomment the following line to enable the warning logs
-#define GS_WARNING_ENABLED 1
-
-// Uncomment the following line to enable the debug logs
-#define GS_DEBUG_ENABLED 1
+#define GS_DEBUG_CODE 1             // Uncomment to log the debug information of the code
+#define GS_DEBUG_MARKUP 1           // Uncomment to log the markup text warnings
+#define GS_DEBUG_PERFORMANCE 1      // Uncomment to log the performance measurements
+#define GS_DEBUG_ALL 1              // Uncomment to enable all kinds of debug logs
 
 
 /// The typical size involved in the text rendering process, including number of nodes in a tree, number of styles in a node.
@@ -157,21 +156,36 @@ extern NSString* const GSFancyTextHeightIsPercentageKey;  // @"line-height-is-pe
 #define GSBridgePreix 
 #endif
 
-#ifdef GS_WARNING_ENABLED
-#define GSWarnLog(...) NSLog(__VA_ARGS__)
-#else
-#define GSWarnLog(...) 
+
+
+#ifdef GS_DEBUG_ALL
+// Components we want to include in the general debug
+#define GS_DEBUG_MARKUP 1
+#define GS_DEBUG_PERFORMANCE 1
+#define GS_DEBUG_CODE 1
 #endif
 
-#ifdef GS_DEBUG_ENABLED
-#define GSDebugLog(s, ...) NSLog( @"%@ (%@ %p @ %@::%d)",\
+
+/**Things that use GSDebugLog()
+ * Don't call this from a thread before you set up an autorelease pool
+ * Use the first one for standard behavior.  Use the second for standard + display
+ * in the in-app debug view.
+ */
+#if defined(GS_DEBUG_ALL) || \
+defined(GS_DEBUG_MARKUP) || \
+defined(GS_DEBUG_PERFORMANCE) || \
+defined(GS_DEBUG_CODE)
+
+/* standard */
+#define GSDebugLog( s, ... ) NSLog( @"%@ (%@ %p @ %@::%d)",\
     [NSString stringWithFormat:(s), ##__VA_ARGS__],\
     NSStringFromClass( [self class] ),\
     &self,\
     [[NSString stringWithUTF8String:__FILE__] lastPathComponent],\
     __LINE__ )
+
 #else
-#define GSDebugLog(...) 
+#define GSDebugLog( s, ... )
 #endif
 
 

@@ -47,6 +47,10 @@
 - (NSArray*)standardTestWithString:(NSString*)string lineWidth:(CGFloat)lineWidth font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
     NSArray* testArray = [string linesWithWidth:lineWidth font:font firstLineWidth:firstLineWidth limitLineCount:limitLineCount];
     
+    for (int i=0; i<testArray.count; i++) {
+        GSDebugLog(@"%d: %@", i, [testArray objectAtIndex:i]);
+    }
+    
     if (limitLineCount>0) {
         STAssertTrue(testArray.count <= limitLineCount, @"too many lines: %d", testArray.count);
     }

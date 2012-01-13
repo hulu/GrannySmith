@@ -187,7 +187,9 @@ static int lineID_ = 1;
 }
 
 - (GSMarkupNode*)parseStructure {
-    //NSDate* startTime = [NSDate date];
+    #ifdef GS_DEBUG_PERFORMANCE
+    NSDate* startTime = [NSDate date];
+    #endif
     
     if (!text_ || !text_.length) {
         // in case the object is initialized with already parsed structure instead of markup text
@@ -197,13 +199,18 @@ static int lineID_ = 1;
     GSRelease(parsedTree_);
     parsedTree_ = [[self class] newParsedMarkupString:text_ withStyleDict:style_];
     
-    //NSLog(@"time to parse markup: %f", -[startTime timeIntervalSinceNow]);
+    #ifdef GS_DEBUG_PERFORMANCE
+    GSDebugLog(@"time to parse markup: %f", -[startTime timeIntervalSinceNow]);
+    #endif
+    
     return parsedTree_;
 }
 
 - (NSMutableArray*)generateLines {
     
-//    NSDate* startTime = [NSDate date];
+    #ifdef GS_DEBUG_PERFORMANCE
+    NSDate* startTime = [NSDate date];
+    #endif
     
     // step 1. parsing
     if (!parsedTree_) {
@@ -381,7 +388,6 @@ static int lineID_ = 1;
             
             for (int i=0; i<segmentLines.count; i++) {
                 NSString* lineText = [segmentLines objectAtIndex:i];
-                // NSLog(@"i=%d, lineText=%@", i, lineText);
                 
                 // Special case: if the current line is empty... conclude the previous line, if there is any
                 if (lineText.length < 1) {
@@ -420,7 +426,6 @@ static int lineID_ = 1;
                 else {
                     // for any unfinished line, calculate the width left for the current line
                     CGFloat widthUsed = [lineText sizeWithFont:segmentFont].width;
-                    // NSLog(@"piece:%@, width used: %f", [piece objectForKey:GSFancyTextTextKey], widthUsed);
                     currentLineSpaceLeft = currentLineSpaceLeft - widthUsed;
                 }
             }
@@ -435,8 +440,9 @@ static int lineID_ = 1;
     GSRelease(segments_);
     GSRelease(currentLine);
     
-//    NSLog(@"the lines: %@", lines_);
-//    NSLog(@"time to generate line: %f", -[startTime timeIntervalSinceNow]);
+    #ifdef GS_DEBUG_PERFORMANCE
+    GSDebugLog(@"time to generate line: %f", -[startTime timeIntervalSinceNow]);
+    #endif
     
     contentHeight_ = totalHeight;
     return lines_;
@@ -476,7 +482,6 @@ typedef enum {
         currentText = [currentText substringFromIndex:lengthToSkip];
         
         // handle scan result
-        // NSLog(@"scan result (outer): %@ (@%d)", currentText, scanner.scanLocation);
         nameParts = [currentText componentsSeparatedByString:@"."];
         
         if (nameParts.count==1) {
@@ -574,7 +579,6 @@ typedef enum {
         currentText = [currentText substringFromIndex: lengthToSkip];
         
         // analyzing scan result
-        // NSLog(@"scanned text (inner): %@", currentText);
         switch (mode) {
             case ParsingAttribName:{
                 currentAttribName = [GSTrim([NSString stringWithString:currentText]) lowercaseString];
@@ -686,8 +690,6 @@ typedef enum {
         // outside the HTML tags.. do unescape to take care of &gt; &lt; etc
         currentSegmentText = [currentSegmentText gtm_stringByUnescapingFromHTML];
         
-        // NSLog(@"segment text:%@ (length=%d)", currentSegmentText, currentSegmentText.length);
-        
         if (currentSegmentText.length) {
             currentSegment = [[GSMarkupNode alloc] init];
             [currentSegment.data setObject:[NSString stringWithString:currentSegmentText] forKey:GSFancyTextTextKey];
@@ -700,8 +702,6 @@ typedef enum {
             
             // set the font based on font-related keys here, because all tags that apply to this segment is analyzed
             [[self class] createFontKeyForDict: currentSegment.data];
-            
-            // NSLog(@"adding %@", currentSegment.data);
             
             [[containerStack lastObject] appendChild:currentSegment];
             
@@ -717,8 +717,7 @@ typedef enum {
             
             // handling several special keys: elementName, isClosingTag, ID, class
             NSString* elementName = [stylesInTag objectForKey: GSFancyTextElementNameKey];
-//            NSLog(@"getting GSFancyTextElementNameKey name as %@", elementName);
-            
+
             BOOL isClosingTag = [[stylesInTag objectForKey:GSFancyTextTagClosingKey] boolValue];
             [stylesInTag removeObjectForKey:GSFancyTextTagClosingKey];
             
@@ -766,7 +765,6 @@ typedef enum {
         GSRelease(nodeToAdd);
         GSRelease(stylesInTag);
         
-//        NSLog(@"after taking care of a tag. the location:%@", [scanner atCharacter]);
         lengthToSkip = 1;
         // after scanning a tag, we are expected to be at the > position
         // we don't move scanner location because in that way the first space after > will be skipped in the next scan (damn it apple!)
@@ -776,16 +774,13 @@ typedef enum {
     GSRelease(scanner);
     GSRelease(containerStack);
     GSRelease(tagStack);
-    // NSLog(@"segments: %@", segments);
     
     resultRoot.IDMap = idMap;
     resultRoot.classesMap = classesMap;
     
     GSRelease(idMap);
     GSRelease(classesMap);
-    
-//    NSLog(@"tree (right after generation):\n%@", [resultRoot displayTree]);
-    
+        
     return resultRoot;
 }
 
@@ -870,14 +865,11 @@ typedef enum {
                 break;
         }
         
-//        NSLog(@"scan result: %@. scanTo:%@ scanResult=%d", currentText, scanTo, scanResult);
-        
         // handling read text
         switch (mode) {
             case ParsingTagName:
                 elementName = [GSTrim(currentText) lowercaseString];
                 
-//                NSLog(@"setting element name to %@", elementName);
                 [style setObject:elementName forKey: GSFancyTextElementNameKey];
                 
                 /** Some supported markup tags
@@ -914,8 +906,7 @@ typedef enum {
                 NSString* content = [scanner string];
                 int nextCharLocation;
                 NSString* next = [content firstNonWhitespaceCharacterSince:scanner.scanLocation+1 foundAt:&nextCharLocation];
-//                NSLog(@"(reading %d, after =) next: %@ (at %d of %d)", attrib, next, nextCharLocation, scanner.string.length);
-                
+
                 if (!next.length) {
                     scanner.scanLocation = content.length;
                     return style;
@@ -978,12 +969,10 @@ typedef enum {
                 if (scanResult==ScanMeetTarget) {
                     scanner.scanLocation += GSTrim(scanTo).length;
                 }
-//                NSLog(@"mode changed to parsingLHS, scanner at: %@", [scanner atCharacter]);
                 break;
         }
     }
     
-//    NSLog(@"end of tag: location: %@", [scanner atCharacter]);
     [[self class] cleanStyleDict:style];
     return style;
 }
@@ -1062,8 +1051,8 @@ typedef enum {
         return color;
     }
     else {
-        #ifdef GS_WARNING_ENABLED
-        GSWarnLog(@"\n[Warning]\nColor parsing error. \"%@\" is not recognized.\n\n", value_);
+        #ifdef GS_DEBUG_MARKUP
+        GSDebugLog(@"\n[Warning]\nColor parsing error. \"%@\" is not recognized.\n\n", value_);
         #endif
         return nil;
     }
@@ -1110,8 +1099,8 @@ typedef enum {
         return textAlignNumber;
     }
     else {
-        #ifdef GS_WARNING_ENABLED
-        GSWarnLog(@"\n[Warning]\nText alignment parsing error. \"%@\" is not recognized.\n\n", value);
+        #ifdef GS_DEBUG_MARKUP
+        GSDebugLog(@"\n[Warning]\nText alignment parsing error. \"%@\" is not recognized.\n\n", value);
         #endif
         return nil;
     }
@@ -1137,8 +1126,8 @@ typedef enum {
         return result;
     }
     else {
-        #ifdef GS_WARNING_ENABLED
-        GSWarnLog(@"\n[Warning]\nVertical alignment parsing error. \"%@\" is not recognized.\n\n", value);
+        #ifdef GS_DEBUG_MARKUP
+        GSDebugLog(@"\n[Warning]\nVertical alignment parsing error. \"%@\" is not recognized.\n\n", value);
         #endif
         return nil;
     }
@@ -1163,8 +1152,8 @@ typedef enum {
         return mode;
     }
     else {
-        #ifdef GS_WARNING_ENABLED
-        GSWarnLog(@"\n[Warning]\nTruncation mode parsing error. \"%@\" is not recognized.\n\n", value);
+        #ifdef GS_DEBUG_MARKUP
+        GSDebugLog(@"\n[Warning]\nTruncation mode parsing error. \"%@\" is not recognized.\n\n", value);
         #endif
         return nil;
     }
@@ -1231,7 +1220,6 @@ static NSMutableDictionary* fontMemory_;
         [fontMemory_ setObject:realFontName forKey:internalName];
     }
     
-//    NSLog(@"in: %@,%@,%@,  out:%@", name, weight, style, realFontName);
     return [UIFont fontWithName:realFontName size:size];
 }
 
@@ -1373,7 +1361,6 @@ static NSMutableDictionary* fontMemory_;
     for (GSMarkupNode* node in changeList) {
         NSMutableDictionary* styles = [self newStylesFromClassName:className elementName:[node.data objectForKey:GSFancyTextElementNameKey]];
         [node applyAndSpreadStyles:styles removeOldStyles:NO];
-//        NSLog(@"node.child.style: %@", [[node.children objectAtIndex:0] data]);
         GSRelease(styles);
     }
     GSRelease(changeList);
@@ -1384,7 +1371,6 @@ static NSMutableDictionary* fontMemory_;
     for (GSMarkupNode* node in changeList) {
         NSMutableDictionary* styles = [self newStylesFromClassName:className elementName:[node.data objectForKey:GSFancyTextElementNameKey]];
         [node applyAndSpreadStyles:styles removeOldStyles:YES];
-//        NSLog(@"node.child.style: %@", [[node.children objectAtIndex:0] data]);
         GSRelease(styles);
     }
     GSRelease(changeList);
@@ -1394,7 +1380,9 @@ static NSMutableDictionary* fontMemory_;
 
 - (void)drawInRect:(CGRect)rect {
     
-    //NSDate* startDraw = [NSDate date];
+    #ifdef GS_DEBUG_PERFORMANCE
+    NSDate* startDraw = [NSDate date];
+    #endif
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     
@@ -1435,8 +1423,6 @@ static NSMutableDictionary* fontMemory_;
         segmentText = [segment objectForKey: GSFancyTextTextKey];
         segmentBaseline = (segmentFont.lineHeight - segmentFont.ascender - segmentFont.descender)/2.f;
         //note that descender is a negative number. -descender is the absolute height of descender from the baseline
-        
-        // NSLog(@"baseline of %@ is %f", segmentText, segmentBaseline);
     };
     void(^getSegmentInfoWithWidthBlock) () = ^(void) {
         
@@ -1462,7 +1448,6 @@ static NSMutableDictionary* fontMemory_;
         if (segmentHeight > h) {
             h = segmentHeight;
             baseline = segmentBaseline; // we use the baseline of the biggest font to be the standard baseline of this line
-            //            NSLog(@"setting line baseline to %f based on %@", segmentBaseline, segmentIsLambda? @"lambda": segmentText);
         }
     };
     
@@ -1615,8 +1600,6 @@ static NSMutableDictionary* fontMemory_;
                     actualY = y;
                     break;
             }
-            //            NSLog(@"line:%d, y:%f, h:%f, segmentHeight:%f, align:%d, actualY:%f. baseline: %f vs %f",
-            //                          l, y,    h,    segmentHeight,   valign,    actualY,  segmentBaseline, baseline);
             
             // draw
             if (segmentIsLambda) {
@@ -1628,11 +1611,10 @@ static NSMutableDictionary* fontMemory_;
                 if ((drawingBlock = [lambdaBlocks_ objectForKey:lambdaID])) {
                     CGRect rect = CGRectMake(x, actualY, lwidth, lheight);
                     drawingBlock(rect);
-//                    NSLog(@"finished drawing %@ for %@...", lambdaID, [[segments_ objectAtIndex:0] objectForKey:GSFancyTextTextKey]);
                 }
-                #ifdef GS_WARNING_ENABLED
+                #ifdef GS_DEBUG_MARKUP
                 else {
-                    GSWarnLog(@"\n[Warning]\nBlock %@... undefined. A blank space will be created.\n\n", lambdaID);
+                    GSDebugLog(@"\n[Warning]\nBlock %@... undefined. A blank space will be created.\n\n", lambdaID);
                 }
                 #endif
             }
@@ -1670,9 +1652,10 @@ static NSMutableDictionary* fontMemory_;
     }
     
     contentHeight_ = y - rect.origin.y;
-    //NSLog(@"final content height: %f", contentHeight_);
     
-    //NSLog(@"drawing time: %f", -[startDraw timeIntervalSinceNow]);
+    #ifdef GS_DEBUG_PERFORMANCE
+    GSDebugLog(@"drawing time: %f", -[startDraw timeIntervalSinceNow]);
+    #endif
     
 }
 
@@ -1708,13 +1691,13 @@ static NSMutableDictionary* fontMemory_;
         
         NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:GSFancyTextTextAlignKey, GSFancyTextLineHeightKey, GSFancyTextLineCountKey, GSFancyTextTruncateModeKey, nil];
         
-#ifdef GS_WARNING_ENABLED
+#ifdef GS_DEBUG_MARKUP
         NSArray* classNames = [dict objectForKey: GSFancyTextClassKey];
         NSString* elementName = [dict objectForKey: GSFancyTextElementNameKey];
         NSString* message = @"\n[Warning]\nFound definition of %@ in a <%@> tag through class %@. It is supposed to be set in <p> tags, and will be ignored here.\n\n";
         for (NSString* attrib in attribsForPOnly) {
             if ([dict objectForKey:attrib]) {
-                GSWarnLog(message, attrib, elementName, classNames);
+                GSDebugLog(message, attrib, elementName, classNames);
             }
         }
 #endif
