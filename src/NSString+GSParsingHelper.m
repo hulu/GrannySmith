@@ -31,14 +31,12 @@
     NSMutableArray* lines = [[NSMutableArray alloc] init];
     NSMutableString* currentLine = [[NSMutableString alloc] init];
 
-//    CGFloat charWidth = [[self substringToIndex:1] sizeWithFont:font].width;
+    CGFloat charWidth = [[self substringToIndex:1] sizeWithFont:font].width;
     
     // estimate the number of characters for each line
-//    int step = (int) (width*1.1 / charWidth);
-    int step = 1; 
-    // using 1 is the safest (but slightly slower) solution. Will double check and optimize this later.
+    int step = 0;
     
-    for (int i = 0; i<self.length; i=i+step){
+    for (int i=0; i<self.length; ){  // we control index move in the loop
     
         // if we are already 1 step reached line count limit, just return the whole thing for the next line
         if (limitLineCount>0 && lines.count == limitLineCount-1) {
@@ -68,25 +66,41 @@
             }
             
             [lines addObject:@""];
-            i = i - step + 1;
+            i = i + 1;
             continue;
         }
     
-        NSString* character = [self substringWithRange:NSMakeRange(i, i+step<=self.length?step:(self.length-i) )];
-        int brPosition = [character rangeOfString:@"\n"].location;
-        if (brPosition != NSNotFound) {
-            character = [character substringToIndex:brPosition];
-            i = i + brPosition - step;
-        }
-
-        if (!currentLine.length && lines.count && [[lines lastObject] length]) {
-            [currentLine appendFormat:@"%@", trim(character)];
-        }
-        else {
-            [currentLine appendFormat:@"%@", character];
+        // read a range of characters.. try to go beyond the line for just a little bit
+        step = (int) (width*1.1 / charWidth);
+        if (i+step > self.length) {
+            step = self.length - i;
         }
         
-        NSString* lineToCalcWidth = (lines.count && firstLineBlocked.length) ? currentLine : [NSString stringWithFormat:@"%@%@", firstLineBlocked, currentLine];
+        NSLog(@"i=%d, step=%d, length=%d", i, step, self.length);
+        NSString* characters = [self substringWithRange:NSMakeRange(i, step)];
+        
+        // if we have a \n in the characters read...
+        int brPosition = [characters rangeOfString:@"\n"].location;
+        if (brPosition != NSNotFound) {
+            characters = [characters substringToIndex:brPosition];
+            NSLog(@"string before \\n: %@", characters);
+            i = i + brPosition; // set the index to the "\n" position, continue and let the next cycle handle the "\n".
+        }
+        else {
+            i = i + step;
+        }
+        // the next character to be inserted is at i now
+
+        if (!currentLine.length && lines.count && [[lines lastObject] length]) {
+            // if it's not the first line, and this is the first character, and the previous line isn't ended by \n
+            // we just skip the leading chars
+            [currentLine appendFormat:@"%@", [characters stringByTrimmingLeadingWhitespace]];
+        }
+        else {
+            [currentLine appendFormat:@"%@", characters];
+        }
+        
+        NSString* lineToCalcWidth = (lines.count || !firstLineBlocked.length) ? currentLine : [NSString stringWithFormat:@"%@%@", firstLineBlocked, currentLine];
         CGSize appleSize = [ lineToCalcWidth
                             sizeWithFont:font
                             constrainedToSize:CGSizeMake(width,1000.f) 
@@ -94,24 +108,48 @@
         
         NSLog(@"[%d] current line: %@. width to confine: %f, apple width: %f", i, currentLine, width, appleSize.width);
         
+        
+        // if we unestimated the number of characters need, add until we exceed the line
+        while (appleSize.height <= font.lineHeight) {
+            if (i>=self.length) {
+                // finish the last character, conclude here.
+                [lines addObject: [NSString stringWithString:currentLine]];
+                GSRelease(currentLine);
+                return GSAutoreleased(lines);
+            }
+            characters = [self substringWithRange:NSMakeRange(i, 1)];
+            if ([characters isEqualToString:@"\n"]) {
+                [lines addObject: [NSString stringWithString:currentLine]];
+                [currentLine setString:@""]; // let the next cycle handle "\n"
+                break;
+            }
+            [currentLine appendString: characters];
+            i++;
+            lineToCalcWidth = (lines.count || !firstLineBlocked.length) ? currentLine : [NSString stringWithFormat:@"%@%@", firstLineBlocked, currentLine];
+            appleSize = [ lineToCalcWidth
+                         sizeWithFont:font
+                         constrainedToSize:CGSizeMake(width,1000.f) 
+                         lineBreakMode:UILineBreakModeWordWrap];
+            NSLog(@"advanced to [%d]: %@ (height=%f, targeting:>%f)", i-1, lineToCalcWidth, appleSize.height, font.lineHeight);
+        }
+        
         if (appleSize.height > font.lineHeight) {
-            // a new line is created
+            
             CGFloat idealWidth = appleSize.width;
             
-            // special case: if the 1st character can't fit into the first line
-            if (i==0 && firstLineWidth<width) {
-                i = -1;
-                [currentLine setString:@""];
-                [lines addObject:@""];
-                continue;
+            int minLength = 1; // a line is at least one char
+            // special case
+            if (!lines.count && firstLineWidth < width) {
+                // if it's the first line, and first line width < rest width, we allow zero character just for this line
+                minLength = 0;
             }
             
             // take out characters one by one until the width is idealWidth
-            while ([lineToCalcWidth sizeWithFont:font].width > idealWidth) {
+            while (currentLine.length > minLength && [lineToCalcWidth sizeWithFont:font].width > idealWidth) {
                 [currentLine deleteCharactersInRange:NSMakeRange(currentLine.length-1, 1)];
-                lineToCalcWidth = (lines.count && firstLineBlocked.length) ? currentLine : [NSString stringWithFormat:@"%@%@", firstLineBlocked, currentLine];
+                lineToCalcWidth = (lines.count || !firstLineBlocked.length) ? currentLine : [NSString stringWithFormat:@"%@%@", firstLineBlocked, currentLine];
                 i--;
-                NSLog(@"retreat to [%d]: %@ (width=%f, targeting:%f)", i, lineToCalcWidth, [lineToCalcWidth sizeWithFont:font].width, idealWidth);
+                NSLog(@"retreat to [%d]: %@ (width=%f, targeting:%f)", i-1, lineToCalcWidth, [lineToCalcWidth sizeWithFont:font].width, idealWidth);
             }
             
             NSLog(@"adding line: %@. i=[%d]",currentLine, i);
@@ -122,11 +160,12 @@
         
     }
     if (currentLine.length>0) {
+        NSLog(@"THIS SHOULD NEVER HAPPEN");
         NSLog(@"adding line: %@. (last line)",currentLine);
         [lines addObject: [NSString stringWithString:currentLine]];
     }
  
-    NSLog(@"lines: %@", lines);
+//    NSLog(@"lines: %@", lines);
     
     GSRelease(currentLine);
     return GSAutoreleased(lines);
