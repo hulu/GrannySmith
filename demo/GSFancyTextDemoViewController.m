@@ -72,7 +72,7 @@ CGFloat const buttonMargin = 5;
     
     // Creating the fancy text object
     
-    NSString* text = @"<em>Hello</em> iOS world. <span id='abc' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class=center>A&lt;&amp;&gt;B</p>Ah I am <font style=color:red>going</font> to be a line.<p class='right doublespace'>A line with <em>2</em> classes</p><p id=eee class=limit2>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a <strong>lot</strong> of a lot of a lot of texts</p> END<f";
+    NSString* text = @"<em>Hello</em> iOS world. <span id='abc' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class=center>A&lt;&amp;&gt;B</p>Ah I am <font style=color:red>going</font> to be a line.<p class='right doublespace'>A line with <em>2</em> classes</p><p id=eee class=limit2>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a <strong>lot</strong> of a lot of a lot of texts</p>    END";
     
     GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:text];
     

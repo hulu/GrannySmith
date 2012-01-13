@@ -31,13 +31,16 @@
     NSMutableArray* lines = [[NSMutableArray alloc] init];
     NSMutableString* currentLine = [[NSMutableString alloc] init];
 
+//    CGFloat charWidth = [[self substringToIndex:1] sizeWithFont:font].width;
+    
     // estimate the number of characters for each line
-    // int step = (int) (width / [[self substringToIndex:1] sizeWithFont:font].width);
+//    int step = (int) (width*1.1 / charWidth);
     int step = 1; 
     // using 1 is the safest (but slightly slower) solution. Will double check and optimize this later.
     
     for (int i = 0; i<self.length; i=i+step){
     
+        // if we are already 1 step reached line count limit, just return the whole thing for the next line
         if (limitLineCount>0 && lines.count == limitLineCount-1) {
             [lines addObject:[self substringFromIndex:i]];
             GSRelease(currentLine);
@@ -49,9 +52,10 @@
                 
         // deal with \n first
         if (beginsWithBR){
+            NSLog(@"found \\n at [%d]", i);
             
             if (currentLine.length>0) {
-                //DebugLog(@"adding line before br: %@",currentLine);
+                NSLog(@"adding line: %@. i=[%d]",currentLine, i);
                 [lines addObject: [NSString stringWithString:currentLine]];
                 [currentLine setString:@""];
                 
@@ -75,7 +79,7 @@
             i = i + brPosition - step;
         }
 
-        if (!currentLine.length && lines.count) {
+        if (!currentLine.length && lines.count && [[lines lastObject] length]) {
             [currentLine appendFormat:@"%@", trim(character)];
         }
         else {
@@ -88,7 +92,7 @@
                             constrainedToSize:CGSizeMake(width,1000.f) 
                             lineBreakMode:UILineBreakModeWordWrap];
         
-//        NSLog(@"[%d] current line: %@. width to confine: %f, apple width: %f", i, currentLine, width, appleSize.width);
+        NSLog(@"[%d] current line: %@. width to confine: %f, apple width: %f", i, currentLine, width, appleSize.width);
         
         if (appleSize.height > font.lineHeight) {
             // a new line is created
@@ -102,13 +106,15 @@
                 continue;
             }
             
+            // take out characters one by one until the width is idealWidth
             while ([lineToCalcWidth sizeWithFont:font].width > idealWidth) {
                 [currentLine deleteCharactersInRange:NSMakeRange(currentLine.length-1, 1)];
                 lineToCalcWidth = (lines.count && firstLineBlocked.length) ? currentLine : [NSString stringWithFormat:@"%@%@", firstLineBlocked, currentLine];
                 i--;
+                NSLog(@"retreat to [%d]: %@ (width=%f, targeting:%f)", i, lineToCalcWidth, [lineToCalcWidth sizeWithFont:font].width, idealWidth);
             }
             
-//            NSLog(@"adding line: %@",currentLine);
+            NSLog(@"adding line: %@. i=[%d]",currentLine, i);
             
             [lines addObject: [NSString stringWithString:currentLine]];
             [currentLine setString:@""];
@@ -116,10 +122,12 @@
         
     }
     if (currentLine.length>0) {
-//        NSLog(@"adding line: %@",currentLine);
+        NSLog(@"adding line: %@. (last line)",currentLine);
         [lines addObject: [NSString stringWithString:currentLine]];
     }
  
+    NSLog(@"lines: %@", lines);
+    
     GSRelease(currentLine);
     return GSAutoreleased(lines);
 }
