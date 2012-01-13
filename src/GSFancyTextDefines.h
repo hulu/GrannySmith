@@ -10,11 +10,14 @@
 #define GSFancyTextDefines_h
 
 
-//#warning Please set the GS_ARC_ENABLED flag according your situation. Comment out this line once you read and understand this so that the warning will be disabled.
 
-// Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
- #define GS_ARC_ENABLED 1
+#warning: Please set the GS_ARC_ENABLED flag according to your project setting. Then comment this line out to disable the warning.
+/// For more information about ARC, please read: http://developer.apple.com/library/mac/#releasenotes/ObjectiveC/RN-TransitioningToARC/_index.html#//apple_ref/doc/uid/TP40011226
+/// To check whether ARC is enabled for your project, hit cmd+1, select the project, then the target, then Build Settings, then search for Objective-C Automatic Reference Counting. If it exists and is set to Yes, ARC is enabled.
 
+
+/// Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
+// #define GS_ARC_ENABLED 1
 
 #define GS_DEBUG_MARKUP 1           // Uncomment to log the markup text warnings
 //#define GS_DEBUG_PERFORMANCE 1      // Uncomment to log the performance measurements
