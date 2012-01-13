@@ -22,9 +22,9 @@
 @implementation GSParsingHelperTest
 
 - (void)setUp {
-    testString_ = @"This application requires a Hulu Plus subscription.\
-    \n    Hulu Plus. The Hulu You Know + More Shows and Movies + More Ways to Watch. Stream thousands of episodes from hundreds of current and classic TV shows to your iPad, iPhone 3GS, iPhone 4, 3rd generation iPod Touch, computer, TV, and other devices with a Hulu Plus subscription.\
-    \n    Hulu Plus subscribers receive many exclusive benefits";
+    testString_ = @"This application requires a Hulu Plus subscription.\n\
+    Hulu Plus. The Hulu You Know + More Shows and Movies + More Ways to Watch. Stream thousands of episodes from hundreds of current and classic TV shows to your iPad, iPhone 3GS, iPhone 4, 3rd generation iPod Touch, computer, TV, and other devices with a Hulu Plus subscription.\n\
+    Hulu Plus subscribers receive many exclusive benefits";
     
     limitWidth_ = 300;
     
@@ -48,7 +48,9 @@
     NSArray* testArray = [string linesWithWidth:lineWidth font:font firstLineWidth:firstLineWidth limitLineCount:limitLineCount];
     
     for (int i=0; i<testArray.count; i++) {
+        #ifdef GS_DEBUG_CODE
         GSDebugLog(@"%d: %@", i, [testArray objectAtIndex:i]);
+        #endif
     }
     
     if (limitLineCount>0) {

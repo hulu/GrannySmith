@@ -15,10 +15,15 @@
 // Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
  #define GS_ARC_ENABLED 1
 
-#define GS_DEBUG_CODE 1             // Uncomment to log the debug information of the code
+
 #define GS_DEBUG_MARKUP 1           // Uncomment to log the markup text warnings
-#define GS_DEBUG_PERFORMANCE 1      // Uncomment to log the performance measurements
-#define GS_DEBUG_ALL 1              // Uncomment to enable all kinds of debug logs
+//#define GS_DEBUG_PERFORMANCE 1      // Uncomment to log the performance measurements
+
+
+
+// Use these flags only when working on the code of GSFancyText
+//#define GS_DEBUG_CODE 1             // Uncomment to log the debug information of the code
+//#define GS_DEBUG_ALL 1              // Uncomment to enable all kinds of debug logs
 
 
 /// The typical size involved in the text rendering process, including number of nodes in a tree, number of styles in a node.
@@ -177,7 +182,7 @@ defined(GS_DEBUG_PERFORMANCE) || \
 defined(GS_DEBUG_CODE)
 
 /* standard */
-#define GSDebugLog( s, ... ) NSLog( @"%@ (%@ %p @ %@::%d)",\
+#define GSDebugLog( s, ... ) NSLog( @"%@    (%@ %p @ %@::%d)",\
     [NSString stringWithFormat:(s), ##__VA_ARGS__],\
     NSStringFromClass( [self class] ),\
     &self,\
