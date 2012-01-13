@@ -71,7 +71,8 @@
         }
     
         // read a range of characters.. try to go beyond the line for just a little bit
-        step = (int) (width*1.1 / charWidth);
+        CGFloat lineWidth = lines.count? width : firstLineWidth;
+        step = (int) (lineWidth*1.4 / charWidth);
         if (i+step > self.length) {
             step = self.length - i;
         }
@@ -111,13 +112,16 @@
         
         // if we unestimated the number of characters need, add until we exceed the line
         while (appleSize.height <= font.lineHeight) {
+            
+            // if the last character is finished. conclude here.
             if (i>=self.length) {
-                // finish the last character, conclude here.
                 [lines addObject: [NSString stringWithString:currentLine]];
                 GSRelease(currentLine);
                 return GSAutoreleased(lines);
             }
             characters = [self substringWithRange:NSMakeRange(i, 1)];
+            
+            // if we meet a \n
             if ([characters isEqualToString:@"\n"]) {
                 [lines addObject: [NSString stringWithString:currentLine]];
                 [currentLine setString:@""]; // let the next cycle handle "\n"
