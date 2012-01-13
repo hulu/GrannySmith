@@ -23,8 +23,8 @@
 
 - (void)setUp {
     testString_ = @"This application requires a Hulu Plus subscription.\
-\n    Hulu Plus. The Hulu You Know + More Shows and Movies + More Ways to Watch. Stream thousands of episodes from hundreds of current and classic TV shows to your iPad, iPhone 3GS, iPhone 4, 3rd generation iPod Touch, computer, TV, and other devices with a Hulu Plus subscription.\
-\n    Hulu Plus subscribers receive many exclusive benefits";
+    \n    Hulu Plus. The Hulu You Know + More Shows and Movies + More Ways to Watch. Stream thousands of episodes from hundreds of current and classic TV shows to your iPad, iPhone 3GS, iPhone 4, 3rd generation iPod Touch, computer, TV, and other devices with a Hulu Plus subscription.\
+    \n    Hulu Plus subscribers receive many exclusive benefits";
     
     limitWidth_ = 300;
     
@@ -43,10 +43,9 @@
     STAssertTrue((1 + 1) == 2, @"Compiler isn't feeling well today :-(");
 }
 
-
+/// the general test, making sure that line and width limits are met, no texts are lost
 - (NSArray*)standardTestWithString:(NSString*)string lineWidth:(CGFloat)lineWidth font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
     NSArray* testArray = [string linesWithWidth:lineWidth font:font firstLineWidth:firstLineWidth limitLineCount:limitLineCount];
-    NSLog(@"result array:\n%@", testArray);
     
     if (limitLineCount>0) {
         STAssertTrue(testArray.count <= limitLineCount, @"too many lines: %d", testArray.count);
@@ -58,10 +57,14 @@
         if (limitLineCount==0 || i!=testArray.count-1) {
             STAssertTrue([line sizeWithFont:systemFont_].width <= limitWidth_, @"Line %d is longer than limit", i);
         }
-        unmatched = [unmatched stringByReplacingOccurrencesOfString:trim(line) withString:@"" options:NSLiteralSearch range:NSMakeRange(0, line.length)];
-        unmatched = trim(unmatched);
+        int lengthToTrim = line.length;
+        if (lengthToTrim > unmatched.length) {
+            lengthToTrim = unmatched.length;
+        }
+        unmatched = [unmatched stringByReplacingOccurrencesOfString:GSTrim(line) withString:@"" options:NSLiteralSearch range:NSMakeRange(0, lengthToTrim)];
+        unmatched = GSTrim(unmatched);
     }
-    STAssertTrue(trim(unmatched).length == 0, @"There's some text that the line breaker didn't find: %@", unmatched);
+    STAssertTrue(GSTrim(unmatched).length == 0, @"There's some text that the line breaker didn't find: %@", unmatched);
     return testArray;
 }
 
@@ -70,10 +73,7 @@
 }
 
 - (void)testNormalBreak {
-    
     NSArray* testArray = [self standardTestWithString:testString_];
-    NSLog(@"result array:\n%@", testArray);
-    
     STAssertTrue(testArray.count == 13, @"Line break didn't give line count result");
 }
 
@@ -94,14 +94,69 @@
     [self standardTestWithString:testString_ lineWidth:limitWidth_ font:systemFont_ firstLineWidth:firstLine limitLineCount:0];
 }
 
-- (void)testJapanese {
-//    NSString* jpTestString = @"マイリストに動画が登録されていません。\n動画を登録するには、動画の紹介画像をホールドし、マイリストに追加してください。";
+- (void)testInternational {
+    NSString* jpTestString = @"マイリストに動画が登録されていません。\n動画を登録するには、動画の紹介画像をホールドし、マイリストに追加してください。";
+    NSArray* lines = [self standardTestWithString:jpTestString];
+    STAssertTrue(lines.count==4, @"Japanese line break failed: %d lines", lines.count);
+    
+    NSString* zhTestString = @"NBC与百脑汇合作，为您献上标志性的系列喜剧节目。";
+    lines = [self standardTestWithString:zhTestString lineWidth:100.f font:systemFont_ firstLineWidth:100.f limitLineCount:0];
+    STAssertTrue(lines.count==4, @"Chinese line break failed: %d lines", lines.count);
 }
 
 - (void)testMisc {
     [self standardTestWithString: @"NBC in association with Broadway Video Enterprises bring you the landmark sketch comedy series."];
     [self standardTestWithString: @"Lovable oaf Peter Griffin is a middle-class New Englander surrounded by his loving wife, Lois, a former beauty queen; daughter, Meg; sons Chris and baby Stewie; and the talking family dog, Brian. While Peter bumbles through life, diabolical Stewie is set on conquering the world, and a brainy Brian puts the moves on any blonde that comes his way."];
     [self standardTestWithString: @"The life of the head writer at a late-night television variety show. From the creator and stars of SNL comes this workplace comedy. A brash network executive bullies head writer Liz Lemon into hiring an unstable movie star. A self-obsessed celeb, an arrogant boss, and a sensitive writing staff challenge Lemon to run a successful program -- without losing her mind."];
+}
+
+- (void)testLineLimitEdgeCase {
+    CGFloat firstCharWidth = [[testString_ substringWithRange:NSMakeRange(0, 1)] sizeWithFont:systemFont_].width;
+    NSArray* lines = [self standardTestWithString:testString_ lineWidth:limitWidth_ font:systemFont_ firstLineWidth:firstCharWidth*2 limitLineCount:0];
+    int firstLineLength = [[lines objectAtIndex:0] length];
+    int secondLineLength = [[lines objectAtIndex:1] length];
+    STAssertEquals(firstLineLength, 0, @"first line should be empty");
+    STAssertTrue(secondLineLength > 0, @"second line shouldn't be empty");
+    
+    lines = [self standardTestWithString:testString_ lineWidth:limitWidth_ font:systemFont_ firstLineWidth:1 limitLineCount:0];
+    firstLineLength = [[lines objectAtIndex:0] length];
+    secondLineLength = [[lines objectAtIndex:1] length];
+    STAssertEquals(firstLineLength, 0, @"first line should be empty");
+    STAssertTrue(secondLineLength > 0, @"second line shouldn't be empty");
+    
+    lines = [self standardTestWithString:testString_ lineWidth:firstCharWidth*2 font:systemFont_ firstLineWidth:firstCharWidth*2 limitLineCount:0];
+    firstLineLength = [[lines objectAtIndex:0] length];
+    secondLineLength = [[lines objectAtIndex:1] length];
+    STAssertTrue(firstLineLength > 0, @"first line shouldn't be empty");
+    STAssertTrue(secondLineLength > 0, @"second line shouldn't be empty");
+    
+    lines = [self standardTestWithString:testString_ lineWidth:1 font:systemFont_ firstLineWidth:1 limitLineCount:0];
+    firstLineLength = [[lines objectAtIndex:0] length];
+    secondLineLength = [[lines objectAtIndex:1] length];
+    STAssertTrue(firstLineLength == 1, @"first line should be 1 char. but it's %d", firstLineLength);
+    STAssertTrue(secondLineLength == 1, @"second line should be 1 char, but it's %d", secondLineLength);
+}
+
+- (void)testLeadingSpace {
+    NSString* testString = @"    hallelujah hallelujah hallelujah hallelujah   hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah hallelujah   \n     RSS";
+    NSArray* lines = [self standardTestWithString:testString];
+    NSString* line = [lines objectAtIndex:0];
+    NSString* firstChar = [line substringToIndex:1];
+    STAssertEqualObjects(firstChar, @" ", @"first line starting with %@", firstChar);
+    line = [lines objectAtIndex:1];
+    firstChar = [line substringToIndex:1];
+    STAssertTrue(![firstChar isEqualToString: @" "], @"second line starting with %@", firstChar);
+    
+    for (int i=2; i<lines.count; i++) {
+        line = [lines objectAtIndex:i];
+        if (line.length) {
+            firstChar = [line substringToIndex:1];
+            if ([firstChar isEqualToString:@" "]) {
+                NSString* firstRealChar = [line firstNonWhitespaceCharacterSince:0 foundAt:nil];
+                STAssertEqualObjects(firstRealChar, @"R", @"seeing leading space at line: %@", line);
+            }
+        }
+    }
 }
 
 @end

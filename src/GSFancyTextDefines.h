@@ -10,13 +10,17 @@
 #define GSFancyTextDefines_h
 
 
-//#warning Please set the ARC_ENABLED flag according your situation. Comment out this line once you read and understand this so that the warning will be disabled.
+//#warning Please set the GS_ARC_ENABLED flag according your situation. Comment out this line once you read and understand this so that the warning will be disabled.
 
 // Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
- #define ARC_ENABLED 1
+ #define GS_ARC_ENABLED 1
 
-// Enable the warning
-#define GS_DEBUG_MODE 1
+// Uncomment the following line to enable the warning logs
+#define GS_WARNING_ENABLED 1
+
+// Uncomment the following line to enable the debug logs
+#define GS_DEBUG_ENABLED 1
+
 
 /// The typical size involved in the text rendering process, including number of nodes in a tree, number of styles in a node.
 /// It is used for initWithCapacity method, so it doesn't really limit. It's just close guess for perf optimization
@@ -133,7 +137,7 @@ extern NSString* const GSFancyTextHeightIsPercentageKey;  // @"line-height-is-pe
 
 
 /// ARC - non-ARC compatibility
-#ifdef ARC_ENABLED
+#ifdef GS_ARC_ENABLED
 #define GSRelease(obj) 
 #define GSRetain(obj)
 #define GSRetained(obj) obj
@@ -153,11 +157,23 @@ extern NSString* const GSFancyTextHeightIsPercentageKey;  // @"line-height-is-pe
 #define GSBridgePreix 
 #endif
 
-#ifdef GS_DEBUG_MODE
-#define GSDebugLog(...) NSLog(__VA_ARGS__)
+#ifdef GS_WARNING_ENABLED
+#define GSWarnLog(...) NSLog(__VA_ARGS__)
+#else
+#define GSWarnLog(...) 
+#endif
+
+#ifdef GS_DEBUG_ENABLED
+#define GSDebugLog(s, ...) NSLog( @"%@ (%@ %p @ %@::%d)",\
+    [NSString stringWithFormat:(s), ##__VA_ARGS__],\
+    NSStringFromClass( [self class] ),\
+    &self,\
+    [[NSString stringWithUTF8String:__FILE__] lastPathComponent],\
+    __LINE__ )
 #else
 #define GSDebugLog(...) 
 #endif
+
 
 
 

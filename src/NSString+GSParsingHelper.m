@@ -31,7 +31,7 @@
     NSMutableArray* lines = [[NSMutableArray alloc] init];
     NSMutableString* currentLine = [[NSMutableString alloc] init];
 
-    CGFloat charWidth = [[self substringToIndex:1] sizeWithFont:font].width;
+    CGFloat charWidth = [@"M" sizeWithFont:font].width;
     
     // estimate the number of characters for each line
     int step = 0;
@@ -70,9 +70,9 @@
             continue;
         }
     
-        // read a range of characters.. try to go beyond the line for just a little bit
+        // read a range of characters.. try to go reach the end of the line
         CGFloat lineWidth = lines.count? width : firstLineWidth;
-        step = (int) (lineWidth*1.4 / charWidth);
+        step = (int) (lineWidth / charWidth);
         if (i+step > self.length) {
             step = self.length - i;
         }
@@ -181,7 +181,7 @@
 }
 
 -(NSString*)stringByTrimmingLeadingWhitespace {
-    if (! trim(self).length) {
+    if (! GSTrim(self).length) {
         return @"";
     }
     
@@ -193,7 +193,7 @@
 }
 
 - (NSString*)stringByTrimmingTrailingWhitespace {
-    if (! trim(self).length) {
+    if (! GSTrim(self).length) {
         return @"";
     }
     
@@ -205,7 +205,7 @@
 }
 
 - (NSString*)firstNonWhitespaceCharacterSince:(int)location foundAt:(int*)foundLocation {
-    if (! trim(self).length) {
+    if (! GSTrim(self).length) {
         return @"";
     }
     BOOL found = NO;
@@ -213,17 +213,22 @@
     NSString* character;
     for (i=location; i<self.length; i++) {
         character = [self substringWithRange:NSMakeRange(i, 1)];
-        if (trim(character).length) {
+        if (GSTrim(character).length) {
             found = YES;
             break;
         }
     }
+    
     if (found) {
-        *foundLocation = i;
+        if (foundLocation) {
+            *foundLocation = i;
+        }
         return character;
     }
     else {
-        *foundLocation = self.length;
+        if (foundLocation) {
+            *foundLocation = self.length;
+        }
         return @"";
     }
 }

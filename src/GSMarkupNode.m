@@ -31,7 +31,7 @@
     return self;
 }
 
-#ifdef ARC_ENABLED
+#ifdef GS_ARC_ENABLED
 #else
 - (void)dealloc {
     GSRelease(children_);

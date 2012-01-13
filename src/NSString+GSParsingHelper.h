@@ -11,8 +11,6 @@
 
 #import <Foundation/Foundation.h>
 
-/// String manipulation
-#define trim(s) [s stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]]
 
 @interface NSString (GSParsingHelper)
 

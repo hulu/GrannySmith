@@ -88,7 +88,7 @@ static int lineID_ = 1;
 @synthesize maxHeight = maxHeight_;
 @synthesize text = text_;
 
-#ifdef ARC_ENABLED
+#ifdef GS_ARC_ENABLED
 #else
 - (void)dealloc {
     GSRelease(style_);
@@ -156,8 +156,6 @@ static int lineID_ = 1;
     }
     
     NSArray* segments_ = [parsedTree_ newDepthFirstOrderDataArray];
-    
-//    NSLog(@"segments:%@", segments_);
     
     NSMutableString* texts = [[NSMutableString alloc] init];
     
@@ -1064,8 +1062,8 @@ typedef enum {
         return color;
     }
     else {
-        #ifdef GS_DEBUG_MODE
-        GSDebugLog(@"\n[Warning]\nColor parsing error. \"%@\" is not recognized.\n\n", value_);
+        #ifdef GS_WARNING_ENABLED
+        GSWarnLog(@"\n[Warning]\nColor parsing error. \"%@\" is not recognized.\n\n", value_);
         #endif
         return nil;
     }
@@ -1112,8 +1110,8 @@ typedef enum {
         return textAlignNumber;
     }
     else {
-        #ifdef GS_DEBUG_MODE
-        GSDebugLog(@"\n[Warning]\nText alignment parsing error. \"%@\" is not recognized.\n\n", value);
+        #ifdef GS_WARNING_ENABLED
+        GSWarnLog(@"\n[Warning]\nText alignment parsing error. \"%@\" is not recognized.\n\n", value);
         #endif
         return nil;
     }
@@ -1139,8 +1137,8 @@ typedef enum {
         return result;
     }
     else {
-        #ifdef GS_DEBUG_MODE
-        GSDebugLog(@"\n[Warning]\nVertical alignment parsing error. \"%@\" is not recognized.\n\n", value);
+        #ifdef GS_WARNING_ENABLED
+        GSWarnLog(@"\n[Warning]\nVertical alignment parsing error. \"%@\" is not recognized.\n\n", value);
         #endif
         return nil;
     }
@@ -1165,8 +1163,8 @@ typedef enum {
         return mode;
     }
     else {
-        #ifdef GS_DEBUG_MODE
-        GSDebugLog(@"\n[Warning]\nTruncation mode parsing error. \"%@\" is not recognized.\n\n", value);
+        #ifdef GS_WARNING_ENABLED
+        GSWarnLog(@"\n[Warning]\nTruncation mode parsing error. \"%@\" is not recognized.\n\n", value);
         #endif
         return nil;
     }
@@ -1632,9 +1630,9 @@ static NSMutableDictionary* fontMemory_;
                     drawingBlock(rect);
 //                    NSLog(@"finished drawing %@ for %@...", lambdaID, [[segments_ objectAtIndex:0] objectForKey:GSFancyTextTextKey]);
                 }
-                #ifdef GS_DEBUG_MODE
+                #ifdef GS_WARNING_ENABLED
                 else {
-                    GSDebugLog(@"\n[Warning]\nBlock %@... undefined. A blank space will be created.\n\n", lambdaID);
+                    GSWarnLog(@"\n[Warning]\nBlock %@... undefined. A blank space will be created.\n\n", lambdaID);
                 }
                 #endif
             }
@@ -1710,13 +1708,13 @@ static NSMutableDictionary* fontMemory_;
         
         NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:GSFancyTextTextAlignKey, GSFancyTextLineHeightKey, GSFancyTextLineCountKey, GSFancyTextTruncateModeKey, nil];
         
-#ifdef GS_DEBUG_MODE
+#ifdef GS_WARNING_ENABLED
         NSArray* classNames = [dict objectForKey: GSFancyTextClassKey];
         NSString* elementName = [dict objectForKey: GSFancyTextElementNameKey];
         NSString* message = @"\n[Warning]\nFound definition of %@ in a <%@> tag through class %@. It is supposed to be set in <p> tags, and will be ignored here.\n\n";
         for (NSString* attrib in attribsForPOnly) {
             if ([dict objectForKey:attrib]) {
-                GSDebugLog(message, attrib, elementName, classNames);
+                GSWarnLog(message, attrib, elementName, classNames);
             }
         }
 #endif
