@@ -239,6 +239,9 @@ static int lineID_ = 1;
     __block CGFloat currentLineContentHeight = 0.f;
     __block CGFloat currentLineSpecifiedHeight = 0.f;
     __block BOOL currentLineSpecifiedHeightIsPct = YES;
+    __block NSString* currentLineMarginTopString;
+    __block NSString* currentLineMarginBottomString;
+    __block CGFloat currentLineMarginX;
     
     // piece/segment level vars
     
@@ -256,6 +259,10 @@ static int lineID_ = 1;
     __block NSNumber* segmentLineHeightIsPctNumber;
     __block CGFloat segmentLineHeight;
     __block BOOL segmentLineHeightIsPct;
+    __block float segmentMarginX;
+    __block NSString* segmentMarginTopString;
+    __block NSString* segmentMarginBottomString;
+    
     int segmentLineID = 0;
     int previousSegmentLineID = -1; // previous segment's line ID
     
@@ -273,12 +280,23 @@ static int lineID_ = 1;
             }
             else {
                 CGFloat nextHeight;
+                CGFloat introducedHeight;
                 if (currentLineSpecifiedHeightIsPct) {
-                    nextHeight = totalHeight + currentLineSpecifiedHeight * currentLineContentHeight;
+                    introducedHeight = currentLineSpecifiedHeight * currentLineContentHeight;
                 }
                 else {
-                    nextHeight = totalHeight + currentLineSpecifiedHeight;
+                    introducedHeight = currentLineSpecifiedHeight;
                 }
+                
+                if (currentLineMarginTopString) {
+                    introducedHeight += [currentLineMarginTopString possiblyPercentageNumberWithBase:introducedHeight];
+                }
+                if (currentLineMarginBottomString) {
+                    introducedHeight += [currentLineMarginTopString possiblyPercentageNumberWithBase:introducedHeight];
+                }
+                
+                nextHeight = totalHeight + introducedHeight;
+                
                 if (maxHeight_ && nextHeight > maxHeight_) {
                     contentHeight_ = totalHeight;
                     GSRelease(currentLine);
@@ -297,7 +315,7 @@ static int lineID_ = 1;
             }
             GSRelease(currentLine);
             currentLine = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
-            currentLineSpaceLeft = width_;
+            currentLineSpaceLeft = width_ - currentLineMarginX;
             currentLineContentHeight = 0.f;
         }
         return YES;
@@ -311,6 +329,9 @@ static int lineID_ = 1;
         currentLineLastTextAlign = segmentAlign;
         currentLineSpecifiedHeight = segmentLineHeight;
         currentLineSpecifiedHeightIsPct = segmentLineHeightIsPct;
+        currentLineMarginTopString = segmentMarginTopString;
+        currentLineMarginBottomString = segmentMarginBottomString;
+        currentLineMarginX = segmentMarginX;
         
         // update the total line content height
         if (segmentContentHeight > currentLineContentHeight) {
@@ -341,6 +362,22 @@ static int lineID_ = 1;
         segmentLineHeight = segmentLineHeightNumber ? [segmentLineHeightNumber floatValue] : 1.f;
         segmentLineHeightIsPctNumber = [segment objectForKey:GSFancyTextHeightIsPercentageKey];
         segmentLineHeightIsPct = segmentLineHeightIsPctNumber ? [segmentLineHeightIsPctNumber boolValue] : YES;
+        
+        // read margins
+        NSString* segmentMarginLeftString = [segment objectForKey:GSFancyTextMarginLeft];
+        NSString* segmentMarginRightString = [segment objectForKey:GSFancyTextMarginRight];
+        segmentMarginTopString = [segment objectForKey:GSFancyTextMarginTop];
+        segmentMarginBottomString = [segment objectForKey:GSFancyTextMarginBottom];
+        
+        CGFloat segmentMarginLeft = segmentMarginLeftString ? [segmentMarginLeftString possiblyPercentageNumberWithBase:width_] : 0.f;
+        CGFloat segmentMarginRight = segmentMarginRightString ? [segmentMarginRightString possiblyPercentageNumberWithBase:width_] : 0.f;
+        segmentMarginX = segmentMarginLeft + segmentMarginRight;
+        
+        NSLog(@"lines:%d currentline:%d, marginX: %f, space left:%f", lines_.count, currentLine.count, segmentMarginX, currentLineSpaceLeft);
+        // when a new line starts, cut the space by marginX
+        if (!currentLine.count) {
+            currentLineSpaceLeft -= segmentMarginX;
+        }
         
         // adding the segment(s)
         
@@ -381,7 +418,7 @@ static int lineID_ = 1;
             
             // split the lines 
             // (the currentLineSpaceLeft might be altered by the insertLineBlock above)
-            NSArray* segmentLines = [segmentText linesWithWidth:width_ font:segmentFont firstLineWidth:currentLineSpaceLeft limitLineCount:segmentLineCount];
+            NSArray* segmentLines = [segmentText linesWithWidth:(width_-segmentMarginX) font:segmentFont firstLineWidth:currentLineSpaceLeft limitLineCount:segmentLineCount];
             
             // a line can contain several pieces, each piece has its own style
             NSMutableDictionary* piece;
@@ -1689,7 +1726,7 @@ static NSMutableDictionary* fontMemory_;
 
     if (![dict objectForKey:GSFancyTextLineIDKey]) {
         
-        NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:GSFancyTextTextAlignKey, GSFancyTextLineHeightKey, GSFancyTextLineCountKey, GSFancyTextTruncateModeKey, nil];
+        NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:GSFancyTextTextAlignKey, GSFancyTextLineHeightKey, GSFancyTextLineCountKey, GSFancyTextTruncateModeKey, GSFancyTextMarginTop, GSFancyTextMarginBottom, GSFancyTextMarginLeft, GSFancyTextMarginRight, nil];
         
 #ifdef GS_DEBUG_MARKUP
         NSArray* classNames = [dict objectForKey: GSFancyTextClassKey];

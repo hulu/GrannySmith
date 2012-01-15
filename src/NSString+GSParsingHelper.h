@@ -45,4 +45,9 @@
  */
 - (NSString*)firstNonWhitespaceCharacterSince:(int)location foundAt:(int*)foundLocation;
 
+
+/** the string can be either "123 anyUnit" or "50%", if it's ended with %, return the percentage*base, otherwise just get the number.
+ */
+- (float)possiblyPercentageNumberWithBase: (float)base;
+
 @end

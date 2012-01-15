@@ -165,4 +165,30 @@
     }
 }
 
+- (void)testNumberParsing {
+    float number = [@"5" possiblyPercentageNumberWithBase:10];
+    STAssertTrue(number == 5, @"wrong number parsing: %f", number);
+    
+    number = [@"12 px" possiblyPercentageNumberWithBase:10];
+    STAssertTrue(number == 12, @"wrong number parsing: %f", number);
+    
+    number = [@"23 human beings" possiblyPercentageNumberWithBase:10];
+    STAssertTrue(number == 23, @"wrong number parsing: %f", number);
+    
+    number = [@"2.3 cows" possiblyPercentageNumberWithBase:10];
+    STAssertEqualsWithAccuracy(number, 2.3f, 0.1, @"wrong number parsing: %f", number);
+    
+    number = [@"50 %" possiblyPercentageNumberWithBase:10];
+    STAssertTrue(number == 5, @"wrong number parsing: %f", number);
+    
+    number = [@"20%" possiblyPercentageNumberWithBase:20];
+    STAssertTrue(number == 4, @"wrong number parsing: %f", number);
+    
+    number = [@" 30 %   " possiblyPercentageNumberWithBase:20];
+    STAssertTrue(number == 6, @"wrong number parsing: %f", number);
+    
+    number = [@"30.123% " possiblyPercentageNumberWithBase:20];
+    STAssertEqualsWithAccuracy(number, 6.0246f, 0.0001, @"wrong number parsing: %f", number);
+}
+
 @end

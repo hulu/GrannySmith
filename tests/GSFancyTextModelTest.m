@@ -9,6 +9,7 @@
 #import <SenTestingKit/SenTestingKit.h>
 #import <UIKit/UIKit.h>
 #import "GSFancyText.h"
+#import "NSString+GSParsingHelper.h"
 
 @interface GSFancyTextTest : SenTestCase {
 }
@@ -227,5 +228,64 @@
     NSString* pureText = [fancyText pureText];
     STAssertEqualObjects(pureText, @"Hello! How are you doing? Read me if you can", @"wrong pure text: %@", pureText);
 }
+
+
+- (void)compareLineBreak:(NSString*)markup leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin fullWidth:(CGFloat)fullWidth {
+    
+    GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:markup];
+    NSString* marginClass = [NSString stringWithFormat:@".margin {margin-left: %f; margin-right:%f;}", leftMargin, rightMargin];
+    
+    [fancyText appendStyleSheet:marginClass];
+    fancyText.width = fullWidth;
+    [fancyText generateLines];
+    int count = [fancyText lines].count;
+    
+    
+    GSFancyText* refFancyText = [[GSFancyText alloc] initWithMarkupText:markup];
+    marginClass = @".margin {color:red}";
+    [fancyText appendStyleSheet:marginClass];
+    refFancyText.width = fullWidth - leftMargin - rightMargin;
+    [refFancyText generateLines];
+    NSArray* refLines = [refFancyText lines];
+    int refCount = refLines.count;
+    
+    STAssertTrue(count==refCount, @"should be %d but it is %d", refCount, count);
+    for (int i=0; i< fancyText.lines.count; i++) {
+        NSArray* line = [fancyText.lines objectAtIndex:i];
+        NSArray* refLine = [refFancyText.lines objectAtIndex:i];
+        STAssertTrue(line.count==refLine.count, @"line %d: should be %d but it is %d", i, refLine.count, line.count);
+        for (int j=0; j< line.count; j++) {
+            NSString* text = [[line objectAtIndex:j] objectForKey:GSFancyTextTextKey];
+            NSString* refText = [[refLine objectAtIndex:j] objectForKey:GSFancyTextTextKey];
+            STAssertEqualObjects(text, refText, @"line %d: should be %@ but it's %@", refText, text);
+        }
+    }
+    
+    GSRelease(fancyText);
+    GSRelease(refFancyText);
+}
+
+- (void)testLineBreakWithMargin {
+    NSString* markup_ = @"<p class=margin>This is a very quite exceptionally tremendously hugely intensely terribly truly really darned way dead long paragraph with some margins <span id=2>and some spans and spams</span></p>";
+
+    [self compareLineBreak:markup_ leftMargin:10 rightMargin:10 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:0 rightMargin:0 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:100 rightMargin:100 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:0 rightMargin:250 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:250 rightMargin:0 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:500 rightMargin:400 fullWidth:1000];
+    [self compareLineBreak:markup_ leftMargin:300 rightMargin:300 fullWidth:1000];
+    
+    markup_ = @"<p class=margin><span>short</span> <span>span</span> <span>s</span><span>h</span><span>o</span><span>r</span><span>t</span>. Next <span>line</span>. Many<span> spans </span>. <span>many</span> <span>many</span><span> many</span>\n Multile <span>line</span> after using slash N. Many lines.\nLine 2\nLine 3</p>";
+    
+    [self compareLineBreak:markup_ leftMargin:10 rightMargin:10 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:0 rightMargin:0 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:100 rightMargin:100 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:0 rightMargin:250 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:250 rightMargin:0 fullWidth:300];
+    [self compareLineBreak:markup_ leftMargin:500 rightMargin:400 fullWidth:1000];
+    [self compareLineBreak:markup_ leftMargin:300 rightMargin:300 fullWidth:1000];
+}
+
 
 @end

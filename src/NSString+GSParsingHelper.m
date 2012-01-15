@@ -13,9 +13,9 @@
 
 - (NSMutableArray*) linesWithWidth:(CGFloat)width font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
 
-    #ifdef GS_DEBUG_CODE
-    GSDebugLog(@"LineBreak - The string: %@, 1st line: %f, other lines: %f", self, firstLineWidth, width);
-    #endif
+//    #ifdef GS_DEBUG_CODE
+    NSLog(@"LineBreak - The string: %@, 1st line: %f, other lines: %f", self, firstLineWidth, width);
+//    #endif
     
     NSMutableString* firstLineBlocked = [NSMutableString string];
     if (firstLineWidth < width) {
@@ -234,6 +234,20 @@
             *foundLocation = self.length;
         }
         return @"";
+    }
+}
+
+- (float)possiblyPercentageNumberWithBase: (float)base {
+    NSString* trimmed = GSTrim(self);
+    if (!trimmed.length) {
+        return 0.f;
+    }
+    float number = [self floatValue];
+    if ([[trimmed substringFromIndex:(trimmed.length-1)] isEqualToString:@"%"]) {
+        return number * base /100.f;
+    }
+    else {
+        return number;
     }
 }
 

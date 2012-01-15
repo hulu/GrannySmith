@@ -20,6 +20,11 @@ NSString* const GSFancyTextFontStyleKey   = @"font-style";
 NSString* const GSFancyTextLineHeightKey   = @"line-height";
 NSString* const GSFancyTextTextAlignKey  = @"text-align";
 NSString* const GSFancyTextVerticalAlignKey  = @"vertical-align";
+NSString* const GSFancyTextMarginTop  = @"margin-top";
+NSString* const GSFancyTextMarginBottom  = @"margin-bottom";
+NSString* const GSFancyTextMarginLeft  = @"margin-left";
+NSString* const GSFancyTextMarginRight  = @"margin-right";
+
 
 #pragma mark - special attributes
 

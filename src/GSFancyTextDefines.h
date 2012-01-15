@@ -17,9 +17,9 @@
 
 
 /// Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
-// #define GS_ARC_ENABLED 1
+ #define GS_ARC_ENABLED 1
 
-#define GS_DEBUG_MARKUP 1           // Uncomment to log the markup text warnings
+//#define GS_DEBUG_MARKUP 1           // Uncomment to log the markup text warnings
 //#define GS_DEBUG_PERFORMANCE 1      // Uncomment to log the performance measurements
 
 
@@ -72,6 +72,10 @@ extern NSString* const GSFancyTextFontStyleKey ;  // @"font-style"
 extern NSString* const GSFancyTextLineHeightKey ;  // @"line-height"
 extern NSString* const GSFancyTextTextAlignKey;  // @"text-align"
 extern NSString* const GSFancyTextVerticalAlignKey;  // @"vertical-align"
+extern NSString* const GSFancyTextMarginTop;  // @"margin-top"
+extern NSString* const GSFancyTextMarginBottom;  // @"margin-bottom"
+extern NSString* const GSFancyTextMarginLeft;  // @"margin-left"
+extern NSString* const GSFancyTextMarginRight;  // @"margin-right"
 
 /// some special attributes
 extern NSString* const GSFancyTextLineCountKey;  // @"line-count"
