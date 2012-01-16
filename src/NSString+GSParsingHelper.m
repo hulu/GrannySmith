@@ -13,9 +13,9 @@
 
 - (NSMutableArray*) linesWithWidth:(CGFloat)width font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
 
-//    #ifdef GS_DEBUG_CODE
-    NSLog(@"LineBreak - The string: %@, 1st line: %f, other lines: %f", self, firstLineWidth, width);
-//    #endif
+    #ifdef GS_DEBUG_CODE
+    GSDebugLog(@"LineBreak - The string: %@, 1st line: %f, other lines: %f", self, firstLineWidth, width);
+    #endif
     
     NSMutableString* firstLineBlocked = [NSMutableString string];
     if (firstLineWidth < width) {
