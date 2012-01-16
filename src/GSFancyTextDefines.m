@@ -83,4 +83,3 @@ NSString* const GSFancyTextLineIDKey  = @"line-id";
 NSString* const GSFancyTextTagClosingKey  = @"is-closing-tag";
 NSString* const GSFancyTextElementNameKey  = @"element-name";
 NSString* const GSFancyTextInternalLambdaIDKey  = @"hulu-fancy-text-internal-lambda-id";
-NSString* const GSFancyTextHeightIsPercentageKey  = @"line-height-is-percentage";

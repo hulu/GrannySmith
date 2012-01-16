@@ -43,12 +43,6 @@ static int lineID_ = 1;
  */
 + (UIColor*)parseColor:(NSString*)value intoDictionary:(NSMutableDictionary*)dict;
 
-/** Parse line height and store into the dict
- * @param value can be either just a number (in px), or a percentage like 100%
- */
-+ (NSNumber*)parseLineHeight:(NSString *)value intoDictionary:(NSMutableDictionary*)dict;
-
-
 /** Parse text align and store into the dict
  * @param value should be left, right or center
  * @return an NSNumber with GSTextAlign integer
@@ -238,11 +232,10 @@ static int lineID_ = 1;
     __block NSString* currentLineLastText;
     __block GSTextAlign currentLineLastTextAlign;
     __block CGFloat currentLineContentHeight = 0.f;
-    __block CGFloat currentLineSpecifiedHeight = 0.f;
-    __block BOOL currentLineSpecifiedHeightIsPct = YES;
+    __block NSString* currentLineSpecifiedHeightString;
     __block NSString* currentLineMarginTopString;
     __block NSString* currentLineMarginBottomString;
-    __block int lineIDWithTopMarginAdded = -1;
+    __block int lineIDWithMarginsAdded = -1;
     __block CGFloat currentLineMarginX;
     
     // piece/segment level vars
@@ -257,10 +250,7 @@ static int lineID_ = 1;
     __block GSTextAlign segmentAlign;
     // some segment info that will be used to calculate the final height of a line
     __block CGFloat segmentContentHeight;
-    __block NSNumber* segmentLineHeightNumber;
-    __block NSNumber* segmentLineHeightIsPctNumber;
-    __block CGFloat segmentLineHeight;
-    __block BOOL segmentLineHeightIsPct;
+    __block NSString* segmentLineHeightString;
     __block float segmentMarginX;
     __block NSString* segmentMarginTopString;
     __block NSString* segmentMarginBottomString;
@@ -283,15 +273,14 @@ static int lineID_ = 1;
             else {
                 CGFloat nextHeight;
                 CGFloat introducedHeight;
-                NSLog(@"current line content height: %f, specified: %f", currentLineContentHeight, currentLineSpecifiedHeight);
-                if (currentLineSpecifiedHeightIsPct) {
-                    introducedHeight = currentLineSpecifiedHeight * currentLineContentHeight;
+                if (currentLineSpecifiedHeightString) {
+                    introducedHeight = [currentLineSpecifiedHeightString possiblyPercentageNumberWithBase:currentLineContentHeight];
                 }
                 else {
-                    introducedHeight = currentLineSpecifiedHeight;
+                    introducedHeight = currentLineContentHeight;
                 }
                 
-                if (currentLineID!=lineIDWithTopMarginAdded) {
+                if (currentLineID!=lineIDWithMarginsAdded) {
                     CGFloat topMargin = 0.f;
                     CGFloat bottomMargin = 0.f;
                     if (currentLineMarginTopString) {
@@ -302,7 +291,7 @@ static int lineID_ = 1;
                     }
                     NSLog(@"top m: %f, bottom m: %f", topMargin, bottomMargin);
                     introducedHeight += (topMargin + bottomMargin);
-                    lineIDWithTopMarginAdded = currentLineID;
+                    lineIDWithMarginsAdded = currentLineID;
                 }
                 
                 nextHeight = totalHeight + introducedHeight;
@@ -338,8 +327,7 @@ static int lineID_ = 1;
         currentLineID = segmentLineID;
         currentLineIDLineCountLimit = segmentLineCount;
         currentLineLastTextAlign = segmentAlign;
-        currentLineSpecifiedHeight = segmentLineHeight;
-        currentLineSpecifiedHeightIsPct = segmentLineHeightIsPct;
+        currentLineSpecifiedHeightString = GSAutoreleased([segmentLineHeightString copy]);
         currentLineMarginTopString = GSAutoreleased([segmentMarginTopString copy]);
         currentLineMarginBottomString = GSAutoreleased([segmentMarginBottomString copy]);
         currentLineMarginX = segmentMarginX;
@@ -369,10 +357,7 @@ static int lineID_ = 1;
         segmentLineCount = segmentLineCountString ? [segmentLineCountString intValue] : 0;
         segmentAlignNumber = [segment objectForKey:GSFancyTextTextAlignKey];
         segmentAlign = segmentAlignNumber ? [segmentAlignNumber intValue] : 0;
-        segmentLineHeightNumber = [segment objectForKey:GSFancyTextLineHeightKey];
-        segmentLineHeight = segmentLineHeightNumber ? [segmentLineHeightNumber floatValue] : 1.f;
-        segmentLineHeightIsPctNumber = [segment objectForKey:GSFancyTextHeightIsPercentageKey];
-        segmentLineHeightIsPct = segmentLineHeightIsPctNumber ? [segmentLineHeightIsPctNumber boolValue] : YES;
+        segmentLineHeightString = [segment objectForKey:GSFancyTextLineHeightKey];
         
         // read margins
         NSString* segmentMarginLeftString = [segment objectForKey:GSFancyTextMarginLeft];
@@ -1041,9 +1026,6 @@ typedef enum {
     if ([key caseInsensitiveCompare:GSFancyTextColorKey]==NSOrderedSame) {
         object = [[self class] parseColor:value intoDictionary:dict];
     }
-    else if ([key caseInsensitiveCompare:GSFancyTextLineHeightKey]==NSOrderedSame) {
-        object = [[self class] parseLineHeight:value intoDictionary:dict];
-    }
     else if ([key caseInsensitiveCompare:GSFancyTextTextAlignKey]==NSOrderedSame) {
         object = [[self class] parseTextAlign:value intoDictionary:dict];
     }
@@ -1108,29 +1090,6 @@ typedef enum {
         #endif
         return nil;
     }
-}
-
-+ (NSNumber*)parseLineHeight:(NSString *)value intoDictionary:(NSMutableDictionary*)dict {
-    // don't want to do this logic in draw rect..
-    NSNumber* object;
-    if ([value rangeOfString:@"%"].location == value.length - 1) {
-        float percentage = [[value stringByReplacingOccurrencesOfString:@"%" withString:@""] floatValue];
-        if (!percentage) {
-            percentage = 100;
-        }
-        object = [NSNumber numberWithFloat: percentage/100.f];
-        [dict setObject:[NSNumber numberWithBool:YES] forKey:GSFancyTextHeightIsPercentageKey];
-    }
-    else {
-        float px = [value floatValue];
-        if (!px) {
-            return [NSNumber numberWithFloat: 1];
-        }
-        object = [NSNumber numberWithFloat: px]; // only use the px value when it's > 10
-        [dict setObject:[NSNumber numberWithBool:NO] forKey:GSFancyTextHeightIsPercentageKey];
-    }
-    [dict setObject:object forKey:GSFancyTextLineHeightKey];
-    return object;
 }
 
 
@@ -1651,12 +1610,13 @@ static NSMutableDictionary* fontMemory_;
         }
         
         // h, y related
-        CGFloat lineHeight = [[[segments objectAtIndex:0] objectForKey:GSFancyTextLineHeightKey] floatValue];
-        if (!lineHeight) {
+        NSString* lineHeightString = [[segments objectAtIndex:0] objectForKey:GSFancyTextLineHeightKey];
+        CGFloat lineHeight;
+        if (!lineHeightString) {
             lineHeight = h;
         }
-        else if ([[[segments objectAtIndex:0] objectForKey:GSFancyTextHeightIsPercentageKey] boolValue]) { // percentage
-            lineHeight = lineHeight * h;
+        else { // percentage
+            lineHeight = [lineHeightString possiblyPercentageNumberWithBase:h];
         }
         CGFloat lineTopMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginTop] possiblyPercentageNumberWithBase:lineHeight];
         previousLineBottomMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginBottom] possiblyPercentageNumberWithBase:lineHeight];

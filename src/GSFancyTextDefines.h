@@ -136,7 +136,6 @@ extern NSString* const GSFancyTextLineIDKey;  // @"line-id"
 extern NSString* const GSFancyTextTagClosingKey;  // @"is-closing-tag"
 extern NSString* const GSFancyTextElementNameKey;  // @"element-name"
 extern NSString* const GSFancyTextInternalLambdaIDKey;  // @"hulu-fancy-text-internal-lambda-id"
-extern NSString* const GSFancyTextHeightIsPercentageKey;  // @"line-height-is-percentage"
 
 
 ///---------------
