@@ -232,22 +232,21 @@
 
 - (void)compareLineBreak:(NSString*)markup leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin fullWidth:(CGFloat)fullWidth {
     
-    GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:markup];
-    NSString* marginClass = [NSString stringWithFormat:@".margin {margin-left: %f; margin-right:%f;}", leftMargin, rightMargin];
-    
-    [fancyText appendStyleSheet:marginClass];
-    fancyText.width = fullWidth;
-    [fancyText generateLines];
-    int count = [fancyText lines].count;
-    
-    
     GSFancyText* refFancyText = [[GSFancyText alloc] initWithMarkupText:markup];
-    marginClass = @".margin {color:red}";
-    [fancyText appendStyleSheet:marginClass];
+    NSString* marginClass = @".margin {color:red}";
+    [refFancyText appendStyleSheet:marginClass];
     refFancyText.width = fullWidth - leftMargin - rightMargin;
     [refFancyText generateLines];
     NSArray* refLines = [refFancyText lines];
     int refCount = refLines.count;
+    
+    
+    GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:markup];
+    marginClass = [NSString stringWithFormat:@".margin {margin-left: %f; margin-right:%f;}", leftMargin, rightMargin];
+    [fancyText appendStyleSheet:marginClass];
+    fancyText.width = fullWidth;
+    [fancyText generateLines];
+    int count = [fancyText lines].count;
     
     STAssertTrue(count==refCount, @"should be %d but it is %d", refCount, count);
     for (int i=0; i< fancyText.lines.count; i++) {
@@ -260,14 +259,36 @@
             STAssertEqualObjects(text, refText, @"line %d: should be %@ but it's %@", refText, text);
         }
     }
-    
     GSRelease(fancyText);
+    
+    // test using percentage sign
+    fancyText = [[GSFancyText alloc] initWithMarkupText:markup];
+    marginClass = [NSString stringWithFormat:@".margin {margin-left: %f%%; margin-right:%f%%;}", leftMargin*100.f/fullWidth, rightMargin*100.f/fullWidth];
+    [fancyText appendStyleSheet:marginClass];
+    fancyText.width = fullWidth;
+    [fancyText generateLines];
+    count = [fancyText lines].count;
+    
+    STAssertTrue(count==refCount, @"should be %d but it is %d", refCount, count);
+    for (int i=0; i< fancyText.lines.count; i++) {
+        NSArray* line = [fancyText.lines objectAtIndex:i];
+        NSArray* refLine = [refFancyText.lines objectAtIndex:i];
+        STAssertTrue(line.count==refLine.count, @"line %d: should be %d but it is %d", i, refLine.count, line.count);
+        for (int j=0; j< line.count; j++) {
+            NSString* text = [[line objectAtIndex:j] objectForKey:GSFancyTextTextKey];
+            NSString* refText = [[refLine objectAtIndex:j] objectForKey:GSFancyTextTextKey];
+            STAssertEqualObjects(text, refText, @"line %d: should be %@ but it's %@", refText, text);
+        }
+    }
+    GSRelease(fancyText);
+    
     GSRelease(refFancyText);
 }
 
 - (void)testLineBreakWithMargin {
     NSString* markup_ = @"<p class=margin>This is a very quite exceptionally tremendously hugely intensely terribly truly really darned way dead long paragraph with some margins <span id=2>and some spans and spams</span></p>";
 
+    [self compareLineBreak:markup_ leftMargin:3.333333 rightMargin:3.333333 fullWidth:300];
     [self compareLineBreak:markup_ leftMargin:10 rightMargin:10 fullWidth:300];
     [self compareLineBreak:markup_ leftMargin:0 rightMargin:0 fullWidth:300];
     [self compareLineBreak:markup_ leftMargin:100 rightMargin:100 fullWidth:300];
@@ -278,6 +299,7 @@
     
     markup_ = @"<p class=margin><span>short</span> <span>span</span> <span>s</span><span>h</span><span>o</span><span>r</span><span>t</span>. Next <span>line</span>. Many<span> spans </span>. <span>many</span> <span>many</span><span> many</span>\n Multile <span>line</span> after using slash N. Many lines.\nLine 2\nLine 3</p>";
     
+    [self compareLineBreak:markup_ leftMargin:3.333333 rightMargin:3.333333 fullWidth:300];
     [self compareLineBreak:markup_ leftMargin:10 rightMargin:10 fullWidth:300];
     [self compareLineBreak:markup_ leftMargin:0 rightMargin:0 fullWidth:300];
     [self compareLineBreak:markup_ leftMargin:100 rightMargin:100 fullWidth:300];
@@ -286,6 +308,82 @@
     [self compareLineBreak:markup_ leftMargin:500 rightMargin:400 fullWidth:1000];
     [self compareLineBreak:markup_ leftMargin:300 rightMargin:300 fullWidth:1000];
 }
+
+- (void)testLineHeights {
+    // prepare numbers
+    NSString* markup = @"<p class=short>short</p>Unwrapped<p class=long>long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long line</p>Another";
+    GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:markup];
+    fancyText.width = 250.f;
+    [fancyText generateLines];
+    int count = fancyText.lines.count;
+    int lastPLineCount = count - 3;
+    CGFloat standardHeight = [UIFont fontWithName:@"Helvetica" size:[UIFont systemFontSize]].lineHeight;
+    STAssertTrue(lastPLineCount > 1, @"last <p>'s line count is %d", lastPLineCount);
+
+    CGFloat expectedHeight = standardHeight * count;
+    STAssertTrue(fancyText.contentHeight==expectedHeight, @"total height=%f, should be %f", fancyText.contentHeight, expectedHeight);
+    
+    // test line-height
+    NSString* marginClass = @".short {line-height:40} .long{line-height:50}";
+    [fancyText appendStyleSheet:marginClass];
+    [fancyText parseStructure];
+    [fancyText generateLines];
+    expectedHeight = 40 + 2*standardHeight + lastPLineCount*50;
+    STAssertTrue(fancyText.contentHeight==expectedHeight, @"total height=%f, should be %f", fancyText.contentHeight, expectedHeight);
+    
+    // test line-height percentage
+    marginClass = @".short {line-height:70%} .long{line-height:210%}";
+    [fancyText appendStyleSheet:marginClass];
+    [fancyText parseStructure];
+    [fancyText generateLines];
+    expectedHeight = standardHeight*0.7 + 2*standardHeight + lastPLineCount*standardHeight*2.1;
+    STAssertEqualsWithAccuracy(fancyText.contentHeight, expectedHeight, 0.1, @"total height=%f, should be %f", fancyText.contentHeight, expectedHeight);
+    
+    // margin top
+    marginClass = @".short {margin-top:11} .long{margin-top:20}";
+    [fancyText appendStyleSheet:marginClass];
+    [fancyText parseStructure];
+    [fancyText generateLines];
+    expectedHeight = standardHeight*count + 11 + 20;
+    STAssertEqualsWithAccuracy(fancyText.contentHeight, expectedHeight, 0.1, @"total height=%f, should be %f", fancyText.contentHeight, expectedHeight);
+    
+    // bottom
+    marginClass = @".short {margin-bottom:11} .long{margin-bottom:20}";
+    [fancyText appendStyleSheet:marginClass];
+    [fancyText parseStructure];
+    [fancyText generateLines];
+    expectedHeight = standardHeight*count + 11 + 20;
+    STAssertEqualsWithAccuracy(fancyText.contentHeight, expectedHeight, 0.1, @"total height=%f, should be %f", fancyText.contentHeight, expectedHeight);
+    
+    // top+bottom
+    marginClass = @".short {margin-top:22; margin-bottom:11} .long{margin-top:30; margin-bottom:20}";
+    [fancyText appendStyleSheet:marginClass];
+    [fancyText parseStructure];
+    [fancyText generateLines];
+    expectedHeight = standardHeight*count + 22 + 11 + 30 + 20;
+    STAssertEqualsWithAccuracy(fancyText.contentHeight, expectedHeight, 0.1, @"total height=%f, should be %f", fancyText.contentHeight, expectedHeight);
+    
+    // margin + line height
+    marginClass = @".short {line-height:50%; margin-top:22; margin-bottom:11} .long{line-height:110%; margin-top:30; margin-bottom:20}";
+    [fancyText appendStyleSheet:marginClass];
+    [fancyText parseStructure];
+    [fancyText generateLines];
+    expectedHeight = standardHeight*2 + standardHeight*0.5 + lastPLineCount*standardHeight*1.1 + 22+11+30+20;
+    STAssertEqualsWithAccuracy(fancyText.contentHeight, expectedHeight, 0.1, @"total height=%f, should be %f", fancyText.contentHeight, expectedHeight);
+    
+    
+    // margin + line height pct
+    NSLog(@"standard Height: %f", standardHeight);
+    marginClass = @".short {line-height:50%; margin-top:10%; margin-bottom:15%} .long{line-height:110%; margin-top:20%; margin-bottom:30%}";
+    [fancyText appendStyleSheet:marginClass];
+    [fancyText parseStructure];
+    [fancyText generateLines];
+    CGFloat sHeight = standardHeight*0.5;
+    CGFloat lHeight = standardHeight*1.1;
+    expectedHeight = standardHeight*2 + sHeight + lastPLineCount*lHeight + sHeight*0.1 + sHeight*0.15 + lHeight*0.2 + lHeight*0.3;
+    STAssertEqualsWithAccuracy(fancyText.contentHeight, expectedHeight, 0.1, @"total height=%f, should be %f", fancyText.contentHeight, expectedHeight);
+}
+
 
 
 @end

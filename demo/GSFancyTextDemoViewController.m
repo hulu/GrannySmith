@@ -65,7 +65,8 @@ CGFloat const buttonMargin = 5;
     .yellow {color: yellow; font-family: Futura; font-SIzE: 18px}\
     .center{text-align: center}\
     .margin{margin-left: 40; margin-right:40}\
-    .ymargin{margin-top: 0; margin-bottom:20}\
+    .bmargin{margin-bottom:10}\
+    .tmargin{margin-top: 10;}\
     .limit2{line-count:2; truncate-mode:tail}\
     .doublespace {line-height: 200%}";
     
@@ -74,7 +75,7 @@ CGFloat const buttonMargin = 5;
     
     // Creating the fancy text object
     
-    NSString* text = @"<em>Hello</em> iOS world. <span id='abc' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class='center ymargin'>A&lt;&amp;&gt;B</p>Ah I am <font style=color:red>going</font> to be a line.<p class='margin doublespace right'>A line with <em>3</em> classes</p><p id=eee class=limit2>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a <strong>lot</strong> of a lot of a lot of texts</p><p>   END</p>";
+    NSString* text = @"<em>Hello</em> iOS world. <span id='abc' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class='center'>A&lt;&amp;&gt;B</p>Ah I am <font style=color:red>going</font> to be a line.<p class='margin right'>A line with <em>>1</em> classes</p><p id=eee class='limit2 tmargin bmargin'>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a <strong>lot</strong> of a lot of a lot of texts</p>";
     
     GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:text];
     
