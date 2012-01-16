@@ -292,7 +292,7 @@ static int lineID_ = 1;
                     introducedHeight += [currentLineMarginTopString possiblyPercentageNumberWithBase:introducedHeight];
                 }
                 if (currentLineMarginBottomString) {
-                    introducedHeight += [currentLineMarginTopString possiblyPercentageNumberWithBase:introducedHeight];
+                    introducedHeight += [currentLineMarginBottomString possiblyPercentageNumberWithBase:introducedHeight];
                 }
                 
                 nextHeight = totalHeight + introducedHeight;
@@ -329,8 +329,8 @@ static int lineID_ = 1;
         currentLineLastTextAlign = segmentAlign;
         currentLineSpecifiedHeight = segmentLineHeight;
         currentLineSpecifiedHeightIsPct = segmentLineHeightIsPct;
-        currentLineMarginTopString = segmentMarginTopString;
-        currentLineMarginBottomString = segmentMarginBottomString;
+        currentLineMarginTopString = GSAutoreleased([segmentMarginTopString copy]);
+        currentLineMarginBottomString = GSAutoreleased([segmentMarginBottomString copy]);
         currentLineMarginX = segmentMarginX;
         
         // update the total line content height
@@ -368,12 +368,14 @@ static int lineID_ = 1;
         NSString* segmentMarginRightString = [segment objectForKey:GSFancyTextMarginRight];
         segmentMarginTopString = [segment objectForKey:GSFancyTextMarginTop];
         segmentMarginBottomString = [segment objectForKey:GSFancyTextMarginBottom];
+        if (segmentMarginBottomString) {
+            NSLog(@"read bottom margin: %@", segmentMarginBottomString);
+        }
         
         CGFloat segmentMarginLeft = segmentMarginLeftString ? [segmentMarginLeftString possiblyPercentageNumberWithBase:width_] : 0.f;
         CGFloat segmentMarginRight = segmentMarginRightString ? [segmentMarginRightString possiblyPercentageNumberWithBase:width_] : 0.f;
         segmentMarginX = segmentMarginLeft + segmentMarginRight;
         
-        NSLog(@"lines:%d currentline:%d, marginX: %f, space left:%f", lines_.count, currentLine.count, segmentMarginX, currentLineSpaceLeft);
         // when a new line starts, cut the space by marginX
         if (!currentLine.count) {
             currentLineSpaceLeft -= segmentMarginX;
@@ -482,6 +484,8 @@ static int lineID_ = 1;
     #endif
     
     contentHeight_ = totalHeight;
+    
+    NSLog(@"line gen: content height: %f", contentHeight_);
     return lines_;
 }
 
@@ -1449,6 +1453,9 @@ static NSMutableDictionary* fontMemory_;
     __block NSString* segmentText;
     __block BOOL segmentIsLambda;
     __block CGFloat segmentBaseline;
+    __block CGFloat lineWidthLimit = 0;
+    CGFloat lineLeftMargin = 0;
+    __block CGFloat lineRightMargin = 0;
     
     void(^getSegmentAtIndexBlock) (int) = ^(int index) {
         segment = [segments objectAtIndex:index];
@@ -1470,9 +1477,15 @@ static NSMutableDictionary* fontMemory_;
             getSegmentInfoBlock();
             segmentWidth = [segmentText sizeWithFont:segmentFont].width;
         }
-        CGFloat left = frameWidth - w;
+        if (lineRightMargin) {
+            NSLog(@"first the width is %f", segmentWidth);
+        }
+        CGFloat left = frameWidth - lineRightMargin - w;
         if (segmentWidth > left) {
             segmentWidth = left;
+        }
+        if (lineRightMargin) {
+            NSLog(@"after limiting it is %f", segmentWidth);
         }
     };
     void(^updateLineTextHeightBlock) () = ^(void) {
@@ -1490,6 +1503,9 @@ static NSMutableDictionary* fontMemory_;
     
     for (int l=0; l < lines_.count; l++){
         segments = [lines_ objectAtIndex:l];
+        lineLeftMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginLeft] possiblyPercentageNumberWithBase:frameWidth];
+        lineRightMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginRight] possiblyPercentageNumberWithBase:frameWidth];
+        lineWidthLimit = frameWidth - lineLeftMargin - lineRightMargin;
         
         // determine if we need to calculate total width
         GSTextAlign align = 0;
@@ -1512,7 +1528,7 @@ static NSMutableDictionary* fontMemory_;
         if (truncateMode == UILineBreakModeHeadTruncation) {
             widthForSegment = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
             for (int i = segments.count-1 ; i>=0; i--) {
-                if (w >= frameWidth) {
+                if (w >= lineWidthLimit) {
                     [widthForSegment insertObject:[NSNumber numberWithFloat:0] atIndex:0];
                 }
                 else {
@@ -1523,14 +1539,13 @@ static NSMutableDictionary* fontMemory_;
                     
                     updateLineTextHeightBlock();
                 }
-                
             }
         }
         else if (truncateMode == UILineBreakModeMiddleTruncation) {
             widthForSegment = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
             int i;
             if (segments.count == 1) {
-                [widthForSegment addObject:[NSNumber numberWithFloat:frameWidth]];
+                [widthForSegment addObject:[NSNumber numberWithFloat:lineWidthLimit]];
                 getSegmentAtIndexBlock(0);
                 getSegmentInfoBlock();
                 updateLineTextHeightBlock();
@@ -1539,7 +1554,7 @@ static NSMutableDictionary* fontMemory_;
                 for (i = 0; i<segments.count; i++) {
                     getSegmentAtIndexBlock(i);
                     getSegmentInfoWithWidthBlock();
-                    if (w + segmentWidth >= frameWidth * .7f) { // hold if the width exceeds 2/3 of the line
+                    if (w + segmentWidth >= lineWidthLimit * .7f) { // hold if the width exceeds 2/3 of the line
                         break;
                     }
                     else {
@@ -1549,7 +1564,7 @@ static NSMutableDictionary* fontMemory_;
                     }
                 }
                 for (int j=segments.count - 1; j>i; j--) {
-                    if (w >= frameWidth) {
+                    if (w >= lineWidthLimit) {
                         [widthForSegment insertObject:[NSNumber numberWithFloat:0] atIndex:i];
                     }
                     else {
@@ -1560,7 +1575,7 @@ static NSMutableDictionary* fontMemory_;
                         updateLineTextHeightBlock();
                     }
                 }
-                [widthForSegment insertObject:[NSNumber numberWithFloat:frameWidth-w] atIndex:i];
+                [widthForSegment insertObject:[NSNumber numberWithFloat:lineWidthLimit-w] atIndex:i];
             }
         }
         else { // clip or truncate tail, the simplest cases
@@ -1571,28 +1586,61 @@ static NSMutableDictionary* fontMemory_;
                 BOOL needTotalLength = (align==GSTextAlignCenter || align==GSTextAlignRight);
                 if (needTotalLength) {
                     getSegmentInfoWithWidthBlock();
+                    if (lineRightMargin) {
+                        NSLog(@"segment %d: width:%f", i, segmentWidth);
+                    }
                     w += segmentWidth;
                 }
             }
         }
         
+        // determine some geometries
+        
+        if (lineRightMargin) {
+            NSLog(@"w = %f", w);
+        }
+        
         // Calculating starting X
         if (align==GSTextAlignLeft) {
-            x = 0.f;
+            x = lineLeftMargin;
         }
         else if (align == GSTextAlignCenter) {
-            x = (frameWidth - w)/2.f;
+            x = lineLeftMargin + (lineWidthLimit - w)/2.f;
         }
         else if (align == GSTextAlignRight) {
-            x = frameWidth - w;
+            x = frameWidth - w - lineRightMargin;
+            if (lineRightMargin) {
+                NSLog(@"x = %f", x);
+            }
         }
         if (x<0) {
             x = 0;
         }
         
+        if (lineRightMargin) {
+            NSLog(@"rect origin: %f", rect.origin.x);
+            NSLog(@"line %d,  frame: %f, w:%f, right margin:%f. x=%f", l, frameWidth, w, lineRightMargin, x);
+        }
+        
         w = x; // since now w will mean the width of space covered by text that's already drawn (it will be used by blocks to determine the available width)
         x += rect.origin.x;
-        CGFloat maxX = frameWidth + rect.origin.x;
+        CGFloat maxX = rect.origin.x + (frameWidth - lineRightMargin);
+        
+        if (lineRightMargin) {
+            NSLog(@"max x: %f", maxX);
+        }
+        
+        // h, y related
+        CGFloat lineHeight = [[[segments objectAtIndex:0] objectForKey:GSFancyTextLineHeightKey] floatValue];
+        if (!lineHeight) {
+            lineHeight = h;
+        }
+        else if ([[[segments objectAtIndex:0] objectForKey:GSFancyTextHeightIsPercentageKey] boolValue]) { // percentage
+            lineHeight = lineHeight * h;
+        }
+        CGFloat lineTopMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginTop] possiblyPercentageNumberWithBase:lineHeight];
+        CGFloat lineBottomMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginBottom] possiblyPercentageNumberWithBase:lineHeight];
+        
         
         // Drawing loop
         for (int i=0; i<segments.count; i++) {
@@ -1617,7 +1665,13 @@ static NSMutableDictionary* fontMemory_;
             }
             else {
                 getSegmentInfoWithWidthBlock();
+                if (lineRightMargin) {
+                    NSLog(@"getting width left for seg %d: %f", i, segmentWidth);
+                }
             }
+            
+            // update y based on top margin 
+            y += lineTopMargin;
             
             // get vertical align
             NSNumber* valignNumber = [segment objectForKey:GSFancyTextVerticalAlignKey];
@@ -1661,6 +1715,10 @@ static NSMutableDictionary* fontMemory_;
                 CGContextSetFillColorWithColor(ctx, [segmentColor CGColor]);
                 CGContextSetStrokeColorWithColor(ctx, [segmentColor CGColor]);
                 
+                if (lineRightMargin) {
+                    NSLog(@"width left for drawing seg %d: %f. x=%f", i, segmentWidth, x);
+                }
+                
                 // actually draw
                 CGRect textArea = CGRectMake(x, actualY, segmentWidth, segmentHeight);
                 [segmentText drawInRect:textArea withFont:segmentFont lineBreakMode:truncateMode];
@@ -1677,18 +1735,12 @@ static NSMutableDictionary* fontMemory_;
         GSRelease(widthForSegment);
         
         // Updating Y for the next line
-        CGFloat lineHeight = [[[segments objectAtIndex:0] objectForKey:GSFancyTextLineHeightKey] floatValue];
-        if (!lineHeight) {
-            lineHeight = h;
-        }
-        else if ([[[segments objectAtIndex:0] objectForKey:GSFancyTextHeightIsPercentageKey] boolValue]) { // percentage
-            lineHeight = lineHeight * h;
-        }
         y += lineHeight;
-        
+        y += lineBottomMargin;
     }
     
     contentHeight_ = y - rect.origin.y;
+    NSLog(@"content height: %f", contentHeight_);
     
     #ifdef GS_DEBUG_PERFORMANCE
     GSDebugLog(@"drawing time: %f", -[startDraw timeIntervalSinceNow]);
