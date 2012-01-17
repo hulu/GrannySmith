@@ -313,7 +313,7 @@ static int lineID_ = 1;
             }
             GSRelease(currentLine);
             currentLine = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
-            currentLineSpaceLeft = width_ - currentLineMarginX;
+            currentLineSpaceLeft = width_;
             currentLineContentHeight = 0.f;
         }
         return YES;
@@ -448,8 +448,7 @@ static int lineID_ = 1;
                 GSRelease(piece);
                 
                 // Regular case: if it is not the last line, it means that this line is long enough to cover a whole line
-                // Or: if the markup tag (aka p) requires it to be an independent line
-                if (i != segmentLines.count -1 ) { // || (isNewLine && [isNewLine boolValue])) {
+                if (i != segmentLines.count -1 ) {
                     if (!insertLineBlock() ) {
                         return lines_;
                     }
@@ -458,6 +457,11 @@ static int lineID_ = 1;
                     // for any unfinished line, calculate the width left for the current line
                     CGFloat widthUsed = [lineText sizeWithFont:segmentFont].width;
                     currentLineSpaceLeft = currentLineSpaceLeft - widthUsed;
+                    // this is the last line of this segment, and there are more than 1 line in this break, 
+                    // remove the margin space
+                    if (segmentLines.count>1 && currentLine.count==1) {
+                        currentLineSpaceLeft = currentLineSpaceLeft - segmentMarginX;
+                    }
                 }
             }
         }

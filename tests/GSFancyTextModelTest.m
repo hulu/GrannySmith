@@ -236,6 +236,7 @@
     NSString* marginClass = @".margin {color:red}";
     [refFancyText appendStyleSheet:marginClass];
     refFancyText.width = fullWidth - leftMargin - rightMargin;
+    NSLog(@"plain break");
     [refFancyText generateLines];
     NSArray* refLines = [refFancyText lines];
     int refCount = refLines.count;
@@ -245,6 +246,7 @@
     marginClass = [NSString stringWithFormat:@".margin {margin-left: %f; margin-right:%f;}", leftMargin, rightMargin];
     [fancyText appendStyleSheet:marginClass];
     fancyText.width = fullWidth;
+    NSLog(@"fancy break");
     [fancyText generateLines];
     int count = [fancyText lines].count;
     
@@ -307,6 +309,32 @@
     [self compareLineBreak:markup_ leftMargin:250 rightMargin:0 fullWidth:300];
     [self compareLineBreak:markup_ leftMargin:500 rightMargin:400 fullWidth:1000];
     [self compareLineBreak:markup_ leftMargin:300 rightMargin:300 fullWidth:1000];
+    
+    // test varied margin
+    NSString* line1 = @"<p class=margin>I'm a line with hell a lot of words and phrases and a long length. And a left margin and a right margin makes me short</p>";
+    NSString* line2 = @"<p>I am long too but i am clear, without any margin chopping my length. So I am free get take any space.</p>";
+    markup_ = [line1 stringByAppendingString:line2];
+    
+    GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:markup_];
+    NSString* marginClass = [NSString stringWithFormat:@".margin {margin-left: 450; margin-right:500;}"];
+    [fancyText appendStyleSheet:marginClass];
+    fancyText.width = 1000.f;
+    [fancyText generateLines];
+    int count = [fancyText lines].count;
+    
+    GSFancyText* refFancyText1 = [[GSFancyText alloc] initWithMarkupText:line1];
+    refFancyText1.width = 50.f;
+    marginClass = [NSString stringWithFormat:@".margin {color:red}"];
+    [refFancyText1 appendStyleSheet:marginClass];
+    [refFancyText1 generateLines];
+    int refCount1 = [refFancyText1 lines].count;
+    GSFancyText* refFancyText2 = [[GSFancyText alloc] initWithMarkupText:line2];
+    refFancyText2.width = 1000.f;
+    [refFancyText2 generateLines];
+    int refCount2 = [refFancyText2 lines].count;
+    
+    STAssertTrue(count == refCount1+refCount2, @"varied margin line generation failed. combined:%d, line1:%d, line2:%d", count, refCount1, refCount2);
+    STAssertTrue(refCount1 > refCount2, @"varied margin line generation failed. line1:%d, line2:%d", refCount1, refCount2);
 }
 
 - (void)testLineHeights {
