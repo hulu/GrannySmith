@@ -771,10 +771,16 @@ typedef enum {
             
             // handle the tag based on if it's a lambda or opening tag or closing tag
             if ([elementName caseInsensitiveCompare: GSFancyTextLambdaElement]==NSOrderedSame) {
-                [nodeToAdd.data setValuesForKeysWithDictionary:stylesInTag];
+                // first apply .default style
+                if (allClasses) {
+                    [nodeToAdd.data setValuesForKeysWithDictionary:[allClasses objectForKey:GSFancyTextDefaultClass]];
+                }
+                // then apply the container stack styles
                 for (GSMarkupNode* node in containerStack) {
                     [nodeToAdd.data setValuesForKeysWithDictionary: node.data];
                 }
+                // lastly apply its own style
+                [nodeToAdd.data setValuesForKeysWithDictionary:stylesInTag];
                 nodeToAdd.isContainer = NO;
                 [[containerStack lastObject] appendChild:nodeToAdd];
                 NSString* lambdaID = [nodeToAdd.data objectForKey:GSFancyTextInternalLambdaIDKey];
