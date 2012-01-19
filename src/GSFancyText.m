@@ -1615,15 +1615,20 @@ static NSMutableDictionary* fontMemory_;
                 segmentHeight = segmentFont.lineHeight;
             }
             
-            // get confined width
-            if (widthForSegment) {
-                segmentWidth = [[widthForSegment objectAtIndex:i] floatValue];
-                if (!segmentWidth) {
-                    continue; // ignore segments that we don't have space for
-                }
+            if (i==segments.count-1) {
+                segmentWidth = lineWidthLimit - (w - lineLeftMargin);
             }
             else {
-                getSegmentInfoWithWidthBlock();
+                // get confined width
+                if (widthForSegment) {
+                    segmentWidth = [[widthForSegment objectAtIndex:i] floatValue];
+                    if (!segmentWidth) {
+                        continue; // ignore segments that we don't have space for
+                    }
+                }
+                else {
+                    getSegmentInfoWithWidthBlock();
+                }
             }
             
             // update y based on top margin 
