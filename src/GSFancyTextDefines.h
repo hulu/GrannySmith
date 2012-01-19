@@ -17,7 +17,7 @@
 
 
 /// Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
- #define GS_ARC_ENABLED 1
+// #define GS_ARC_ENABLED 1
 
 //#define GS_DEBUG_MARKUP 1           // Uncomment to log the markup text warnings
 //#define GS_DEBUG_PERFORMANCE 1      // Uncomment to log the performance measurements
