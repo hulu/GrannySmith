@@ -1659,7 +1659,7 @@ static NSMutableDictionary* fontMemory_;
                 CGFloat lheight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
                 void(^drawingBlock)(CGRect);
                 if ((drawingBlock = [lambdaBlocks_ objectForKey:lambdaID])) {
-                    CGRect rect = CGRectMake(x, actualY, lwidth, lheight);
+                    CGRect rect = GSRectMakeRounded(x, actualY, lwidth, lheight);
                     drawingBlock(rect);
                 }
                 #ifdef GS_DEBUG_MARKUP
@@ -1675,7 +1675,7 @@ static NSMutableDictionary* fontMemory_;
                 CGContextSetStrokeColorWithColor(ctx, [segmentColor CGColor]);
                 
                 // actually draw
-                CGRect textArea = CGRectMake(x, actualY, segmentWidth, segmentHeight);
+                CGRect textArea = GSRectMakeRounded(x, actualY, segmentWidth, segmentHeight);
                 [segmentText drawInRect:textArea withFont:segmentFont lineBreakMode:truncateMode];
             }
             

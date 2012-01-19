@@ -62,7 +62,7 @@
 		EC61851714BCC3F200E1DA2F /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		EC61851814BCC3F200E1DA2F /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		EC61851914BCC3F200E1DA2F /* GSFancyText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSFancyText.h; sourceTree = "<group>"; };
-		EC61851A14BCC3F200E1DA2F /* GSFancyText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GSFancyText.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		EC61851A14BCC3F200E1DA2F /* GSFancyText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GSFancyText.m; sourceTree = "<group>"; };
 		EC61851B14BCC3F200E1DA2F /* GSFancyTextDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = GSFancyTextDefines.h; sourceTree = "<group>"; };
 		EC61851C14BCC3F200E1DA2F /* GSFancyTextDefines.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSFancyTextDefines.m; sourceTree = "<group>"; };
 		EC61851D14BCC3F200E1DA2F /* GSFancyTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSFancyTextView.h; sourceTree = "<group>"; };
