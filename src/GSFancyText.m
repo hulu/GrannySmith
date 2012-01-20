@@ -1713,7 +1713,7 @@ static NSMutableDictionary* fontMemory_;
     
 }
 
-- (void)setBlock:(void(^)(CGRect))drawingBlock forLambdaID:(NSString*)lambdaID {
+- (void)defineLambdaID:(NSString*)lambdaID withBlock:(void(^)(CGRect))drawingBlock {
     if (!drawingBlock) {
         [lambdaBlocks_ removeObjectForKey:lambdaID];
     }

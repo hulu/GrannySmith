@@ -103,7 +103,7 @@
  * So that in the fancy text markup string, the tag <lambda id=lambdaID width=xxx height=xxx valign=xxx> will be replaced by this drawing
  * @param drawingBlock is the block for drawing, it takes one CGRect parameter, which is the frame for drawing
  */
-- (void)setBlock:(void(^)(CGRect))drawingBlock forLambdaID:(NSString*)lambdaID;
+- (void)defineLambdaID:(NSString*)lambdaID withBlock:(void(^)(CGRect))drawingBlock;
 
 
 ///---------------
