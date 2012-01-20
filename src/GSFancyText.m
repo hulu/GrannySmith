@@ -1479,7 +1479,6 @@ static NSMutableDictionary* fontMemory_;
         lineRightMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginRight] possiblyPercentageNumberWithBase:frameWidth];
         lineWidthLimit = frameWidth - lineLeftMargin - lineRightMargin;
         
-        previousLineID = lineID;
         lineID = [[[segments objectAtIndex:0] objectForKey:GSFancyTextLineIDKey] intValue];
         if (previousLineID>=0 && lineID!=previousLineID) {
             y += previousLineBottomMargin;
@@ -1635,6 +1634,9 @@ static NSMutableDictionary* fontMemory_;
             if (lineID != previousLineID) {
                 // it's not for every line
                 y += lineTopMargin;
+                
+                // we don't need to use previousLineID from here, so just set previousID to lineID
+                previousLineID = lineID;
             }
             
             // get vertical align
