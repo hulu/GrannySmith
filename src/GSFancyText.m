@@ -784,6 +784,9 @@ typedef enum {
                 nodeToAdd.isContainer = NO;
                 [[containerStack lastObject] appendChild:nodeToAdd];
                 NSString* lambdaID = [nodeToAdd.data objectForKey:GSFancyTextInternalLambdaIDKey];
+                if (!lambdaID) {
+                    lambdaID = @"";
+                }
                 [nodeToAdd.data setObject:lambdaID forKey:GSFancyTextIDKey];
                 [idMap setObject:nodeToAdd forKey:lambdaID]; // lambda ID also needs to be saved in hash map
             }
