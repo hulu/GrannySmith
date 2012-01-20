@@ -80,13 +80,12 @@ CGFloat const buttonMargin = 5;
     GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:text];
     
     // Set the drawing block
-    void(^drawStarBlock) (CGRect) = ^(CGRect rect) {
+    [fancyText defineLambdaID:@"circle" withBlock:^(CGRect rect) {
         CGContextRef contextRef = UIGraphicsGetCurrentContext();
         CGContextSetRGBFillColor(contextRef, 255, 0, 0, 1);
         CGContextSetRGBStrokeColor(contextRef, 255, 255, 0, 1);
         CGContextFillEllipseInRect(contextRef, CGRectMake(rect.origin.x + 12, rect.origin.y + 0, 12, 12));
-    };
-    [fancyText setBlock:drawStarBlock forLambdaID:@"circle"];
+    }];
 
     // Put on the view
 

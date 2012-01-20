@@ -1,0 +1,4 @@
+Documentation set was installed to Xcode!
+
+Path: /Users/baolei/Library/Developer/Shared/Documentation/DocSets/com.hulu.gs.docset
+Time: 2012-01-20 18:38:12 +0000

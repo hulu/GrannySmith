@@ -1,0 +1,599 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>GSFancyTextView Class Reference</title>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8" />
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
+		<meta name="generator" content="appledoc 2.0.4 (build 703)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">GSFancyTextView Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/contentHeight">&nbsp;&nbsp;&nbsp;&nbsp;contentHeight</option>
+	
+	<option value="//api/name/fancyText">&nbsp;&nbsp;&nbsp;&nbsp;fancyText</option>
+	
+	<option value="//api/name/matchFrameHeightToContent">&nbsp;&nbsp;&nbsp;&nbsp;matchFrameHeightToContent</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/dealloc">&nbsp;&nbsp;&nbsp;&nbsp;- dealloc</option>
+	
+	<option value="//api/name/drawRect:">&nbsp;&nbsp;&nbsp;&nbsp;- drawRect:</option>
+	
+	<option value="//api/name/initWithFrame:fancyText:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithFrame:fancyText:</option>
+	
+	<option value="//api/name/setFrameHeightToContentHeight">&nbsp;&nbsp;&nbsp;&nbsp;- setFrameHeightToContentHeight</option>
+	
+	<option value="//api/name/updateAccessibilityLabel">&nbsp;&nbsp;&nbsp;&nbsp;- updateAccessibilityLabel</option>
+	
+	<option value="//api/name/updateWithCurrentFrame">&nbsp;&nbsp;&nbsp;&nbsp;- updateWithCurrentFrame</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentHeight">contentHeight</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/fancyText">fancyText</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/dealloc">dealloc</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/drawRect:">drawRect:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithFrame:fancyText:">initWithFrame:fancyText:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setFrameHeightToContentHeight">setFrameHeightToContentHeight</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/updateAccessibilityLabel">updateAccessibilityLabel</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="GSFancyTextView Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">GSFancyTextView Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">UIView</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">GSFancyTextView.h<br />GSFancyTextView.m</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The view class
+based on <a href="../Classes/GSFancyText.html">GSFancyText</a> model.
+Added features include: setting accessibility lable, auto-resizing, updating view frame height based on content height, etc</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/fancyText">&nbsp;&nbsp;fancyText</a></code>
+		
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contentHeight">&nbsp;&nbsp;contentHeight</a></code>
+		
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/matchFrameHeightToContent">&nbsp;&nbsp;matchFrameHeightToContent</a></code>
+		<span class="tooltip"><p>If <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> is set to YES, the frame content height will be set to match the content height
+every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</a> method is called.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithFrame:fancyText:">&ndash;&nbsp;initWithFrame:fancyText:</a></code>
+		<span class="tooltip"><p>initialize a fancy text view with a frame and a <a href="#//api/name/fancyText">fancyText</a></p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/updateAccessibilityLabel">&ndash;&nbsp;updateAccessibilityLabel</a></code>
+		<span class="tooltip"><p>enable and update the accessibility label</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/updateWithCurrentFrame">&ndash;&nbsp;updateWithCurrentFrame</a></code>
+		<span class="tooltip"><p>inform <a href="#//api/name/fancyText">fancyText</a> model object the frame change (mainly width) and let it re-calculate the drawing
+@note for best visual experience, call this method in view controller&rsquo;s willAnimateRotationToInterfaceOrientation:duration: method
+@note this can also be called in loadView method after adding the fancyTextView to the screen, so that the frame height can be updated (need to set <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> in this case)</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setFrameHeightToContentHeight">&ndash;&nbsp;setFrameHeightToContentHeight</a></code>
+		<span class="tooltip"><p>we may assign extra/more than enough space at the beginning, so after the drawing we can truncate the view frame to fit the content.
+@note this method sets frame height for once. For automatical frame height update, see <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> property.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/dealloc">&ndash;&nbsp;dealloc</a></code>
+		
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/drawRect:">&ndash;&nbsp;drawRect:</a></code>
+		
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/contentHeight" title="contentHeight"></a>
+	<h3 class="subsubtitle method-title">contentHeight</h3>
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/fancyText" title="fancyText"></a>
+	<h3 class="subsubtitle method-title">fancyText</h3>
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/matchFrameHeightToContent" title="matchFrameHeightToContent"></a>
+	<h3 class="subsubtitle method-title">matchFrameHeightToContent</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>If <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> is set to YES, the frame content height will be set to match the content height
+every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</a> method is called.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL matchFrameHeightToContent</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> is set to YES, the frame content height will be set to match the content height
+every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</a> method is called.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSFancyTextView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/dealloc" title="dealloc"></a>
+	<h3 class="subsubtitle method-title">dealloc</h3>
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/drawRect:" title="drawRect:"></a>
+	<h3 class="subsubtitle method-title">drawRect:</h3>
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithFrame:fancyText:" title="initWithFrame:fancyText:"></a>
+	<h3 class="subsubtitle method-title">initWithFrame:fancyText:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>initialize a fancy text view with a frame and a <a href="#//api/name/fancyText">fancyText</a></p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (id)initWithFrame:(CGRect)<em>frame</em> fancyText:(GSFancyText *)<em>fancyText</em></code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>initialize a fancy text view with a frame and a <a href="#//api/name/fancyText">fancyText</a></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSFancyTextView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setFrameHeightToContentHeight" title="setFrameHeightToContentHeight"></a>
+	<h3 class="subsubtitle method-title">setFrameHeightToContentHeight</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>we may assign extra/more than enough space at the beginning, so after the drawing we can truncate the view frame to fit the content.
+@note this method sets frame height for once. For automatical frame height update, see <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> property.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)setFrameHeightToContentHeight</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>we may assign extra/more than enough space at the beginning, so after the drawing we can truncate the view frame to fit the content.
+@note this method sets frame height for once. For automatical frame height update, see <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> property.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSFancyTextView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/updateAccessibilityLabel" title="updateAccessibilityLabel"></a>
+	<h3 class="subsubtitle method-title">updateAccessibilityLabel</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>enable and update the accessibility label</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)updateAccessibilityLabel</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>enable and update the accessibility label</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSFancyTextView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/updateWithCurrentFrame" title="updateWithCurrentFrame"></a>
+	<h3 class="subsubtitle method-title">updateWithCurrentFrame</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>inform <a href="#//api/name/fancyText">fancyText</a> model object the frame change (mainly width) and let it re-calculate the drawing
+@note for best visual experience, call this method in view controller&rsquo;s willAnimateRotationToInterfaceOrientation:duration: method
+@note this can also be called in loadView method after adding the fancyTextView to the screen, so that the frame height can be updated (need to set <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> in this case)</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)updateWithCurrentFrame</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>inform <a href="#//api/name/fancyText">fancyText</a> model object the frame change (mainly width) and let it re-calculate the drawing
+@note for best visual experience, call this method in view controller&rsquo;s willAnimateRotationToInterfaceOrientation:duration: method
+@note this can also be called in loadView method after adding the fancyTextView to the screen, so that the frame height can be updated (need to set <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> in this case)</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSFancyTextView.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2012 Hulu. All rights reserved. (Last updated: 2012-01-20)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.4 (build 703)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+		</script>
+	</body>
+</html>

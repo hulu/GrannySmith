@@ -6,10 +6,13 @@
 //  Copyright (c) 2011 Hulu. All rights reserved.
 //
 
-/// A structure that stores tree based markup parsing result, and arrays of lines.
-/// @discussion The initialization can be from an unparsed markup string, or a parsed result tree.
+/// GSFancyText does parsing and stores parsing result and generated lines.
+///
+/// The initialization can be from an unparsed markup string, or a parsed result tree.
+///
 /// It also stores a dictionary of styles, which can be used in markup parsing, as well as style switching afterwards
-/// @note This is a model class. It only processes strings and generate arrays. To create a view, see GSFancyTextView
+///
+/// This is a model class. It's mainly for processing strings and generate arrays. To create a view, see GSFancyTextView
 
 #import <Foundation/Foundation.h>
 
@@ -31,97 +34,147 @@
     GSMarkupNode* parsedTree_; // root of the parsed result (in tree structure). ready after parseStructure
 }
 
+
+///--------------------
+/// @name Properties
+///--------------------
+
+/// A dictionary of lambda block. Key:lambda ID. Value: a block
 @property (nonatomic, retain) NSMutableDictionary* lambdaBlocks;
+
+/// The style dictionary. It's a dictionary of dictionaries of dictionaries. Key: tag name. Value: a dictionary with [Key:class name. Value: (a dictionary with key: attribute name, value: value of the attribute)]
+///
+/// Use key "default" (GSFancyTextDefaultClass) to get classes that are not associated with any tag.
 @property (nonatomic, retain) NSMutableDictionary* style;
+
+/// The original markup text.
+/// @warning If the fancy text instance is instatiated based on a parsed structure, the text will be empty. Don't always rely on this property because texts in some tags maybe changed after calling changeNodeToText:forID:
 @property (nonatomic, retain) NSString* text;
+
+/// The confined width of the fancy text object
 @property (nonatomic, assign) CGFloat width;
+
+/// The confined height of the fancy text object. If it's set to 0, it means that there's no limit on height.
 @property (nonatomic, assign) CGFloat maxHeight;
 
+///--------------------
+/// @name Initialize
+///--------------------
 
-/** initialize with a markup text (unparsed), a CSS dictionary (obtained with parsedCSS method), a width, and a maxHeight
- * @note this is the most low level initialization method.
+/** Initialize with a markup text (unparsed), a CSS dictionary (obtained with parsedCSS method), a width, and a maxHeight
+ *
+ * This is the most low level initialization method.
  */
 - (id)initWithMarkupText:(NSString*)text styleDict:(NSMutableDictionary*)styleDict width:(CGFloat)width maxHeight:(CGFloat)maxHeight;
 
-/** initialize with a formatted text and the global style (if set). The width and max height are set to 0 and can be changed later.
+/** Initialize with a formatted text and the global style (if set). The width and max height are set to 0 and can be changed later.
  */
 - (id)initWithMarkupText:(NSString*)text;
 
-/** init with a parsed structure.
- * @discussion in this way you can re-use a parsing result
+/** Init with a parsed structure.
+ *
+ * In this way you can re-use a parsing result
+ *
  * e.g. structure = [fancyText1 parse];
+ *
  * fancyText2 = [[GSFancyText alloc] initWithParsedStructure: structure];
+ *
  * [fancyText2 changeNodeToText:@"new text" forID:@"123"];
- * @note the width and max height are set to 0, but can be changed later
+ *
+ * The width and max height are set to 0, but can be changed later
  */
 - (id)initWithParsedStructure:(GSMarkupNode*)structure;
 
-/** keep the original style sheet and append a new one on that.
+///-----------------------
+/// @name Add style sheet
+///-----------------------
+
+/** Keep the original style sheet and append a new one on that.
+ *
  * If there is any conflicted class, follow the newStyleSheet.
  */
 - (void)appendStyleSheet: (NSString*)newStyleSheet;
 
-/** parse the markup text (e.g. "abc <p class=xyz>def</p>") 
+
+///--------------------
+/// @name Markup parsing
+///--------------------
+
+/** Parse the markup text (e.g. "abc &lt;p class=xyz>def&lt;/p>") 
+ *
+ * After parsing, we can always call parsedResultTree to retrieve the result tree
+ *
  * @return the root of the result tree
- * @note after parsing, we can always call parsedResultTree to retrieve the result tree
  */
 - (GSMarkupNode*)parseStructure;
 
-/** result of parseStructure
+/** The result of parseStructure
  * @return the root of the result tree
  */
 - (GSMarkupNode*)parsedResultTree;
 
+///----------------------
+/// @name Line generation
+///----------------------
 
-/** generate lines based on a parsed text
+/** Generate lines based on a parsed text
  * @return an array containing several lines, each line is an array of dictionaries with text key and style keys
  */
 - (NSMutableArray*)generateLines;
 
-/** the result of generateLines
+/** The result of generateLines
  * @return an array containing several lines, each line is an array of dictionaries with text key and style keys
  */
 - (NSMutableArray*)lines;
 
-/** returns the pure text (tags removed) for accessibility label.
- * @note extra stop signs may be exported based on forced line breaks. This is for the convenience of blind people
+///--------------------
+/// @name Information
+///--------------------
+
+/** Returns the pure text (tags removed) for accessibility label.
+ *
+ * Extra stop signs may be exported based on forced line breaks. This is for the convenience of blind people
  */
 - (NSString*)pureText;
 
-/** returns the resulting total height after generating lines
- * @note call this only after doing generateLines
+/** Returns the resulting total height after generating lines
+ *
+ * Call this only after doing generateLines
  */
 - (CGFloat)contentHeight;
 
 
 
 ///--------------------
-/// @name lambda blocks
+/// @name Lambda block
 ///--------------------
 
-/** set the drawing block for a lambda ID
- * So that in the fancy text markup string, the tag <lambda id=lambdaID width=xxx height=xxx valign=xxx> will be replaced by this drawing
+/** Set the drawing block for a lambda ID, so that in the fancy text markup string, the tag &lt;lambda id=lambdaID width=xxx height=xxx> will be replaced by this drawing
  * @param drawingBlock is the block for drawing, it takes one CGRect parameter, which is the frame for drawing
  */
 - (void)defineLambdaID:(NSString*)lambdaID withBlock:(void(^)(CGRect))drawingBlock;
 
 
-///---------------
-/// @name styles
-///---------------
+///--------------------
+/// @name Global style
+///--------------------
 
 /** Parse a style sheet string and set it as the global default style 
  */
 + (NSMutableDictionary*)parseStyleAndSetGlobal: (NSString*)styleSheet;
 
-/** returns the global default style
+/** Returns the global default style
  */
 + (NSMutableDictionary*)globalStyle;
 
+///-------------------------
+/// @name Standalone parsers
+///-------------------------
 
 /** A parser for CSS styled format string
+ *
+ * The style dictionary is something like {default:{class1:{color:red, font-size:10}, class2:{color:green} } p:{class1:{font-size: 12}} }. Basically it's a 3-level dictionary, the 1st level is element name, the 2nd level is class name, the 3rd level is the attribute name.
  * @return a style dictionary
- * @discussion the style dictionary is something like {default:{class1:{color:red, font-size:10}, class2:{color:green} } p:{class1:{font-size: 12}} }. Basically it's a 3-level dictionary, the 1st level is element name, the 2nd level is class name, the 3rd level is the attribute name.
  */
 + (NSMutableDictionary*)parsedStyle: (NSString*)style;
 
@@ -130,8 +183,9 @@
 + (NSMutableDictionary*)newParsedStyle: (NSString*)style;
 
 /** A standalone parser for a markup styled string
+ *
+ * This is similar to instance method parseStructure, but the difference is that we don't need to instantiate an GSFancyText object, and we don't need to worry about width, max height and all line breaking related stuff
  * @return a parsed result tree
- * @discussion this is similar to instance method parseStructure, but the difference is that we don't need to instantiate an GSFancyText object, and we don't need to worry about width, max height and all line breaking related stuff
  */
 + (GSMarkupNode*)parsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict;
 
@@ -140,9 +194,9 @@
 + (GSMarkupNode*)newParsedMarkupString: (NSString*)markup withStyleDict: (NSDictionary*)styleDict;
 
 
-///-------------------
-/// @name Font related
-///-------------------
+///--------------------
+/// @name Font handling
+///--------------------
 
 
 /** Create a UIFont based on name, size, weight, style
@@ -152,12 +206,14 @@
  */
 + (UIFont*)fontWithName:(NSString*)name size:(CGFloat)size weight:(NSString*)weight style:(NSString*)style;
 
-/** returns a string that included all available font names, grouped by family names.
+/** Returns a string that included all available font names, grouped by family names.
+ *
  * Used by developers to quickly look up what's available
  */
 + (NSString*)availableFonts;
 
-/** make a font key based on font family, size, weight, style keys in the dictionary.
+/** Make a font key based on font family, size, weight, style keys in the dictionary.
+ *
  * The font key's value is a UIFont object
  */
 + (void)createFontKeyForDict: (NSMutableDictionary*)dict;
@@ -166,80 +222,96 @@
 /// @name Drawing
 ///-------------------
 
-/** draw self in a rect
+/** Draw self in a rect
  */
 - (void)drawInRect:(CGRect)rect;
 
-///------------------------------
-/// @name Content/style swapping
-///------------------------------
+///----------------------------------
+/// @name Content/Style modification
+///----------------------------------
 
-/** change a node to text.
- * @example for "ABC <span id=x>123 <span>456</span> </span> DEF", changeNodeToText:@"000" forID:@"x" will give "ABC <span id=x>000</span> DEF"
+/** Change a node to text.
+ *
+ * Example: for "ABC &lt;span id=x>123 &lt;span>456&lt;/span> &lt;/span> DEF", changeNodeToText:@"000" forID:@"x" will give "ABC &lt;span id=x>000&lt;/span> DEF"
  */
 - (void)changeNodeToText:(NSString*)text forID:(NSString*)nodeID;
 
-/** change a node to a styled text (to be parsed).
- * @discussion it's similar to changeNodeToText:forID: but the styledText can have markup tags, e.g. <strong>text</strong>
+/** Change a node to a styled text (to be parsed).
+ *
+ * It's similar to changeNodeToText:forID: but the styledText can have markup tags, e.g. &lt;strong>text&lt;/strong>
+ *
  * It can also refer to classes that is either stored in this GSFancyText instance or the global/default style sheet
  */
 - (void)changeNodeToStyledText:(NSString*)styledText forID:(NSString*)nodeID;
 
-/** append a styled text (to be parsed) to a node
- * @example for "ABC <span id=x>123 <span>456</span> </span> DEF", if we append "a <em>e</em>" to "x", "a <em>e</em>" will go after <span>456</span>
+/** Append a styled text (to be parsed) to a node
+ *
+ * Example: for "ABC &lt;span id=x>123 &lt;span>456&lt;/span> &lt;/span> DEF", if we append "a &lt;em>e&lt;/em>" to "x", "a &lt;em>e&lt;/em>" will go after &lt;span>456&lt;/span>
  */
 - (void)appendStyledText:(NSString*)text toID:(NSString*)nodeID;
 
-/** totally cut the node with the given ID
- * @example for "ABC <span id=x>123 <span>456</span> </span> DEF", removeID:@"x" will give "ABC  DEF"
+/** Totally cut the node with the given ID
+ *
+ * Example: for "ABC &lt;span id=x>123 &lt;span>456&lt;/span> &lt;/span> DEF", removeID:@"x" will give "ABC  DEF"
  */
 - (void)removeID: (NSString*)nodeID;
 
 
-/** change the value of a single attribute to an ID or a class.
+/** Change the value of a single attribute to an ID or a class.
  * @param type can be either GSFancyTextID or GSFancyTextClass
  * @param name is the ID or the class name (in case it's root no name is required, it can be nil or anything)
  */
 - (void)changeAttribute:(NSString*)attribute to:(id)value on:(GSFancyTextReferenceType)type withName:(NSString*)name;
 
-/** add styles defined in a dictionary to an ID or a class.
+/** Add styles defined in a dictionary to an ID or a class.
  * @param type can be either GSFancyTextID or GSFancyTextClass or GSFancyTextRoot 
  * @param name is the ID or the class name (in case it's root no name is required, it can be nil or anything)
  */
 - (void)addStyles:(NSMutableDictionary*)styles on:(GSFancyTextReferenceType)type withName:(NSString*)name;
 
-/** apply styles defined in a class to an ID or a class. (also keeps the old styles)
+/** Apply styles defined in a class to an ID or a class. (also keeps the old styles)
+ *
+ * This just changes styles, but doesn't change class mapping.
+ *
+ * Example: if we have &lt;p class=a>123&lt;/p>, and we called applyClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
+ *
+ * But searching 123 would be still based on class=a
  * @param type can be either GSFancyTextID or GSFancyTextClass
  * @param name is the ID or the class name  (in case it's root no name is required, it can be nil or anything)
- * @note this just changes styles, but doesn't change class mapping.
- * e.g. if we have <p class=a>123</p>, and we called applyClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
- * But searching 123 would be still based on class=a
  */
 - (void)applyClass:(NSString*)className on:(GSFancyTextReferenceType)type withName:(NSString*)name;
 
-/** apply styles defined in a class to an ID or a class. (old styles get removed first)
+/** Apply styles defined in a class to an ID or a class. (old styles get removed first)
+ *
+ * This just changes styles, but doesn't change class mapping.
+ *
+ * Example: if we have &lt;p class=a>123&lt;/p>, and we called changeStylesToClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
+ *
+ * But searching 123 would be still based on class=a
  * @param type can be either GSFancyTextID or GSFancyTextClass
  * @param name is the ID or the class name (in case it's root no name is required, it can be nil or anything)
- * @note this just changes styles, but doesn't change class mapping.
- * e.g. if we have <p class=a>123</p>, and we called changeStylesToClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
- * But searching 123 would be still based on class=a
  */
 - (void)changeStylesToClass:(NSString*)className on:(GSFancyTextReferenceType)type withName:(NSString*)name;
 
-///--------------
-/// @name helper
-///--------------
+///----------------------
+/// @name Helper methods
+///----------------------
 
-/** assuming the value for the key in this dict is an array, add the object to that array.
+/** Assuming the value for the key in this dict is an array, add the object to that array.
+ *
  * If the value for the key doesn't exist yet, then create a new array with this object and set it as the value for the key.
  */
 + (void)addObject:(NSObject*)object intoDict:(NSMutableDictionary*)dict underKey:(NSString*)key;
 
-/** clean up the conflicting keys
- * @discussion we have this method because when we set styles, we copy attributes by a block
+/** Clean up the conflicting keys
+ *
+ * We have this method because when we set styles, we copy attributes by a block
+ *
  * And only in a few cases we want to block attributes. So we use this method.
- * @example if dict does not have line-id key (which is from p) but it has text align, line-id, truncation-mode key, just kick them out
- * @note this method is called at the tag parsing level, e.g if we have <span class=centerAlign> we just remove the text-align
+ *
+ * Example: if dict does not have line-id key (which is from p) but it has text align, line-id, truncation-mode key, just kick them out
+ *
+ * Note: this method is called at the tag parsing level, e.g if we have &lt;span class=centerAlign> we just remove the text-align
  */
 + (void)cleanStyleDict:(NSMutableDictionary*)dict;
 

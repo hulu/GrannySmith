@@ -1,0 +1,1139 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>GSMarkupNode Class Reference</title>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8" />
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
+		<meta name="generator" content="appledoc 2.0.4 (build 703)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">GSMarkupNode Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/IDMap">&nbsp;&nbsp;&nbsp;&nbsp;IDMap</option>
+	
+	<option value="//api/name/children">&nbsp;&nbsp;&nbsp;&nbsp;children</option>
+	
+	<option value="//api/name/classesMap">&nbsp;&nbsp;&nbsp;&nbsp;classesMap</option>
+	
+	<option value="//api/name/data">&nbsp;&nbsp;&nbsp;&nbsp;data</option>
+	
+	<option value="//api/name/isContainer">&nbsp;&nbsp;&nbsp;&nbsp;isContainer</option>
+	
+	<option value="//api/name/parent">&nbsp;&nbsp;&nbsp;&nbsp;parent</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/appendChild:">&nbsp;&nbsp;&nbsp;&nbsp;- appendChild:</option>
+	
+	<option value="//api/name/appendSubtree:underNode:">&nbsp;&nbsp;&nbsp;&nbsp;- appendSubtree:underNode:</option>
+	
+	<option value="//api/name/applyAndSpreadStyles:removeOldStyles:">&nbsp;&nbsp;&nbsp;&nbsp;- applyAndSpreadStyles:removeOldStyles:</option>
+	
+	<option value="//api/name/childNodeWithID:">&nbsp;&nbsp;&nbsp;&nbsp;- childNodeWithID:</option>
+	
+	<option value="//api/name/childrenNodesWithClassName:">&nbsp;&nbsp;&nbsp;&nbsp;- childrenNodesWithClassName:</option>
+	
+	<option value="//api/name/cutFromParent">&nbsp;&nbsp;&nbsp;&nbsp;- cutFromParent</option>
+	
+	<option value="//api/name/dismissAllChildren">&nbsp;&nbsp;&nbsp;&nbsp;- dismissAllChildren</option>
+	
+	<option value="//api/name/displayTree">&nbsp;&nbsp;&nbsp;&nbsp;- displayTree</option>
+	
+	<option value="//api/name/newDepthFirstOrderDataArray">&nbsp;&nbsp;&nbsp;&nbsp;- newDepthFirstOrderDataArray</option>
+	
+	<option value="//api/name/resetChildToText:">&nbsp;&nbsp;&nbsp;&nbsp;- resetChildToText:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Properties">Properties</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Appending nodes">Appending nodes</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Enumeration">Enumeration</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_ID/Class search">ID/Class search</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Modification">Modification</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Debug">Debug</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/IDMap">IDMap</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/children">children</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/classesMap">classesMap</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/data">data</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/isContainer">isContainer</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parent">parent</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appendChild:">appendChild:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/appendSubtree:underNode:">appendSubtree:underNode:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/applyAndSpreadStyles:removeOldStyles:">applyAndSpreadStyles:removeOldStyles:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/childNodeWithID:">childNodeWithID:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/childrenNodesWithClassName:">childrenNodesWithClassName:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/cutFromParent">cutFromParent</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/dismissAllChildren">dismissAllChildren</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/displayTree">displayTree</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/newDepthFirstOrderDataArray">newDepthFirstOrderDataArray</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/resetChildToText:">resetChildToText:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="GSMarkupNode Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">GSMarkupNode Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">GSMarkupNode.h</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>It&rsquo;s a tree node with a <a href="#//api/name/data">data</a> dictionary.</p>
+
+<p>It&rsquo;s used for storing the markup text parsing result.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						<a title="Properties" name="task_Properties"></a>
+						<h3 class="subsubtitle task-title">Properties</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/data">&nbsp;&nbsp;data</a></code>
+		<span class="tooltip"><p>The <a href="#//api/name/data">data</a> dictionary of the node.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/children">&nbsp;&nbsp;children</a></code>
+		<span class="tooltip"><p>The <a href="#//api/name/children">children</a> array. Each object is an <a href="GSMarkupNode.html">GSMarkupNode</a> object</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isContainer">&nbsp;&nbsp;isContainer</a></code>
+		<span class="tooltip"><p>Denoting if this node a container node.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/IDMap">&nbsp;&nbsp;IDMap</a></code>
+		<span class="tooltip"><p>A hash map for finding nodes with certain IDs</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/classesMap">&nbsp;&nbsp;classesMap</a></code>
+		<span class="tooltip"><p>A hash map for finding nodes with certain classes</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parent">&nbsp;&nbsp;parent</a></code>
+		<span class="tooltip"><p>The <a href="#//api/name/parent">parent</a> node of this node. Used for tracing back all the styles applied to this node.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Appending nodes" name="task_Appending nodes"></a>
+						<h3 class="subsubtitle task-title">Appending nodes</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/appendChild:">&ndash;&nbsp;appendChild:</a></code>
+		<span class="tooltip"><p>Append a node into the <a href="#//api/name/children">children</a> array</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/appendSubtree:underNode:">&ndash;&nbsp;appendSubtree:underNode:</a></code>
+		<span class="tooltip"><p>Add subtree under a child node of this tree, and add the map info in subtree root into the root of this tree (assuming it&rsquo;s this node)</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Enumeration" name="task_Enumeration"></a>
+						<h3 class="subsubtitle task-title">Enumeration</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/newDepthFirstOrderDataArray">&ndash;&nbsp;newDepthFirstOrderDataArray</a></code>
+		<span class="tooltip"><p>Create an array with the content node <a href="#//api/name/data">data</a> in this tree in depth first order (natural markup string order)</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="ID/Class search" name="task_ID/Class search"></a>
+						<h3 class="subsubtitle task-title">ID/Class search</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/childNodeWithID:">&ndash;&nbsp;childNodeWithID:</a></code>
+		<span class="tooltip"><p>Get the tree node under this node that has the given nodeID</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/childrenNodesWithClassName:">&ndash;&nbsp;childrenNodesWithClassName:</a></code>
+		<span class="tooltip"><p>Get all the tree nodes under this node that has the given class name</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Modification" name="task_Modification"></a>
+						<h3 class="subsubtitle task-title">Modification</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/cutFromParent">&ndash;&nbsp;cutFromParent</a></code>
+		<span class="tooltip"><p>Cut this node from <a href="#//api/name/parent">parent</a></p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/dismissAllChildren">&ndash;&nbsp;dismissAllChildren</a></code>
+		<span class="tooltip"><p>Dismiss all <a href="#//api/name/children">children</a> of this node</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/resetChildToText:">&ndash;&nbsp;resetChildToText:</a></code>
+		<span class="tooltip"><p>Reset the text under this node</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/applyAndSpreadStyles:removeOldStyles:">&ndash;&nbsp;applyAndSpreadStyles:removeOldStyles:</a></code>
+		<span class="tooltip"><p>Apply styles defined in the styles dictionary to self and all <a href="#//api/name/children">children</a></p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Debug" name="task_Debug"></a>
+						<h3 class="subsubtitle task-title">Debug</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/displayTree">&ndash;&nbsp;displayTree</a></code>
+		<span class="tooltip"><p>Display the information of the tree starting from this node, nonrecursively
+@note for debug use</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/IDMap" title="IDMap"></a>
+	<h3 class="subsubtitle method-title">IDMap</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>A hash map for finding nodes with certain IDs</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSMutableDictionary *IDMap</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>A hash map for finding nodes with certain IDs</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/children" title="children"></a>
+	<h3 class="subsubtitle method-title">children</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The <a href="#//api/name/children">children</a> array. Each object is an <a href="GSMarkupNode.html">GSMarkupNode</a> object</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSMutableArray *children</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The <a href="#//api/name/children">children</a> array. Each object is an <a href="GSMarkupNode.html">GSMarkupNode</a> object</p>
+
+<p>For a child-less leaf the <a href="#//api/name/children">children</a> array is an empty array, instead of nil</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/classesMap" title="classesMap"></a>
+	<h3 class="subsubtitle method-title">classesMap</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>A hash map for finding nodes with certain classes</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSMutableDictionary *classesMap</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>A hash map for finding nodes with certain classes</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/data" title="data"></a>
+	<h3 class="subsubtitle method-title">data</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The <a href="#//api/name/data">data</a> dictionary of the node.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSMutableDictionary *data</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The <a href="#//api/name/data">data</a> dictionary of the node.</p>
+
+<p>The <a href="#//api/name/data">data</a> dictionary stores everything that is unrelated to the tree structure, including the text, lambda ID, all styles. This makes it easy to copy and debug a node, and easy to pass bulk information among nodes</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/isContainer" title="isContainer"></a>
+	<h3 class="subsubtitle method-title">isContainer</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Denoting if this node a container node.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL isContainer</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Denoting if this node a container node.</p>
+
+<p>The root is always a container. A content node (lambda/text) isn&rsquo;t a container.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parent" title="parent"></a>
+	<h3 class="subsubtitle method-title">parent</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The <a href="#//api/name/parent">parent</a> node of this node. Used for tracing back all the styles applied to this node.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, GSWeak) GSMarkupNode *parent</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The <a href="#//api/name/parent">parent</a> node of this node. Used for tracing back all the styles applied to this node.</p>
+
+<p>If ARC is not enabled, it&rsquo;s <strong>unsafe</strong>unretained in order to avoid retain cycle, so use with caution.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/appendChild:" title="appendChild:"></a>
+	<h3 class="subsubtitle method-title">appendChild:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Append a node into the <a href="#//api/name/children">children</a> array</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)appendChild:(GSMarkupNode *)<em>node</em></code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Append a node into the <a href="#//api/name/children">children</a> array</p>
+
+<p>This also sets the <a href="#//api/name/parent">parent</a> of the child node</p><div class="warning"><p>This method only establishes child/<a href="#//api/name/parent">parent</a> relationship, but doesn&rsquo;t pass styles and hashmaps. So it&rsquo;s mainly used during construction stage.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/appendSubtree:underNode:" title="appendSubtree:underNode:"></a>
+	<h3 class="subsubtitle method-title">appendSubtree:underNode:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Add subtree under a child node of this tree, and add the map info in subtree root into the root of this tree (assuming it&rsquo;s this node)</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)appendSubtree:(GSMarkupNode *)<em>subtreeRoot</em> underNode:(GSMarkupNode *)<em>node</em></code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Add subtree under a child node of this tree, and add the map info in subtree root into the root of this tree (assuming it&rsquo;s this node)</p>
+
+<p>Call this method only on the root node, and make sure that node is an offsprint under this node</p><div class="warning"><p>If the subtree has a conflicting ID with the original tree, the ID will refer to the one in the new subtree</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/applyAndSpreadStyles:removeOldStyles:" title="applyAndSpreadStyles:removeOldStyles:"></a>
+	<h3 class="subsubtitle method-title">applyAndSpreadStyles:removeOldStyles:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Apply styles defined in the styles dictionary to self and all <a href="#//api/name/children">children</a></p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)applyAndSpreadStyles:(NSMutableDictionary *)<em>styles</em> removeOldStyles:(BOOL)<em>removeOldStyles</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>removeOldStyles</em></dt>
+			<dd><p>is YES if it&rsquo;s a replace, NO if it&rsquo;s just adding new styles</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Apply styles defined in the styles dictionary to self and all <a href="#//api/name/children">children</a></p>
+
+<p>RemoveOldStyles only refer to the old styles defined by the class at this node, and does NOT include the default styles and global styles</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/childNodeWithID:" title="childNodeWithID:"></a>
+	<h3 class="subsubtitle method-title">childNodeWithID:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Get the tree node under this node that has the given nodeID</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (GSMarkupNode *)childNodeWithID:(NSString *)<em>nodeID</em></code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>the right node. If no node is found by the ID or the method is called on a non-root node, return Nil</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Get the tree node under this node that has the given nodeID</p>
+
+<p>This method must be called on a root node, where ID hashmap is stored</p>
+
+<p>You can can use @&ldquo;root&rdquo; (GSFancyTextRootID) to refer to the root of the tree (this node)</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/childrenNodesWithClassName:" title="childrenNodesWithClassName:"></a>
+	<h3 class="subsubtitle method-title">childrenNodesWithClassName:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Get all the tree nodes under this node that has the given class name</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (NSArray *)childrenNodesWithClassName:(NSString *)<em>className</em></code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>an array with the right nodes. If no node is found by the ID or the method is called on a non-root node, return Nil</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Get all the tree nodes under this node that has the given class name</p>
+
+<p>This method must be called on a root node, where class hashmap is stored</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/cutFromParent" title="cutFromParent"></a>
+	<h3 class="subsubtitle method-title">cutFromParent</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Cut this node from <a href="#//api/name/parent">parent</a></p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)cutFromParent</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Cut this node from <a href="#//api/name/parent">parent</a></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/dismissAllChildren" title="dismissAllChildren"></a>
+	<h3 class="subsubtitle method-title">dismissAllChildren</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Dismiss all <a href="#//api/name/children">children</a> of this node</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)dismissAllChildren</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Dismiss all <a href="#//api/name/children">children</a> of this node</p>
+
+<p>From user&rsquo;s point of view, this method has similar effect with <a href="#//api/name/cutFromParent">cutFromParent</a>, but if we call this one, later we still have a chance to add <a href="#//api/name/children">children</a> into this node. <a href="#//api/name/cutFromParent">cutFromParent</a> is more thorough.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/displayTree" title="displayTree"></a>
+	<h3 class="subsubtitle method-title">displayTree</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Display the information of the tree starting from this node, nonrecursively
+@note for debug use</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (NSString *)displayTree</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Display the information of the tree starting from this node, nonrecursively
+@note for debug use</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/newDepthFirstOrderDataArray" title="newDepthFirstOrderDataArray"></a>
+	<h3 class="subsubtitle method-title">newDepthFirstOrderDataArray</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Create an array with the content node <a href="#//api/name/data">data</a> in this tree in depth first order (natural markup string order)</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (NSArray *)newDepthFirstOrderDataArray</code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>an array of dictionaries, each dictionary is the <a href="#//api/name/data">data</a> of a content node</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Create an array with the content node <a href="#//api/name/data">data</a> in this tree in depth first order (natural markup string order)</p>
+
+<p>Example: a tree based on &ldquo;a &lt;span>B&lt;em>C&lt;/em> D &lt;/span>&rdquo; will give an array of [a, B, C, D] (styles included)</p>
+
+<p>Only content nodes are exported. Container nodes are not. This makes output lighterweight.</p>
+
+<p>Only <a href="#//api/name/data">data</a> (dictionary) is stored in the array because you don&rsquo;t need tree information (<a href="#//api/name/children">children</a>, <a href="#//api/name/parent">parent</a>) when it&rsquo;s flattened</p>
+
+<p>New means that you own it (it&rsquo;s not autoreleased, and you have to release it upon finishing, if it&rsquo;s not ARC)</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/resetChildToText:" title="resetChildToText:"></a>
+	<h3 class="subsubtitle method-title">resetChildToText:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Reset the text under this node</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)resetChildToText:(NSString *)<em>text</em></code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Reset the text under this node</p>
+
+<p>Example: in this tree &ldquo;&lt;span id=1>ABC&lt;span class=xxx>XXX&lt;/span>&lt;/span>, if we call resetChildToText:@"123&rdquo; to id=1 node, it will become &lt;span id=1>123&lt;/span>; and in &ldquo;&lt;span id=1>ABC<lambda id=xxx>DEF&lt;/span>&rdquo;, if we can the same method, it will give us &ldquo;&lt;span id=1>123<lambda id=xxx>&lt;/span>&rdquo;</p><div class="warning"><p>If there&rsquo;s any subtree under this node, it will be removed. After this call there will be only one text child note, plus the lambda nodes</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSMarkupNode.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2012 Hulu. All rights reserved. (Last updated: 2012-01-20)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.4 (build 703)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+		</script>
+	</body>
+</html>

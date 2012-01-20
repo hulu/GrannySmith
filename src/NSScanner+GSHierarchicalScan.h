@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Hulu. All rights reserved.
 //
 
+/// Some additions to NSScanner
+
 #import <Foundation/Foundation.h>
 
 @interface NSScanner (GSHierarchicalScan)
@@ -16,20 +18,25 @@ typedef enum {
     ScanMeetEnd,
 } GSScanResult;
 
-/** scan up to a either a target string or an end token (whichever comes first), and store the scanned string
- * @return ScanMeetTarget if the target string is met first, ScanMeetEndToken if the end token is met first, or ScanMeetEnd is neither is found.
- * @discussion This is useful when we are parsing a structure like: {item11, item12, item13} {item21, item22} {item31, item32,}
+/** Scan up to a either a target string or an end token (whichever comes first), and store the scanned string
+ *
+ * This is useful when we are parsing a structure like: {item11, item12, item13} {item21, item22} {item31, item32,}
+ *
  * When we are at the parsing all the items inside one group, we can set the target to "," , and the endToken to "}"
+ *
  * So that we can use one scanner to take care of the 2-level parsing.
+ *
+ * @return ScanMeetTarget if the target string is met first, ScanMeetEndToken if the end token is met first, or ScanMeetEnd is neither is found.
  */
 - (GSScanResult) scanUpToString:(NSString*)target endToken:(NSString*)endToken intoString:(NSString**)intoString;
 
 /** Similar to the standard scanUpToString:intoString, but returns a GSScanResult value
- * @discussion this is useful because, say we are parsing something like "abc <def>", we first scan up to "<" where we get abc, then the scanLocation is at "<". At this time we want do something based on either the GSScanResult is ScanMeetTarget of ScanMeetEnd.
+ *
+ * This is useful because, say we are parsing something like "abc &lt;def>", we first scan up to "&lt;" where we get abc, then the scanLocation is at "&lt;". At this time we want do something based on either the GSScanResult is ScanMeetTarget of ScanMeetEnd.
  */
 - (GSScanResult) scanWithGSScanResultUpToString:(NSString*)target intoString:(NSString**)intoString;
 
-/** The character at the current scanning position of the scanner. For debug purpose.
+/** The character at the current scanning position of the scanner. Mainly for debug purpose.
  */
 - (NSString*)atCharacter;
 
