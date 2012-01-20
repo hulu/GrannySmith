@@ -58,7 +58,7 @@
 @property (nonatomic, assign) CGFloat maxHeight;
 
 ///--------------------
-/// @name Initialize
+/// @name Initialization
 ///--------------------
 
 /** Initialize with a markup text (unparsed), a CSS dictionary (obtained with parsedCSS method), a width, and a maxHeight
