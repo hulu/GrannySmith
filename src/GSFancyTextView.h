@@ -27,10 +27,10 @@
 /// The GSFancyText object for this view
 @property (nonatomic, retain) GSFancyText* fancyText;
 
-/// The content height of the fancyText object
-@property (nonatomic, assign) CGFloat contentHeight;
+/// The content height of the fancyText object.
+@property (nonatomic, assign, readonly) CGFloat contentHeight;
 
-/** If matchFrameHeightToContent is set to YES, the frame content height will be set to match the content height
+/** If matchFrameHeightToContent is set to YES, the view frame height will be set to match the content height
  * every time updateWithCurrentFrame method is called.
  *
  * If it's set to NO, every time we call updateWithCurrentFrame, only the new width will be used to affect the line height.
@@ -43,14 +43,9 @@
  */
 - (id)initWithFrame:(CGRect)frame fancyText:(GSFancyText*)fancyText;
 
-/// @name Accessibility label
+/// @name Frame update
 
-/** Enable and update the accessibility label
- */
-- (void)updateAccessibilityLabel;
-
-
-/** Inform fancyText model object the frame change (mainly width) and let it re-calculate the drawing
+/** Inform fancyText model object the frame change (mainly width) and let it re-calculate the lines for drawing
  *
  * For best visual experience, call this method in view controller's willAnimateRotationToInterfaceOrientation:duration: method
  *
@@ -66,5 +61,11 @@
  * Note: this method sets frame height for once. For automatical frame height update, see matchFrameHeightToContent property.
  */
 - (void)setFrameHeightToContentHeight;
+
+/// @name Accessibility label
+
+/** Enable and update the accessibility label
+ */
+- (void)updateAccessibilityLabel;
 
 @end

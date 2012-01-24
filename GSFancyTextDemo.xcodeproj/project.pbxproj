@@ -170,7 +170,7 @@
 		EC6B5A0614BBE9D40016D910 = {
 			isa = PBXGroup;
 			children = (
-				ECFDC57314BBEB950084F4CB /* HUSFT */,
+				ECFDC57314BBEB950084F4CB /* GSFancyText */,
 				EC6B5A1B14BBE9D40016D910 /* demo */,
 				EC61850614BCC17500E1DA2F /* tests */,
 				EC6B5A1414BBE9D40016D910 /* Frameworks */,
@@ -214,12 +214,12 @@
 			path = HUFancyTextDemo;
 			sourceTree = "<group>";
 		};
-		ECFDC57314BBEB950084F4CB /* HUSFT */ = {
+		ECFDC57314BBEB950084F4CB /* GSFancyText */ = {
 			isa = PBXGroup;
 			children = (
 				EC61851414BCC3F200E1DA2F /* src */,
 			);
-			name = HUSFT;
+			name = GSFancyText;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
