@@ -236,7 +236,6 @@
     NSString* marginClass = @".margin {color:red}";
     [refFancyText appendStyleSheet:marginClass];
     refFancyText.width = fullWidth - leftMargin - rightMargin;
-    NSLog(@"plain break");
     [refFancyText generateLines];
     NSArray* refLines = [refFancyText lines];
     int refCount = refLines.count;
@@ -246,7 +245,6 @@
     marginClass = [NSString stringWithFormat:@".margin {margin-left: %f; margin-right:%f;}", leftMargin, rightMargin];
     [fancyText appendStyleSheet:marginClass];
     fancyText.width = fullWidth;
-    NSLog(@"fancy break");
     [fancyText generateLines];
     int count = [fancyText lines].count;
     
@@ -401,7 +399,6 @@
     
     
     // margin + line height pct
-    NSLog(@"standard Height: %f", standardHeight);
     marginClass = @".short {line-height:50%; margin-top:10%; margin-bottom:15%} .long{line-height:110%; margin-top:20%; margin-bottom:30%}";
     [fancyText appendStyleSheet:marginClass];
     [fancyText parseStructure];

@@ -63,7 +63,11 @@
 
 /** Initialize with a markup text (unparsed), a CSS dictionary (obtained with parsedCSS method), a width, and a maxHeight
  *
- * This is the most low level initialization method.
+ * The global style sheet (if set) is also applied, but the styleDict will be on top of it (higher priority).
+ *
+ * Note: global style will be applied with this init method, and the passed styleDict param will override on top.
+ *
+ * @param maxHeight is limit of the height. Use 0 if there is no height limit. Use contentHeight method to get the actual height (must be after generateLines)
  */
 - (id)initWithMarkupText:(NSString*)text styleDict:(NSMutableDictionary*)styleDict width:(CGFloat)width maxHeight:(CGFloat)maxHeight;
 

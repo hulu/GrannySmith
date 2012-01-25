@@ -71,6 +71,9 @@ static int lineID_ = 1;
  */
 - (NSMutableDictionary*)newStylesFromClassName:(NSString*)className elementName:(NSString*)elementName;
 
+/** Append a parsed style dictionary to the current fancyText
+ */
+- (void)appendStyleDict:(NSMutableDictionary*)styleDict;
 
 @end
 
@@ -97,7 +100,15 @@ static int lineID_ = 1;
     if ((self = [super init])) {
         width_ = width;
         maxHeight_ = maxHeight;
-        self.style = styleDict;
+        if (globalStyleDictionary_) {
+            self.style = globalStyleDictionary_;
+            if (styleDict != globalStyleDictionary_) {
+                [self appendStyleDict:styleDict];
+            }
+        }
+        else {
+            self.style = styleDict;
+        }
         self.text = text;
         contentHeight_ = 0.f;
         lambdaBlocks_ = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
@@ -106,7 +117,7 @@ static int lineID_ = 1;
 }
 
 - (id)initWithMarkupText:(NSString*)text {
-    return [self initWithMarkupText:text styleDict:globalStyleDictionary_ width:0 maxHeight:0];
+    return [self initWithMarkupText:text styleDict:nil width:0 maxHeight:0];
 }
 
 
@@ -124,6 +135,10 @@ static int lineID_ = 1;
 
 - (void)appendStyleSheet:(NSString *)newStyleSheet {
     NSMutableDictionary* styleDict = [[self class] parsedStyle:newStyleSheet];
+    [self appendStyleDict: styleDict];
+}
+
+- (void)appendStyleDict:(NSMutableDictionary*)styleDict {
     for (NSString* element in [styleDict allKeys]) {
         if ([[self.style allKeys] containsObject:element]) {
             [[self.style objectForKey:element] setValuesForKeysWithDictionary: [styleDict objectForKey:element]];
@@ -133,7 +148,6 @@ static int lineID_ = 1;
         }
     }
 }
-
 
 
 - (NSMutableArray*)lines {
