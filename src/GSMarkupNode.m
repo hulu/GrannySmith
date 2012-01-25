@@ -262,6 +262,11 @@
     // for performance considerations, we do this in this way:
     // 1. if there is a text node under this node, we just replace the text of that node, and remove all other nodes. E.g. <span>abc<span>12</span><span>34</span></span>, just replace the abc text and cut 12, 34
     // 2. otherwise, remove all text children (lambda not included) and add the text node. E.g. <span><span>1</span><span>2</span></span>
+    
+    if (!text) {
+        return;
+    }
+    
     BOOL found = NO;
     for (int i=self.children.count-1; i>=0; i--) {
         GSMarkupNode* child = [self.children objectAtIndex:i];
