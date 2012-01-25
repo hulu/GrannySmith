@@ -245,8 +245,7 @@ static int lineID_ = 1;
     __block int currentLineIDLineCountLimit = 0;
     __block NSString* currentLineLastText;
     __block GSTextAlign currentLineLastTextAlign;
-    __block CGFloat currentLineContentHeight = 0.f;
-    __block NSString* currentLineSpecifiedHeightString;
+    __block CGFloat currentLineHeight = 0.f;
     __block NSString* currentLineMarginTopString;
     __block NSString* currentLineMarginBottomString;
     __block int lineIDWithMarginsAdded = -1;
@@ -263,8 +262,8 @@ static int lineID_ = 1;
     __block NSNumber* segmentAlignNumber;
     __block GSTextAlign segmentAlign;
     // some segment info that will be used to calculate the final height of a line
-    __block CGFloat segmentContentHeight;
-    __block NSString* segmentLineHeightString;
+    __block CGFloat segmentHeight;
+    NSString* segmentLineHeightString;
     __block float segmentMarginX;
     __block NSString* segmentMarginTopString;
     __block NSString* segmentMarginBottomString;
@@ -286,22 +285,16 @@ static int lineID_ = 1;
             }
             else {
                 CGFloat nextHeight;
-                CGFloat introducedHeight;
-                if (currentLineSpecifiedHeightString) {
-                    introducedHeight = [currentLineSpecifiedHeightString possiblyPercentageNumberWithBase:currentLineContentHeight];
-                }
-                else {
-                    introducedHeight = currentLineContentHeight;
-                }
+                CGFloat introducedHeight = currentLineHeight;
                 
                 if (currentLineID!=lineIDWithMarginsAdded) {
                     CGFloat topMargin = 0.f;
                     CGFloat bottomMargin = 0.f;
                     if (currentLineMarginTopString) {
-                        topMargin = [currentLineMarginTopString possiblyPercentageNumberWithBase:introducedHeight];   
+                        topMargin = [currentLineMarginTopString possiblyPercentageNumberWithBase:currentLineHeight];   
                     }
                     if (currentLineMarginBottomString) {
-                        bottomMargin = [currentLineMarginBottomString possiblyPercentageNumberWithBase:introducedHeight];
+                        bottomMargin = [currentLineMarginBottomString possiblyPercentageNumberWithBase:currentLineHeight];
                     }
                     introducedHeight += (topMargin + bottomMargin);
                     lineIDWithMarginsAdded = currentLineID;
@@ -328,7 +321,7 @@ static int lineID_ = 1;
             GSRelease(currentLine);
             currentLine = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
             currentLineSpaceLeft = width_;
-            currentLineContentHeight = 0.f;
+            currentLineHeight = 0.f;
         }
         return YES;
     };
@@ -340,14 +333,13 @@ static int lineID_ = 1;
         currentLineID = segmentLineID;
         currentLineIDLineCountLimit = segmentLineCount;
         currentLineLastTextAlign = segmentAlign;
-        currentLineSpecifiedHeightString = GSAutoreleased([segmentLineHeightString copy]);
         currentLineMarginTopString = GSAutoreleased([segmentMarginTopString copy]);
         currentLineMarginBottomString = GSAutoreleased([segmentMarginBottomString copy]);
         currentLineMarginX = segmentMarginX;
         
         // update the total line content height
-        if (segmentContentHeight > currentLineContentHeight) {
-            currentLineContentHeight = segmentContentHeight;
+        if (segmentHeight > currentLineHeight) {
+            currentLineHeight = segmentHeight;
         }
     };
     
@@ -394,7 +386,10 @@ static int lineID_ = 1;
             
             // retrieve some lambda segment specific info
             CGFloat segmentWidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
-            segmentContentHeight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
+            segmentHeight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
+            if (segmentLineHeightString) {
+                segmentHeight = [segmentLineHeightString possiblyPercentageNumberWithBase:segmentHeight];
+            }
 
             // conclude the previous line if it's too long
             if (currentLine.count && currentLineSpaceLeft<segmentWidth) {
@@ -422,7 +417,10 @@ static int lineID_ = 1;
             // retrieve some text segment specific info
             segmentText = [segment objectForKey:GSFancyTextTextKey];
             segmentFont = [segment objectForKey:GSFancyTextFontKey];
-            segmentContentHeight = [segmentFont lineHeight];
+            segmentHeight = [segmentFont lineHeight];
+            if (segmentLineHeightString) {
+                segmentHeight = [segmentLineHeightString possiblyPercentageNumberWithBase:segmentHeight];
+            }
             
             // split the lines 
             // (the currentLineSpaceLeft might be altered by the insertLineBlock above)
@@ -1485,6 +1483,10 @@ static NSMutableDictionary* fontMemory_;
         else {
             segmentHeight = [(UIFont*)[segment objectForKey:GSFancyTextFontKey] lineHeight];
         }
+        NSString* specifiedHeight = [segment objectForKey:GSFancyTextLineHeightKey];
+        if (specifiedHeight) {
+            segmentHeight = [specifiedHeight possiblyPercentageNumberWithBase:segmentHeight];
+        }
         if (segmentHeight > h) {
             h = segmentHeight;
             baseline = segmentBaseline; // we use the baseline of the biggest font to be the standard baseline of this line
@@ -1607,16 +1609,8 @@ static NSMutableDictionary* fontMemory_;
         CGFloat maxX = rect.origin.x + (frameWidth - lineRightMargin);
         
         // h, y related
-        NSString* lineHeightString = [[segments objectAtIndex:0] objectForKey:GSFancyTextLineHeightKey];
-        CGFloat lineHeight;
-        if (!lineHeightString) {
-            lineHeight = h;
-        }
-        else { // percentage
-            lineHeight = [lineHeightString possiblyPercentageNumberWithBase:h];
-        }
-        CGFloat lineTopMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginTop] possiblyPercentageNumberWithBase:lineHeight];
-        previousLineBottomMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginBottom] possiblyPercentageNumberWithBase:lineHeight];
+        CGFloat lineTopMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginTop] possiblyPercentageNumberWithBase:h];
+        previousLineBottomMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginBottom] possiblyPercentageNumberWithBase:h];
         
         // Drawing loop
         for (int i=0; i<segments.count; i++) {
@@ -1663,13 +1657,13 @@ static NSMutableDictionary* fontMemory_;
             CGFloat actualY;
             switch (valign) {
                 case GSVerticalAlignBaseline:
-                    actualY = y + lineHeight - segmentHeight - (baseline - segmentBaseline);
+                    actualY = y + h - segmentHeight - (baseline - segmentBaseline);
                     break;
                 case GSVerticalAlignBottom:
-                    actualY = y + lineHeight - segmentHeight;
+                    actualY = y + h - segmentHeight;
                     break;
                 case GSVerticalAlignMiddle:
-                    actualY = y + (lineHeight-segmentHeight)/2;
+                    actualY = y + (h-segmentHeight)/2;
                     break;
                 case GSVerticalAlignTop:
                     actualY = y;
@@ -1715,7 +1709,7 @@ static NSMutableDictionary* fontMemory_;
         GSRelease(widthForSegment);
         
         // Updating Y for the next line
-        y += lineHeight;
+        y += h;
     }
     y += previousLineBottomMargin;
     
@@ -1757,7 +1751,7 @@ static NSMutableDictionary* fontMemory_;
 
     if (![dict objectForKey:GSFancyTextLineIDKey]) {
         
-        NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:GSFancyTextTextAlignKey, GSFancyTextLineHeightKey, GSFancyTextLineCountKey, GSFancyTextTruncateModeKey, GSFancyTextMarginTop, GSFancyTextMarginBottom, GSFancyTextMarginLeft, GSFancyTextMarginRight, nil];
+        NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:GSFancyTextTextAlignKey, GSFancyTextLineCountKey, GSFancyTextTruncateModeKey, GSFancyTextMarginTop, GSFancyTextMarginBottom, GSFancyTextMarginLeft, GSFancyTextMarginRight, nil];
         
 #ifdef GS_DEBUG_MARKUP
         NSArray* classNames = [dict objectForKey: GSFancyTextClassKey];
