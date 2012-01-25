@@ -1649,13 +1649,13 @@ static NSMutableDictionary* fontMemory_;
             CGFloat actualY;
             switch (valign) {
                 case GSVerticalAlignBaseline:
-                    actualY = y + h - segmentHeight - (baseline - segmentBaseline);
+                    actualY = y + lineHeight - segmentHeight - (baseline - segmentBaseline);
                     break;
                 case GSVerticalAlignBottom:
-                    actualY = y + h - segmentHeight;
+                    actualY = y + lineHeight - segmentHeight;
                     break;
                 case GSVerticalAlignMiddle:
-                    actualY = y + (h-segmentHeight)/2;
+                    actualY = y + (lineHeight-segmentHeight)/2;
                     break;
                 case GSVerticalAlignTop:
                     actualY = y;
