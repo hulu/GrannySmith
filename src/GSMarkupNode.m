@@ -103,7 +103,7 @@
         for (int i=0; i<indent; i++) {
             [tree appendString:@"  "];
         }
-        NSString* text = [node.data objectForKey:GSFancyTextTextKey];
+        NSString* text = [NSString stringWithFormat:@"%@ %@", [node.data objectForKey:GSFancyTextTextKey], [node.data objectForKey:GSFancyTextColorKey]];
         [tree appendString: text? text : @"*"];
         if (!text) {
             [tree appendFormat:@" (%p)", node];

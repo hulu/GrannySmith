@@ -115,6 +115,7 @@ static int lineID_ = 1;
         }
         self.text = text;
         contentHeight_ = 0.f;
+        contentWidth_ = 0.f;
         lambdaBlocks_ = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
     }
     return self;
@@ -198,6 +199,10 @@ static int lineID_ = 1;
     return contentHeight_;
 }
 
+- (CGFloat)contentWidth {
+    return contentWidth_;
+}
+
 - (GSMarkupNode*)parseStructure {
     #ifdef GS_DEBUG_PERFORMANCE
     NSDate* startTime = [NSDate date];
@@ -239,6 +244,7 @@ static int lineID_ = 1;
     lines_ = [[NSMutableArray alloc] initWithCapacity:segments_.count];
     
     __block float totalHeight = 0.f;
+    contentWidth_ = 0.f;
     
     // line level vars
     
@@ -397,6 +403,7 @@ static int lineID_ = 1;
 
             // conclude the previous line if it's too long
             if (currentLine.count && currentLineSpaceLeft<segmentWidth) {
+                contentWidth_ = width_;
                 if (!insertLineBlock() ) {
                     return lines_;
                 }
@@ -410,9 +417,15 @@ static int lineID_ = 1;
             currentLineSpaceLeft = currentLineSpaceLeft - segmentWidth;
             if (currentLineSpaceLeft <= 0) {
                 currentLineSpaceLeft = 0;
+                contentWidth_ = width_;
                 if (!insertLineBlock() ) {
                     return lines_;
                 }
+            }
+            
+            CGFloat currentLineContentWidth = width_-currentLineSpaceLeft;
+            if (contentWidth_ < currentLineContentWidth) {
+                contentWidth_ = currentLineContentWidth;
             }
         }
         else {
@@ -469,6 +482,7 @@ static int lineID_ = 1;
                 
                 // Regular case: if it is not the last line, it means that this line is long enough to cover a whole line
                 if (i != segmentLines.count -1 ) {
+                    contentWidth_ = width_;
                     if (!insertLineBlock() ) {
                         return lines_;
                     }
@@ -481,6 +495,11 @@ static int lineID_ = 1;
                     // remove the margin space
                     if (segmentLines.count>1 && currentLine.count==1) {
                         currentLineSpaceLeft = currentLineSpaceLeft - segmentMarginX;
+                    }
+                    
+                    CGFloat currentLineContentWidth = width_-currentLineSpaceLeft;
+                    if (contentWidth_ < currentLineContentWidth) {
+                        contentWidth_ = currentLineContentWidth;
                     }
                 }
             }
@@ -1707,6 +1726,7 @@ static NSMutableDictionary* fontMemory_;
             else {
                 // get color
                 UIColor* segmentColor = [segment objectForKey:GSFancyTextColorKey];
+                NSLog(@"segment color for %@: %@", segmentText, segmentColor);
                 CGContextSetFillColorWithColor(ctx, [segmentColor CGColor]);
                 CGContextSetStrokeColorWithColor(ctx, [segmentColor CGColor]);
                 

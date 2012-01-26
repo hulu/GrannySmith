@@ -27,7 +27,8 @@
     NSMutableDictionary* style_; // key is class name, value is "style" dictionary, with color and font keys
     NSString* text_;
     
-    CGFloat contentHeight_; // will require parseStructure calculation
+    CGFloat contentHeight_; // will require lineGeneration calculation
+    CGFloat contentWidth_; // will require lineGeneration calculation
     
     NSMutableDictionary* lambdaBlocks_; // key is lambda id, value is a block for drawing code with 1 parameter: the starting point
     
@@ -147,7 +148,13 @@
  */
 - (CGFloat)contentHeight;
 
-
+/** Returns the content width after generating lines
+ *
+ * Call this only after doing generateLines
+ *
+ * Note: this is used when the original assigned width is too big, and actually none of the lines reached the width. This method gives the actually reached width.
+ */
+- (CGFloat)contentWidth;
 
 ///--------------------
 /// @name Lambda block
