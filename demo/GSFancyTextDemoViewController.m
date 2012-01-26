@@ -101,7 +101,7 @@ CGFloat const buttonMargin = 5;
     fancyTextView_.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     
     [self.view addSubview:fancyTextView_];
-    [fancyTextView_ updateWithCurrentFrame];
+    [fancyTextView_ updateDisplay];
     
     // Buttons for demo content/style switch
     [self setupButtons];
@@ -128,7 +128,7 @@ CGFloat const buttonMargin = 5;
 
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [fancyTextView_ updateWithCurrentFrame];
+    [fancyTextView_ updateDisplay];
 }
 
 
@@ -165,7 +165,7 @@ CGFloat const buttonMargin = 5;
 
 - (void)demoTextSwap:(id)sender {
     [fancyTextView_.fancyText changeNodeToStyledText:@"New <span class=green>Text</span> has been <span class=green>added</span>." forID:@"abc"];
-    [fancyTextView_ updateWithCurrentFrame];
+    [fancyTextView_ updateDisplay];
 
     self.contentSwitchButton.enabled = NO;
     self.resetButton.enabled = YES;
@@ -175,7 +175,7 @@ CGFloat const buttonMargin = 5;
     [fancyTextView_.fancyText changeAttribute:@"color" to:[UIColor greenColor] on:GSFancyTextRoot withName:nil];
     [fancyTextView_.fancyText appendStyleSheet:@".cyan {color:cyan}"];
     [fancyTextView_.fancyText applyClass:@"cyan" on:GSFancyTextClass withName:@"green"];
-    [fancyTextView_ updateWithCurrentFrame];
+    [fancyTextView_ updateDisplay];
     
     self.styleSwitchButton.enabled = NO;
     self.resetButton.enabled = YES;
@@ -183,7 +183,7 @@ CGFloat const buttonMargin = 5;
 
 - (void)resetTextAndStyle:(id)sender {
     fancyTextView_.fancyText = originalFancyText_;
-    [fancyTextView_ updateWithCurrentFrame];
+    [fancyTextView_ updateDisplay];
     
     GSRelease(originalFancyText_);
     originalFancyText_ = [fancyTextView_.fancyText copy];

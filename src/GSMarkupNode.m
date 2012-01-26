@@ -266,30 +266,30 @@
     if (!text) {
         return;
     }
-    
     BOOL found = NO;
-    for (int i=self.children.count-1; i>=0; i--) {
-        GSMarkupNode* child = [self.children objectAtIndex:i];
-        if (!found && [child.data objectForKey:GSFancyTextTextKey] && !child.children.count) {
-            [child.data setObject:text forKey:GSFancyTextTextKey];
-            // just change the text and leave other styles
-            found = YES;
-        }
-        else {
-            if (![[child.data allKeys] containsObject:GSFancyTextInternalLambdaIDKey]) {
-                [child cutFromParent];
+    if (self.children.count > 0) {
+        for (int i=self.children.count-1; i>=0; i--) {
+            GSMarkupNode* child = [self.children objectAtIndex:i];
+            if (!found && [child.data objectForKey:GSFancyTextTextKey] && !child.children.count) {
+                [child.data setObject:text forKey:GSFancyTextTextKey];
+                // just change the text and leave other styles
+                found = YES;
+            }
+            else {
+                if (![[child.data allKeys] containsObject:GSFancyTextInternalLambdaIDKey]) {
+                    [child cutFromParent];
+                }
             }
         }
     }
-    
     if (!found) {
         GSMarkupNode* newChild = [[GSMarkupNode alloc] init];
         [newChild.data setValuesForKeysWithDictionary:self.data];
         [newChild.data setObject:text forKey:GSFancyTextTextKey];
+        [GSFancyText createFontKeyForDict:newChild.data];
         [self appendChild:newChild];
         GSRelease(newChild);
     }
-    
 }
 
 - (void)applyAndSpreadStyles:(NSMutableDictionary*)styles removeOldStyles:(BOOL)removeOldStyles; {

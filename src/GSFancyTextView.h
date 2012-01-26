@@ -31,9 +31,9 @@
 @property (nonatomic, assign, readonly) CGFloat contentHeight;
 
 /** If matchFrameHeightToContent is set to YES, the view frame height will be set to match the content height
- * every time updateWithCurrentFrame method is called.
+ * every time updateDisplay method is called.
  *
- * If it's set to NO, every time we call updateWithCurrentFrame, only the new width will be used to affect the line height.
+ * If it's set to NO, every time we call updateDisplay, only the new width will be used to affect the line height.
  */
 @property (nonatomic, assign) BOOL matchFrameHeightToContent;
 
@@ -45,13 +45,15 @@
 
 /// @name Frame update
 
-/** Inform fancyText model object the frame change (mainly width) and let it re-calculate the lines for drawing
+/** Whenever the fancyText parsed structure changes, or view frame changes, call this method to make sure that the display will be updated.
+ *
+ * It will do 3 things: 1. re-generate the lines, 2. update the view height is demanded, 3. setNeedsDisplay for the view
  *
  * For best visual experience, call this method in view controller's willAnimateRotationToInterfaceOrientation:duration: method
  *
  * This can also be called in loadView method after adding the fancyTextView to the screen, so that the frame height can be updated (need to set matchFrameHeightToContent in this case)
  */
-- (void)updateWithCurrentFrame;
+- (void)updateDisplay;
 
 
 /** Updates the frame size based on fancyText content height

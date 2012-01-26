@@ -45,7 +45,7 @@
     self.accessibilityLabel = pureText;
 }
 
-- (void)updateWithCurrentFrame {
+- (void)updateDisplay {
     self.fancyText.width = self.frame.size.width;
     [self.fancyText generateLines];
     if (matchFrameHeightToContent_) {

@@ -61,6 +61,10 @@ static int lineID_ = 1;
  */
 + (NSNumber*)parseTruncationMode: (NSString*)value intoDictionary:(NSMutableDictionary*)dict;
 
+/** If the fancyText isn't parsed yet, parse it and return the result tree.
+ */
+- (GSMarkupNode*)parseIfUnparsed;
+
 /** Get a list of GSMarkupNode objects based on a class name or ID
  * @return a retained array. An emtpy array if there's no match.
  * @note call this after parsing 
@@ -417,6 +421,10 @@ static int lineID_ = 1;
             // retrieve some text segment specific info
             segmentText = [segment objectForKey:GSFancyTextTextKey];
             segmentFont = [segment objectForKey:GSFancyTextFontKey];
+            if (!segmentFont) {
+                [[self class] createFontKeyForDict:segment];
+                segmentFont = [segment objectForKey:GSFancyTextFontKey];
+            }
             segmentHeight = [segmentFont lineHeight];
             if (segmentLineHeightString) {
                 segmentHeight = [segmentLineHeightString possiblyPercentageNumberWithBase:segmentHeight];
@@ -1295,8 +1303,15 @@ static NSMutableDictionary* fontMemory_;
 
 #pragma mark - Content switch
 
+- (GSMarkupNode*)parseIfUnparsed {
+    if (!parsedTree_) {
+        return [self parseStructure];
+    }
+    return parsedTree_;
+}
+
 - (void)changeNodeToText:(NSString*)text forID:(NSString*)nodeID {
-    if (self.parsedResultTree) {
+    if ([self parseIfUnparsed]) {
         GSMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
         if (theNode) {
             [theNode resetChildToText:text];
@@ -1305,7 +1320,7 @@ static NSMutableDictionary* fontMemory_;
 }
 
 - (void)changeNodeToStyledText:(NSString*)styledText forID:(NSString*)nodeID {
-    if (self.parsedResultTree) {
+    if ([self parseIfUnparsed]) {
         GSMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
         if (theNode) {
             // do it only when the current GSFancyText is parsed and has the nodeID
@@ -1318,7 +1333,7 @@ static NSMutableDictionary* fontMemory_;
 }
 
 - (void)appendStyledText:(NSString*)styledText toID:(NSString*)nodeID {
-    if (self.parsedResultTree) {
+    if ([self parseIfUnparsed]) {
         GSMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
         if (theNode) {
             GSMarkupNode* newTree = [[self class] parsedMarkupString:styledText withStyleDict:self.style];
@@ -1328,7 +1343,7 @@ static NSMutableDictionary* fontMemory_;
 }
 
 - (void)removeID: (NSString*)nodeID {
-    if (self.parsedResultTree) {
+    if ([self parseIfUnparsed]) {
         GSMarkupNode* theNode = [self.parsedResultTree childNodeWithID:nodeID];
         if (theNode) {
             [theNode cutFromParent];
@@ -1339,6 +1354,8 @@ static NSMutableDictionary* fontMemory_;
 #pragma mark - Style switch
 
 - (NSArray*)newChangeListBasedOnType:(GSFancyTextReferenceType)type withName:(NSString*)name {
+    [self parseIfUnparsed];
+    
     NSArray* changeList;
     if (type == GSFancyTextRoot) {
         changeList = [[NSMutableArray alloc] initWithObjects:self.parsedResultTree, nil];
