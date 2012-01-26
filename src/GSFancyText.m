@@ -1726,7 +1726,6 @@ static NSMutableDictionary* fontMemory_;
             else {
                 // get color
                 UIColor* segmentColor = [segment objectForKey:GSFancyTextColorKey];
-                NSLog(@"segment color for %@: %@", segmentText, segmentColor);
                 CGContextSetFillColorWithColor(ctx, [segmentColor CGColor]);
                 CGContextSetStrokeColorWithColor(ctx, [segmentColor CGColor]);
                 

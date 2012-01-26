@@ -103,9 +103,10 @@
         for (int i=0; i<indent; i++) {
             [tree appendString:@"  "];
         }
-        NSString* text = [NSString stringWithFormat:@"%@ %@", [node.data objectForKey:GSFancyTextTextKey], [node.data objectForKey:GSFancyTextColorKey]];
-        [tree appendString: text? text : @"*"];
-        if (!text) {
+        NSString* text = [node.data objectForKey:GSFancyTextTextKey];
+        NSString* lid = [node.data objectForKey:GSFancyTextInternalLambdaIDKey];
+        [tree appendString: text? text : (lid? [NSString stringWithFormat:@"lambda %@",lid] : @"*")];
+        if (node.isContainer) {
             [tree appendFormat:@" (%p)", node];
         }
         [tree appendString:@"\n"];
@@ -293,7 +294,6 @@
 }
 
 - (void)applyAndSpreadStyles:(NSMutableDictionary*)styles removeOldStyles:(BOOL)removeOldStyles; {
-    
     NSMutableArray* stylesToRemove;
     
     // first apply the changes to the root node
