@@ -312,7 +312,18 @@ static int lineID_ = 1;
                 
                 nextHeight = totalHeight + introducedHeight;
                 
+                // if there is not enough height
                 if (maxHeight_ && nextHeight > maxHeight_) {
+                    
+                    // if the line ID of this line is still the same as last line, give some "..." to the last line to indicate it's truncated
+                    if (lines_.count) {
+                        NSMutableDictionary* lastLineLastSegment = [[lines_ lastObject] lastObject];
+                        int lastLineID = [[lastLineLastSegment objectForKey:GSFancyTextLineIDKey] intValue];
+                        if (lastLineID == currentLineID) {
+                            NSString* lastText = [lastLineLastSegment objectForKey:GSFancyTextTextKey];
+                            [lastLineLastSegment setObject:[NSString stringWithFormat:@"%@ %@", lastText, [[currentLine objectAtIndex:0] objectForKey:GSFancyTextTextKey]] forKey:GSFancyTextTextKey];
+                        }
+                    }
                     contentHeight_ = totalHeight;
                     GSRelease(currentLine);
                     GSRelease(segments_);
