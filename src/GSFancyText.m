@@ -774,7 +774,8 @@ typedef enum {
         currentSegmentText = [currentSegmentText substringFromIndex:lengthToSkip];
         
         // outside the HTML tags.. do unescape to take care of &gt; &lt; etc
-        currentSegmentText = [currentSegmentText gtm_stringByUnescapingFromHTML];
+        #warning this is now broken
+        currentSegmentText = [currentSegmentText newMethod];
         
         if (currentSegmentText.length) {
             currentSegment = [[GSMarkupNode alloc] init];
