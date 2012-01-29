@@ -6,10 +6,9 @@
 //  Copyright (c) 2011 Hulu. All rights reserved.
 //
 
-#import "GTMNSString+HTML.h"
-
 #import "GSFancyText.h"
 #import "NSString+GSParsingHelper.h"
+#import "NSString+GSHTML.h"
 #import "NSScanner+GSHierarchicalScan.h"
 #import <objc/message.h>
 
@@ -774,8 +773,7 @@ typedef enum {
         currentSegmentText = [currentSegmentText substringFromIndex:lengthToSkip];
         
         // outside the HTML tags.. do unescape to take care of &gt; &lt; etc
-        #warning this is now broken
-        currentSegmentText = [currentSegmentText newMethod];
+        currentSegmentText = [currentSegmentText unescapeHTMLEntities];
         
         if (currentSegmentText.length) {
             currentSegment = [[GSMarkupNode alloc] init];
