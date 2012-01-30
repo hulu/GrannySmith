@@ -43,6 +43,10 @@
     html = @"Meet the sign &";
     unescaped = [html unescapeHTMLEntities];
     STAssertEqualObjects(@"Meet the sign &", unescaped, @"incorrect unescape: %@", unescaped);
+
+    html = @"&Beginning and end &";
+    unescaped = [html unescapeHTMLEntities];
+    STAssertEqualObjects(@"&Beginning and end &", unescaped, @"incorrect unescape: %@", unescaped);
     
     html = @"& there are less;";
     unescaped = [html unescapeHTMLEntities];

@@ -14,8 +14,10 @@ NSString *const semiString = @";";
 static NSDictionary *unescapeTable_;
 static NSUInteger maxUnescapeKeyLength_ = 0;
 static NSUInteger minUnescapeKeyLength_ = NSUIntegerMax;
+static NSCharacterSet *entityBoundaryCharacterSet_;
+static NSCharacterSet *nonAmpCharacterSet_;
 
-static void initUnescapeTable() {
+static void initUnescapeVars() {
     GSRelease(unescapeTable);
     unescapeTable_ = [[NSDictionary alloc] initWithObjectsAndKeys:
                       @"\"", @"&#34;",	// quotation mark
@@ -228,13 +230,15 @@ static void initUnescapeTable() {
             minUnescapeKeyLength_ = keyLength;
         }
     }
+
+    entityBoundaryCharacterSet_ = GSRetained([NSCharacterSet characterSetWithCharactersInString:@"&;"]);
+
+    NSMutableCharacterSet *ampSet = [NSMutableCharacterSet characterSetWithCharactersInString:@"&"];
+    [ampSet invert];
+    nonAmpCharacterSet_ = GSRetained(ampSet);
 }
 
-static NSString* unescapedStringForEntity(NSString *entity, BOOL* didEscape) {
-    if (!unescapeTable_) {
-        initUnescapeTable();
-    }
-
+static NSString* unescapedStringForEntity(NSString *entity) {
     // entity should be something matching (&.*;).
     if (!entity || [entity length] > maxUnescapeKeyLength_ || [entity length] < minUnescapeKeyLength_) {
         return entity;
@@ -242,17 +246,11 @@ static NSString* unescapedStringForEntity(NSString *entity, BOOL* didEscape) {
 
     NSString *rString = [unescapeTable_ objectForKey:entity];
     if (rString) {
-        if (didEscape != NULL) {
-            *didEscape = YES;
-        }
         return rString;
     }
-    else {
-        if (didEscape != NULL) {
-            *didEscape = NO;
-        }
-        return entity;
-    }
+
+    // we couldn't map to any value... return a copy
+    return GSAutoreleased([entity copy]);
 }
 
 @implementation NSString (GSHTML)
@@ -262,45 +260,91 @@ static NSString* unescapedStringForEntity(NSString *entity, BOOL* didEscape) {
         return @"";
     }
 
+    // make sure we're set up to unescape
+    if (!unescapeTable_) {
+        initUnescapeVars();
+    }
+
     NSMutableString *rString = [[NSMutableString alloc] initWithCapacity:[self length]];
     NSScanner *scanner = [[NSScanner alloc] initWithString:self];
     scanner.charactersToBeSkipped = nil;
     NSString *newString;
     NSString *entityString;
-    BOOL didEscape = NO;
+    NSString *heldAmpersand = @"";
     while (scanner.isAtEnd == NO) {
         // go until you find an &
         newString = nil;
         [scanner scanUpToString:ampString intoString:&newString];
-        if (scanner.isAtEnd) {
-            return newString;
-        }
         if (newString) {
             [rString appendString:newString];
         }
-
-        // next time you see a ;, unescape stuff if you need to
-        newString = nil;
-        [scanner scanUpToString:semiString intoString:&newString];
         if (scanner.isAtEnd) {
-            [rString appendString:newString];
-            break;
+            return rString;
         }
 
-        // newString is now something that matches (&.*)
-        didEscape = NO;
-        entityString = [[NSString alloc] initWithFormat:@"%@;", newString]; // released at end
-        newString = unescapedStringForEntity(entityString, &didEscape);
-        if (newString) {
-            [rString appendString:newString];
+        // next time you see a ;, unescape stuff if you need to. 
+        heldAmpersand = @"";
+        while (scanner.isAtEnd == NO) {
+            newString = nil;
+            [scanner scanUpToCharactersFromSet:entityBoundaryCharacterSet_ intoString:&newString];
+
+            if (scanner.isAtEnd) {
+                [rString appendString:heldAmpersand];
+                heldAmpersand = @"";
+
+                [rString appendString:newString];
+                break;
+            }
+            unichar nextChar = [self characterAtIndex:scanner.scanLocation];
+
+            if (nextChar == '&') {
+                // held ampersand will either be an ampersand or an empty string,
+                // but we now know it's not important for parsing now
+                [rString appendString:heldAmpersand];
+                heldAmpersand = @"";
+
+                // put everything you've got so far into the rString and restart this loop
+                if (newString) {
+                    [rString appendString:newString];
+                }
+
+                // put all consecutive &'s you run into on the string, save the last one
+                newString = nil;
+                [scanner scanUpToCharactersFromSet:nonAmpCharacterSet_ intoString:&newString];
+                heldAmpersand = @"&";
+                if (newString && [newString length] > 1) {
+                    NSString *subStr = [newString substringToIndex:[newString length]-1];
+                    [rString appendString:subStr];
+                }
+                continue;
+            }
+            else if (nextChar == ';') {
+                // newString will be nil if you collected 0 characters... replace w/empty
+                if (!newString) {
+                    newString = @"";
+                }
+
+                // parse what you've seen since the last &
+                entityString = [[NSString alloc] initWithFormat:@"%@%@;", heldAmpersand, newString]; // released below
+
+                newString = unescapedStringForEntity(entityString);
+                if (newString) {
+                    // string is unchanged if un-unescapable
+                    [rString appendString:newString];
+                }
+                GSRelease(entityString);
+
+                // advance the scanner past the ;
+                scanner.scanLocation += 1;
+
+                // break out of the while loop
+                heldAmpersand = @"";
+                break;
+            }
         }
 
-        // advance the scanner past the ; if you escaped
-        if (didEscape) {
-            scanner.scanLocation += 1;
-        }
-
-        GSRelease(entityString);
+        // the held ampersand will either be an ampersand or an empty string
+        [rString appendString:heldAmpersand];
     }
     return rString;
 }
