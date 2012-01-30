@@ -11,7 +11,7 @@
 @interface NSString (GSHTML)
 
 /** 
- Unescapes all of the entities listed at w3schools.com/tags/ref_entities.asp
+ Unescapes all of the entities listed at http://www.w3.org/TR/WD-html40-970708/sgml/entities.html
  This method does not support the 'soft hyphen,' &#173;, &shy;*/
 - (NSString*)unescapeHTMLEntities;
 
