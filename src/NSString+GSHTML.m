@@ -18,7 +18,7 @@ static NSCharacterSet *entityBoundaryCharacterSet_;
 static NSCharacterSet *nonAmpCharacterSet_;
 
 static void initUnescapeVars() {
-    GSRelease(unescapeTable);
+    GSRelease(unescapeTable_);
     unescapeTable_ = [[NSDictionary alloc] initWithObjectsAndKeys:
                       @" ", @"&nbsp;",	//no-break space 
                       @" ", @"&#160;",	//no-break space 
