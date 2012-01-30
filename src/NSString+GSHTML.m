@@ -235,24 +235,34 @@ static NSString* unescapedStringForEntity(NSString *entity, BOOL* didEscape) {
         initUnescapeTable();
     }
 
+    NSMutableString* entity_ = [NSMutableString stringWithString:entity];
+    NSMutableString* result = [[NSMutableString alloc] initWithCapacity:entity.length];
+    
+    // first take care of the case when entity is "& something unrelated &lt;"
+    while (entity_.length>1 && [entity_ rangeOfString:ampString options:0 range:NSMakeRange(1, entity_.length-1)].location!=NSNotFound) {
+        [result appendString:[entity_ substringToIndex:1]];
+        [entity_ replaceCharactersInRange:NSMakeRange(0, 1) withString:@""];
+    }
+         
     // entity should be something matching (&.*;).
-    if (!entity || [entity length] > maxUnescapeKeyLength_ || [entity length] < minUnescapeKeyLength_) {
-        return entity;
+    if ([entity_ length] > maxUnescapeKeyLength_ || [entity_ length] < minUnescapeKeyLength_) {
+        return GSAutoreleased([entity copy]);
     }
 
-    NSString *rString = [unescapeTable_ objectForKey:entity];
+    NSString *rString = [unescapeTable_ objectForKey:entity_];
     if (rString) {
         if (didEscape != NULL) {
             *didEscape = YES;
         }
-        return rString;
+        [result appendString: rString];
     }
     else {
         if (didEscape != NULL) {
             *didEscape = NO;
         }
-        return entity;
+        return GSAutoreleased([entity copy]);
     }
+    return GSAutoreleased(result);
 }
 
 @implementation NSString (GSHTML)
@@ -272,13 +282,15 @@ static NSString* unescapedStringForEntity(NSString *entity, BOOL* didEscape) {
         // go until you find an &
         newString = nil;
         [scanner scanUpToString:ampString intoString:&newString];
-        if (scanner.isAtEnd) {
-            return newString;
-        }
+
         if (newString) {
             [rString appendString:newString];
         }
-
+        
+        if (scanner.isAtEnd) {
+            break;
+        }
+        
         // next time you see a ;, unescape stuff if you need to
         newString = nil;
         [scanner scanUpToString:semiString intoString:&newString];
@@ -295,10 +307,9 @@ static NSString* unescapedStringForEntity(NSString *entity, BOOL* didEscape) {
             [rString appendString:newString];
         }
 
-        // advance the scanner past the ; if you escaped
-        if (didEscape) {
-            scanner.scanLocation += 1;
-        }
+        // as long as you get ";", advance the scanLocation by 1
+        // if you don't get ";", then you must have reached the end, +1 is also fine.
+        scanner.scanLocation += 1;
 
         GSRelease(entityString);
     }
