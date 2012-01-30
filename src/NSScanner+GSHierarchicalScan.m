@@ -12,6 +12,22 @@
 @implementation NSScanner (GSHierarchicalScan)
 
 - (GSScanResult) scanUpToString:(NSString*)target endToken:(NSString*)endToken intoString:(NSString**)intoString {
+    
+    // fast approach if we are targeting single characters
+    if (target.length==1 && endToken.length==1) {
+        NSCharacterSet* set = [NSCharacterSet characterSetWithCharactersInString:[NSString stringWithFormat:@"%@%@", target, endToken]];
+        [self scanUpToCharactersFromSet:set intoString:intoString];
+        if (self.isAtEnd) {
+            return ScanMeetEnd;
+        }
+        else if ([[self atCharacter] isEqualToString:target]) {
+            return ScanMeetTarget;
+        }
+        else {
+            return ScanMeetEndToken;
+        }
+    }
+    
     int locationBeforeScan = self.scanLocation;
     
     [self scanUpToString:target intoString:intoString];
