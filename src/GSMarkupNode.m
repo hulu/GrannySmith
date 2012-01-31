@@ -285,7 +285,16 @@
     }
     if (!found) {
         GSMarkupNode* newChild = [[GSMarkupNode alloc] init];
-        [newChild.data setValuesForKeysWithDictionary:self.data];
+        NSMutableArray* ancestorArray = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
+        GSMarkupNode* ancestor = self;
+        while (ancestor) {
+            [ancestorArray addObject:ancestor];
+            ancestor = ancestor.parent;
+        }
+        for (int i=ancestorArray.count-1; i>=0; i--) {
+            ancestor = [ancestorArray objectAtIndex:i];
+            [newChild.data setValuesForKeysWithDictionary:ancestor.data];
+        }
         [newChild.data setObject:text forKey:GSFancyTextTextKey];
         [GSFancyText createFontKeyForDict:newChild.data];
         [self appendChild:newChild];
