@@ -289,8 +289,11 @@ static int lineID_ = 1;
                 [[currentLine lastObject] setObject:lineText forKey:GSFancyTextTextKey];
             }
             
+            // if we reached line-count limit, squeeze the current line into the last line
+            // and mark this line as "advanced truncation"
             if (currentLineIDLineCountLimit && currentLineIDActualLineCount >= currentLineIDLineCountLimit) {
                 [[lines_ lastObject] addObjectsFromArray:currentLine];
+                [[[lines_ lastObject] objectAtIndex:0] setObject:[NSNumber numberWithBool:YES] forKey:GSFancyTextAdvancedTruncationKey];
             }
             else {
                 CGFloat nextHeight;
@@ -321,6 +324,7 @@ static int lineID_ = 1;
                         if (lastLineID == currentLineID) {
                             NSString* lastText = [lastLineLastSegment objectForKey:GSFancyTextTextKey];
                             [lastLineLastSegment setObject:[NSString stringWithFormat:@"%@ %@", lastText, [[currentLine objectAtIndex:0] objectForKey:GSFancyTextTextKey]] forKey:GSFancyTextTextKey];
+                            [[[lines_ lastObject] objectAtIndex:0] setObject:[NSNumber numberWithBool:YES] forKey:GSFancyTextAdvancedTruncationKey];
                         }
                     }
                     contentHeight_ = totalHeight;
@@ -1541,26 +1545,27 @@ static NSMutableDictionary* fontMemory_;
     
     for (int l=0; l < lines_.count; l++){
         segments = [lines_ objectAtIndex:l];
-        lineLeftMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginLeft] possiblyPercentageNumberWithBase:frameWidth];
-        lineRightMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginRight] possiblyPercentageNumberWithBase:frameWidth];
+        if (!segments.count) {
+            continue;
+        }
+        NSDictionary* firstSegment = [segments objectAtIndex:0];
+        lineLeftMargin = [[firstSegment objectForKey:GSFancyTextMarginLeft] possiblyPercentageNumberWithBase:frameWidth];
+        lineRightMargin = [[firstSegment objectForKey:GSFancyTextMarginRight] possiblyPercentageNumberWithBase:frameWidth];
         lineWidthLimit = frameWidth - lineLeftMargin - lineRightMargin;
         
-        lineID = [[[segments objectAtIndex:0] objectForKey:GSFancyTextLineIDKey] intValue];
+        lineID = [[firstSegment objectForKey:GSFancyTextLineIDKey] intValue];
         if (previousLineID>=0 && lineID!=previousLineID) {
             y += previousLineBottomMargin;
         }
         
         // determine if we need to calculate total width
         GSTextAlign align = 0;
-        NSNumber* alignNumber = [[segments objectAtIndex:0] objectForKey:GSFancyTextTextAlignKey];
+        NSNumber* alignNumber = [firstSegment objectForKey:GSFancyTextTextAlignKey];
         if (alignNumber) {
             align = [alignNumber intValue];
         }
-        UILineBreakMode truncateMode = UILineBreakModeTailTruncation;
-        NSNumber* truncateNumber = [[segments objectAtIndex:0] objectForKey:GSFancyTextTruncateModeKey];
-        if (truncateNumber) {
-            truncateMode = [truncateNumber intValue];
-        }
+        
+        BOOL advancedTruncation = [[firstSegment objectForKey:GSFancyTextAdvancedTruncationKey] boolValue];
         
         h = 0.f;
         w = 0.f;
@@ -1568,57 +1573,36 @@ static NSMutableDictionary* fontMemory_;
         // first loop: preparation (pre-calculate width, height and starting x)
         NSMutableArray* widthForSegment = nil; // the width for each segment. Use this only for head and middle truncation.
         // because for tail truncation and clip, space assignment is first come first serve.
-        if (truncateMode == UILineBreakModeHeadTruncation) {
-            widthForSegment = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
-            for (int i = segments.count-1 ; i>=0; i--) {
-                if (w >= lineWidthLimit) {
-                    [widthForSegment insertObject:[NSNumber numberWithFloat:0] atIndex:0];
-                }
-                else {
-                    getSegmentAtIndexBlock(i);
-                    getSegmentInfoWithWidthBlock();
-                    w += segmentWidth;
-                    [widthForSegment insertObject:[NSNumber numberWithFloat:segmentWidth] atIndex:0];
-                    
-                    updateLineTextHeightBlock();
-                }
-            }
-        }
-        else if (truncateMode == UILineBreakModeMiddleTruncation) {
-            widthForSegment = [[NSMutableArray alloc] initWithCapacity:GSFancyTextTypicalSize];
-            int i;
-            if (segments.count == 1) {
-                [widthForSegment addObject:[NSNumber numberWithFloat:lineWidthLimit]];
-                getSegmentAtIndexBlock(0);
-                getSegmentInfoBlock();
+        
+        if (advancedTruncation) {
+            // advanced truncation case.. a lot of shit here
+            widthForSegment = [[NSMutableArray alloc] initWithCapacity:segments.count];
+            CGFloat totalWidth = 0;
+            for (int i = 0; i<segments.count; i++) {
+                getSegmentAtIndexBlock(i);
+                getSegmentInfoWithWidthBlock();
                 updateLineTextHeightBlock();
+                [widthForSegment addObject:[NSNumber numberWithFloat:segmentWidth]];
+                totalWidth += segmentWidth;
             }
-            else {
-                for (i = 0; i<segments.count; i++) {
-                    getSegmentAtIndexBlock(i);
-                    getSegmentInfoWithWidthBlock();
-                    if (w + segmentWidth >= lineWidthLimit * .7f) { // hold if the width exceeds 2/3 of the line
+            if (totalWidth > lineWidthLimit) {
+                for (int i = 0; i<segments.count; i++) {
+                    CGFloat maxWidth = [[widthForSegment objectAtIndex:i] floatValue];
+                    NSString* minWidthString = [segment objectForKey:GSFancyTextMinWidthKey];
+                    CGFloat minWidth = minWidthString? [minWidthString possiblyPercentageNumberWithBase:frameWidth] : maxWidth;
+                    CGFloat roomToCut = maxWidth>minWidth? (maxWidth - minWidth) : 0.f;
+                    CGFloat needToCut = totalWidth - lineWidthLimit;
+                    
+                    if (roomToCut >= needToCut) {
+                        // if this segment is willing to get enough truncate to save the whole line, it's all set here
+                        [widthForSegment replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:(maxWidth - needToCut)]];
                         break;
                     }
-                    else {
-                        w += segmentWidth;
-                        [widthForSegment addObject:[NSNumber numberWithFloat:segmentWidth]];
-                        updateLineTextHeightBlock();
+                    else if (roomToCut > 0) {
+                        [widthForSegment replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:minWidth]];
+                        totalWidth -= roomToCut;
                     }
                 }
-                for (int j=segments.count - 1; j>i; j--) {
-                    if (w >= lineWidthLimit) {
-                        [widthForSegment insertObject:[NSNumber numberWithFloat:0] atIndex:i];
-                    }
-                    else {
-                        getSegmentAtIndexBlock(j);
-                        getSegmentInfoWithWidthBlock();
-                        [widthForSegment insertObject:[NSNumber numberWithFloat:segmentWidth] atIndex:i];
-                        w += segmentWidth;
-                        updateLineTextHeightBlock();
-                    }
-                }
-                [widthForSegment insertObject:[NSNumber numberWithFloat:lineWidthLimit-w] atIndex:i];
             }
         }
         else { // clip or truncate tail, the simplest cases
@@ -1633,6 +1617,8 @@ static NSMutableDictionary* fontMemory_;
                 }
             }
         }
+        
+        
         
         // determine some geometries
         
@@ -1739,6 +1725,10 @@ static NSMutableDictionary* fontMemory_;
                 CGContextSetFillColorWithColor(ctx, [segmentColor CGColor]);
                 CGContextSetStrokeColorWithColor(ctx, [segmentColor CGColor]);
                 
+                // get truncation
+                NSNumber* truncationNumber = [segment objectForKey:GSFancyTextTruncateModeKey];
+                UILineBreakMode truncateMode = truncationNumber ? [truncationNumber intValue] : UILineBreakModeTailTruncation;
+                
                 // actually draw
                 CGRect textArea = GSRectMakeRounded(x, actualY, segmentWidth, segmentHeight);
                 [segmentText drawInRect:textArea withFont:segmentFont lineBreakMode:truncateMode];
@@ -1797,7 +1787,7 @@ static NSMutableDictionary* fontMemory_;
 
     if (![dict objectForKey:GSFancyTextLineIDKey]) {
         
-        NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:GSFancyTextTextAlignKey, GSFancyTextLineCountKey, GSFancyTextTruncateModeKey, GSFancyTextMarginTop, GSFancyTextMarginBottom, GSFancyTextMarginLeft, GSFancyTextMarginRight, nil];
+        NSArray* attribsForPOnly = [[NSArray alloc] initWithObjects:GSFancyTextTextAlignKey, GSFancyTextLineCountKey, GSFancyTextMarginTop, GSFancyTextMarginBottom, GSFancyTextMarginLeft, GSFancyTextMarginRight, nil];
         
 #ifdef GS_DEBUG_MARKUP
         NSArray* classNames = [dict objectForKey: GSFancyTextClassKey];

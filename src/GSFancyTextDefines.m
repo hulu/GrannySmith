@@ -30,6 +30,7 @@ NSString* const GSFancyTextMarginRight  = @"margin-right";
 
 NSString* const GSFancyTextLineCountKey  = @"line-count";
 NSString* const GSFancyTextTruncateModeKey  = @"truncate-mode";
+NSString* const GSFancyTextMinWidthKey = @"min-width";
 NSString* const GSFancyTextAltKey = @"alt";
 
 #pragma mark - values
@@ -82,4 +83,6 @@ NSString* const GSFancyTextFontKey  = @"font";
 NSString* const GSFancyTextLineIDKey  = @"line-id";
 NSString* const GSFancyTextTagClosingKey  = @"is-closing-tag";
 NSString* const GSFancyTextElementNameKey  = @"element-name";
-NSString* const GSFancyTextInternalLambdaIDKey  = @"hulu-fancy-text-internal-lambda-id";
+NSString* const GSFancyTextInternalLambdaIDKey  = @"granny-smith-fancy-text-internal-lambda-id";
+NSString* const GSFancyTextAdvancedTruncationKey  = @"advanced-truncation";
+

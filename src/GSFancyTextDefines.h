@@ -80,6 +80,7 @@ extern NSString* const GSFancyTextMarginRight;  // @"margin-right"
 /// some special attributes
 extern NSString* const GSFancyTextLineCountKey;  // @"line-count"
 extern NSString* const GSFancyTextTruncateModeKey;  // @"truncate-mode"
+extern NSString* const GSFancyTextMinWidthKey; // @"min-width"
 extern NSString* const GSFancyTextAltKey;  // @"alt"
 
 /// values
@@ -135,7 +136,8 @@ extern NSString* const GSFancyTextFontKey;  // @"font"
 extern NSString* const GSFancyTextLineIDKey;  // @"line-id"
 extern NSString* const GSFancyTextTagClosingKey;  // @"is-closing-tag"
 extern NSString* const GSFancyTextElementNameKey;  // @"element-name"
-extern NSString* const GSFancyTextInternalLambdaIDKey;  // @"hulu-fancy-text-internal-lambda-id"
+extern NSString* const GSFancyTextInternalLambdaIDKey;  // @"granny-smith-fancy-text-internal-lambda-id"
+extern NSString* const GSFancyTextAdvancedTruncationKey; // @"advanced-truncation"
 
 
 ///---------------
