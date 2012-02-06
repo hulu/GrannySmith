@@ -1768,6 +1768,22 @@ static NSMutableDictionary* fontMemory_;
     }
 }
 
+# pragma mark - Node searching
+
+- (GSMarkupNode*)nodeWithID:(NSString*)nodeID {
+    if (!parsedTree_) {
+        [self parseStructure];
+    }
+    return [parsedTree_ childNodeWithID:nodeID];
+}
+
+- (NSArray*)nodesWithClass:(NSString*)className {
+    if (!parsedTree_) {
+        [self parseStructure];
+    }
+    return [parsedTree_ childrenNodesWithClassName:className];
+}
+
 
 # pragma mark - helper
 

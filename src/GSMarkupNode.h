@@ -121,6 +121,12 @@
  */
 - (NSArray*)childrenNodesWithClassName:(NSString*)className;
 
+/** First child of this node
+ *
+ * This is very useful when you have something like <span id=xxx>some text</span>. You can get the <span> node easily through ID search, then with firstChild method you get the text inside the span container node
+ */
+- (GSMarkupNode*)firstChild;
+
 
 ///-------------------------------
 /// @name Modification

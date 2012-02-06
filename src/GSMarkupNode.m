@@ -174,6 +174,15 @@
 }
 
 
+- (GSMarkupNode*)firstChild {
+    if (self.isContainer && self.children.count) {
+        return [self.children objectAtIndex:0];
+    }
+    else {
+        return nil;
+    }
+}
+
 - (id)copy {
     
     GSMarkupNode* newGuy = [[GSMarkupNode alloc] init];

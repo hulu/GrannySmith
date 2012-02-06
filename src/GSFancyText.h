@@ -166,6 +166,19 @@
 - (void)defineLambdaID:(NSString*)lambdaID withBlock:(void(^)(CGRect))drawingBlock;
 
 
+///----------------------
+/// @name Node searching
+///----------------------
+
+/** Find the node with a certain ID
+ */
+- (GSMarkupNode*)nodeWithID:(NSString*)nodeID;
+
+/** Find a list of nodes with a certain class name
+ */
+- (NSArray*)nodesWithClass:(NSString*)className;
+
+
 ///--------------------
 /// @name Global style
 ///--------------------

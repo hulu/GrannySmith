@@ -94,6 +94,8 @@
 	
 	<option value="//api/name/contentHeight">&nbsp;&nbsp;&nbsp;&nbsp;- contentHeight</option>
 	
+	<option value="//api/name/contentWidth">&nbsp;&nbsp;&nbsp;&nbsp;- contentWidth</option>
+	
 	<option value="//api/name/defineLambdaID:withBlock:">&nbsp;&nbsp;&nbsp;&nbsp;- defineLambdaID:withBlock:</option>
 	
 	<option value="//api/name/drawInRect:">&nbsp;&nbsp;&nbsp;&nbsp;- drawInRect:</option>
@@ -107,6 +109,10 @@
 	<option value="//api/name/initWithParsedStructure:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithParsedStructure:</option>
 	
 	<option value="//api/name/lines">&nbsp;&nbsp;&nbsp;&nbsp;- lines</option>
+	
+	<option value="//api/name/nodeWithID:">&nbsp;&nbsp;&nbsp;&nbsp;- nodeWithID:</option>
+	
+	<option value="//api/name/nodesWithClass:">&nbsp;&nbsp;&nbsp;&nbsp;- nodesWithClass:</option>
 	
 	<option value="//api/name/parseStructure">&nbsp;&nbsp;&nbsp;&nbsp;- parseStructure</option>
 	
@@ -145,6 +151,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Information">Information</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Lambda block">Lambda block</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Node searching">Node searching</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Global style">Global style</a></span></li>
 	
@@ -228,6 +236,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentHeight">contentHeight</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentWidth">contentWidth</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/defineLambdaID:withBlock:">defineLambdaID:withBlock:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/drawInRect:">drawInRect:</a></span></li>
@@ -241,6 +251,10 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithParsedStructure:">initWithParsedStructure:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/lines">lines</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/nodeWithID:">nodeWithID:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/nodesWithClass:">nodesWithClass:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parseStructure">parseStructure</a></span></li>
 	
@@ -454,6 +468,13 @@
 	</span>
 	
 	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contentWidth">&ndash;&nbsp;contentWidth</a></code>
+		<span class="tooltip"><p>Returns the content <a href="#//api/name/width">width</a> after generating <a href="#//api/name/lines">lines</a></p></span>
+	</span>
+	
+	
 </li>
 						</ul>
 						
@@ -466,6 +487,28 @@
 	<span class="tooltip">
 		<code><a href="#//api/name/defineLambdaID:withBlock:">&ndash;&nbsp;defineLambdaID:withBlock:</a></code>
 		<span class="tooltip"><p>Set the drawing block for a lambda ID, so that in the fancy <a href="#//api/name/text">text</a> markup string, the tag &lt;lambda id=lambdaID width=xxx height=xxx> will be replaced by this drawing</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Node searching" name="task_Node searching"></a>
+						<h3 class="subsubtitle task-title">Node searching</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/nodeWithID:">&ndash;&nbsp;nodeWithID:</a></code>
+		<span class="tooltip"><p>Find the node with a certain ID</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/nodesWithClass:">&ndash;&nbsp;nodesWithClass:</a></code>
+		<span class="tooltip"><p>Find a list of nodes with a certain class name</p></span>
 	</span>
 	
 	
@@ -1746,6 +1789,47 @@
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/contentWidth" title="contentWidth"></a>
+	<h3 class="subsubtitle method-title">contentWidth</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the content <a href="#//api/name/width">width</a> after generating <a href="#//api/name/lines">lines</a></p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (CGFloat)contentWidth</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Returns the content <a href="#//api/name/width">width</a> after generating <a href="#//api/name/lines">lines</a></p>
+
+<p>Call this only after doing <a href="#//api/name/generateLines">generateLines</a></p>
+
+<p>Note: this is used when the original assigned <a href="#//api/name/width">width</a> is too big, and actually none of the <a href="#//api/name/lines">lines</a> reached the <a href="#//api/name/width">width</a>. This method gives the actually reached <a href="#//api/name/width">width</a>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSFancyText.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/defineLambdaID:withBlock:" title="defineLambdaID:withBlock:"></a>
 	<h3 class="subsubtitle method-title">defineLambdaID:withBlock:</h3>
 	
@@ -1922,6 +2006,16 @@
 	<div class="method-subsection method-declaration"><code>- (id)initWithMarkupText:(NSString *)<em>text</em> styleDict:(NSMutableDictionary *)<em>styleDict</em> width:(CGFloat)<em>width</em> maxHeight:(CGFloat)<em>maxHeight</em></code></div>
 	
 	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>maxHeight</em></dt>
+			<dd><p>is limit of the height. Use 0 if there is no height limit. Use <a href="#//api/name/contentHeight">contentHeight</a> method to get the actual height (must be after <a href="#//api/name/generateLines">generateLines</a>)</p></dd>
+		</dl>
+		
+	</div>
+	
 	
 	
 	
@@ -1930,7 +2024,9 @@
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>Initialize with a markup <a href="#//api/name/text">text</a> (unparsed), a CSS dictionary (obtained with parsedCSS method), a <a href="#//api/name/width">width</a>, and a <a href="#//api/name/maxHeight">maxHeight</a></p>
 
-<p>This is the most low level initialization method.</p>
+<p>The global <a href="#//api/name/style">style</a> sheet (if set) is also applied, but the styleDict will be on top of it (higher priority).</p>
+
+<p>Note: global <a href="#//api/name/style">style</a> will be applied with this init method, and the passed styleDict param will override on top.</p>
 	</div>
 	
 	
@@ -2020,6 +2116,80 @@
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>The result of <a href="#//api/name/generateLines">generateLines</a></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSFancyText.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/nodeWithID:" title="nodeWithID:"></a>
+	<h3 class="subsubtitle method-title">nodeWithID:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Find the node with a certain ID</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (GSMarkupNode *)nodeWithID:(NSString *)<em>nodeID</em></code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Find the node with a certain ID</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GSFancyText.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/nodesWithClass:" title="nodesWithClass:"></a>
+	<h3 class="subsubtitle method-title">nodesWithClass:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Find a list of nodes with a certain class name</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (NSArray *)nodesWithClass:(NSString *)<em>className</em></code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Find a list of nodes with a certain class name</p>
 	</div>
 	
 	
@@ -2213,7 +2383,7 @@
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Hulu. All rights reserved. (Last updated: 2012-01-23)</span><br />
+						<p><span class="copyright">&copy; 2012 Hulu. All rights reserved. (Last updated: 2012-02-06)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.4 (build 703)</a>.</span></p>
 						

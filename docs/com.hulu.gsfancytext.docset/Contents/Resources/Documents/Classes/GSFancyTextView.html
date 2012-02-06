@@ -53,7 +53,7 @@
 	
 	<option value="//api/name/updateAccessibilityLabel">&nbsp;&nbsp;&nbsp;&nbsp;- updateAccessibilityLabel</option>
 	
-	<option value="//api/name/updateWithCurrentFrame">&nbsp;&nbsp;&nbsp;&nbsp;- updateWithCurrentFrame</option>
+	<option value="//api/name/updateDisplay">&nbsp;&nbsp;&nbsp;&nbsp;- updateDisplay</option>
 	
 	
 	
@@ -107,7 +107,7 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/updateAccessibilityLabel">updateAccessibilityLabel</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/updateDisplay">updateDisplay</a></span></li>
 	
 </ul></li>
 
@@ -174,7 +174,7 @@
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/contentHeight">&nbsp;&nbsp;contentHeight</a></code>
-		<span class="tooltip"><p>The content height of the <a href="#//api/name/fancyText">fancyText</a> object</p></span>
+		<span class="tooltip"><p>The content height of the <a href="#//api/name/fancyText">fancyText</a> object.</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -182,7 +182,7 @@
 	<span class="tooltip">
 		<code><a href="#//api/name/matchFrameHeightToContent">&nbsp;&nbsp;matchFrameHeightToContent</a></code>
 		<span class="tooltip"><p>If <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> is set to YES, the view frame height will be set to match the content height
-every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</a> method is called.</p></span>
+every time <a href="#//api/name/updateDisplay">updateDisplay</a> method is called.</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -211,8 +211,8 @@ every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/updateWithCurrentFrame">&ndash;&nbsp;updateWithCurrentFrame</a></code>
-		<span class="tooltip"><p>Inform <a href="#//api/name/fancyText">fancyText</a> model object the frame change (mainly width) and let it re-calculate the drawing</p></span>
+		<code><a href="#//api/name/updateDisplay">&ndash;&nbsp;updateDisplay</a></code>
+		<span class="tooltip"><p>Whenever the <a href="#//api/name/fancyText">fancyText</a> parsed structure changes, or view frame changes, call this method to make sure that the display will be updated.</p></span>
 	</span>
 	
 	
@@ -258,11 +258,11 @@ every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The content height of the <a href="#//api/name/fancyText">fancyText</a> object</p>
+		<p>The content height of the <a href="#//api/name/fancyText">fancyText</a> object.</p>
 	</div>		
 	
 	
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) CGFloat contentHeight</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign, readonly) CGFloat contentHeight</code></div>
 	
 	
 	
@@ -271,7 +271,7 @@ every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>The content height of the <a href="#//api/name/fancyText">fancyText</a> object</p>
+		<p>The content height of the <a href="#//api/name/fancyText">fancyText</a> object.</p>
 	</div>
 	
 	
@@ -333,7 +333,7 @@ every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</
 	
 	<div class="method-subsection brief-description">
 		<p>If <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> is set to YES, the view frame height will be set to match the content height
-every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</a> method is called.</p>
+every time <a href="#//api/name/updateDisplay">updateDisplay</a> method is called.</p>
 	</div>		
 	
 	
@@ -347,9 +347,9 @@ every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>If <a href="#//api/name/matchFrameHeightToContent">matchFrameHeightToContent</a> is set to YES, the view frame height will be set to match the content height
-every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</a> method is called.</p>
+every time <a href="#//api/name/updateDisplay">updateDisplay</a> method is called.</p>
 
-<p>If it&rsquo;s set to NO, every time we call <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</a>, only the new width will be used to affect the line height.</p>
+<p>If it&rsquo;s set to NO, every time we call <a href="#//api/name/updateDisplay">updateDisplay</a>, only the new width will be used to affect the line height.</p>
 	</div>
 	
 	
@@ -492,17 +492,17 @@ every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/updateWithCurrentFrame" title="updateWithCurrentFrame"></a>
-	<h3 class="subsubtitle method-title">updateWithCurrentFrame</h3>
+	<a name="//api/name/updateDisplay" title="updateDisplay"></a>
+	<h3 class="subsubtitle method-title">updateDisplay</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Inform <a href="#//api/name/fancyText">fancyText</a> model object the frame change (mainly width) and let it re-calculate the drawing</p>
+		<p>Whenever the <a href="#//api/name/fancyText">fancyText</a> parsed structure changes, or view frame changes, call this method to make sure that the display will be updated.</p>
 	</div>		
 	
 	
-	<div class="method-subsection method-declaration"><code>- (void)updateWithCurrentFrame</code></div>
+	<div class="method-subsection method-declaration"><code>- (void)updateDisplay</code></div>
 	
 	
 	
@@ -511,7 +511,9 @@ every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Inform <a href="#//api/name/fancyText">fancyText</a> model object the frame change (mainly width) and let it re-calculate the drawing</p>
+		<p>Whenever the <a href="#//api/name/fancyText">fancyText</a> parsed structure changes, or view frame changes, call this method to make sure that the display will be updated.</p>
+
+<p>It will do 3 things: 1. re-generate the lines, 2. update the view height is demanded, 3. setNeedsDisplay for the view</p>
 
 <p>For best visual experience, call this method in view controller&rsquo;s willAnimateRotationToInterfaceOrientation:duration: method</p>
 
@@ -545,7 +547,7 @@ every time <a href="#//api/name/updateWithCurrentFrame">updateWithCurrentFrame</
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Hulu. All rights reserved. (Last updated: 2012-01-23)</span><br />
+						<p><span class="copyright">&copy; 2012 Hulu. All rights reserved. (Last updated: 2012-02-06)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.4 (build 703)</a>.</span></p>
 						

@@ -1,4 +1,4 @@
 Documentation set was installed to Xcode!
 
 Path: docs/com.hulu.gsfancytext.docset
-Time: 2012-01-24 02:30:07 +0000
+Time: 2012-02-06 20:10:07 +0000

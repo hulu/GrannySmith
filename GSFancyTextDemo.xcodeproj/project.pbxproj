@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B58D1AF914D5ED9000B7FAEB /* NSString+GSHTML.m in Sources */ = {isa = PBXBuildFile; fileRef = B58D1AF714D5ED7F00B7FAEB /* NSString+GSHTML.m */; };
+		EC218E5C14E06707009BE809 /* GSHierarchicalScanTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC218E5B14E06707009BE809 /* GSHierarchicalScanTest.m */; };
 		EC2F285E14BF7EF8007D8644 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC2F285514BF7EF8007D8644 /* InfoPlist.strings */; };
 		EC2F285F14BF7EF8007D8644 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC2F285514BF7EF8007D8644 /* InfoPlist.strings */; };
 		EC2F286014BF7EF8007D8644 /* GSFancyTextAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F285814BF7EF8007D8644 /* GSFancyTextAppDelegate.m */; };
@@ -18,7 +19,6 @@
 		EC2F287314BF7F13007D8644 /* GSMarkupNodeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F286E14BF7F13007D8644 /* GSMarkupNodeTest.m */; };
 		EC2F287414BF7F13007D8644 /* GSParsingHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F286F14BF7F13007D8644 /* GSParsingHelperTest.m */; };
 		EC34B58314D60C4700653715 /* GSHTMLTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC34B58214D60C4700653715 /* GSHTMLTest.m */; };
-		EC6139B814D7275D00FE45A3 /* GSHierarchicalScanTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC6139B714D7275D00FE45A3 /* GSHierarchicalScanTest.m */; };
 		EC61850314BCC17500E1DA2F /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A2D14BBE9D50016D910 /* SenTestingKit.framework */; };
 		EC61850414BCC17500E1DA2F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1514BBE9D40016D910 /* UIKit.framework */; };
 		EC61850514BCC17500E1DA2F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
@@ -48,6 +48,7 @@
 		B58D1AF614D5ED7F00B7FAEB /* NSString+GSHTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+GSHTML.h"; sourceTree = "<group>"; };
 		B58D1AF714D5ED7F00B7FAEB /* NSString+GSHTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+GSHTML.m"; sourceTree = "<group>"; };
 		EC0A301514BF8CC200AD98CE /* GSFancyTextTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GSFancyTextTest-Info.plist"; path = "tests/GSFancyTextTest-Info.plist"; sourceTree = SOURCE_ROOT; };
+		EC218E5B14E06707009BE809 /* GSHierarchicalScanTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSHierarchicalScanTest.m; path = tests/GSHierarchicalScanTest.m; sourceTree = SOURCE_ROOT; };
 		EC2F285614BF7EF8007D8644 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		EC2F285714BF7EF8007D8644 /* GSFancyTextAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GSFancyTextAppDelegate.h; path = demo/GSFancyTextAppDelegate.h; sourceTree = SOURCE_ROOT; };
 		EC2F285814BF7EF8007D8644 /* GSFancyTextAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSFancyTextAppDelegate.m; path = demo/GSFancyTextAppDelegate.m; sourceTree = SOURCE_ROOT; };
@@ -62,7 +63,6 @@
 		EC2F286E14BF7F13007D8644 /* GSMarkupNodeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSMarkupNodeTest.m; path = tests/GSMarkupNodeTest.m; sourceTree = SOURCE_ROOT; };
 		EC2F286F14BF7F13007D8644 /* GSParsingHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSParsingHelperTest.m; path = tests/GSParsingHelperTest.m; sourceTree = SOURCE_ROOT; };
 		EC34B58214D60C4700653715 /* GSHTMLTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSHTMLTest.m; path = tests/GSHTMLTest.m; sourceTree = SOURCE_ROOT; };
-		EC6139B714D7275D00FE45A3 /* GSHierarchicalScanTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSHierarchicalScanTest.m; sourceTree = SOURCE_ROOT; };
 		EC61850214BCC17500E1DA2F /* GSFancyTextTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GSFancyTextTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC61851914BCC3F200E1DA2F /* GSFancyText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSFancyText.h; sourceTree = "<group>"; };
 		EC61851A14BCC3F200E1DA2F /* GSFancyText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GSFancyText.m; sourceTree = "<group>"; };
@@ -136,7 +136,7 @@
 				EC2F286E14BF7F13007D8644 /* GSMarkupNodeTest.m */,
 				EC2F286F14BF7F13007D8644 /* GSParsingHelperTest.m */,
 				EC34B58214D60C4700653715 /* GSHTMLTest.m */,
-				EC6139B714D7275D00FE45A3 /* GSHierarchicalScanTest.m */,
+				EC218E5B14E06707009BE809 /* GSHierarchicalScanTest.m */,
 			);
 			name = tests;
 			path = HUFancyTextTest;
@@ -329,7 +329,7 @@
 				EC2F287314BF7F13007D8644 /* GSMarkupNodeTest.m in Sources */,
 				EC2F287414BF7F13007D8644 /* GSParsingHelperTest.m in Sources */,
 				EC34B58314D60C4700653715 /* GSHTMLTest.m in Sources */,
-				EC6139B814D7275D00FE45A3 /* GSHierarchicalScanTest.m in Sources */,
+				EC218E5C14E06707009BE809 /* GSHierarchicalScanTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
