@@ -1704,7 +1704,6 @@ static NSMutableDictionary* fontMemory_;
             
             // draw
             if (segmentIsLambda) {
-                // to do: call block method
                 NSString* lambdaID = [segment objectForKey:GSFancyTextInternalLambdaIDKey];
                 CGFloat lwidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
                 CGFloat lheight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
@@ -1844,7 +1843,8 @@ static NSMutableDictionary* fontMemory_;
     newFancyText.style = newStyle;
     GSRelease(newStyle);
     
-    NSMutableDictionary* newlambdaBlocks = [self.lambdaBlocks copy];
+    NSMutableDictionary* newlambdaBlocks = [[NSMutableDictionary alloc] initWithCapacity:self.lambdaBlocks.allKeys.count]; //[self.lambdaBlocks copy];
+    [newlambdaBlocks setValuesForKeysWithDictionary:self.lambdaBlocks];
     newFancyText.lambdaBlocks = newlambdaBlocks;
     GSRelease(newlambdaBlocks);
  
