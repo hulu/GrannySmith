@@ -1587,6 +1587,7 @@ static NSMutableDictionary* fontMemory_;
             }
             if (totalWidth > lineWidthLimit) {
                 for (int i = 0; i<segments.count; i++) {
+                    getSegmentAtIndexBlock(i);
                     CGFloat maxWidth = [[widthForSegment objectAtIndex:i] floatValue];
                     NSString* minWidthString = [segment objectForKey:GSFancyTextMinWidthKey];
                     CGFloat minWidth = minWidthString? [minWidthString possiblyPercentageNumberWithBase:frameWidth] : maxWidth;
