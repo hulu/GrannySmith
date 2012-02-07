@@ -9,6 +9,8 @@
 #import "NSString+GSParsingHelper.h"
 #import "GSFancyTextDefines.h"
 
+const CGFloat ConservativeSpaceReservation = 1.f;
+
 @implementation NSString (GSParsingHelper)
 
 - (NSMutableArray*) linesWithWidth:(CGFloat)width font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
@@ -25,7 +27,9 @@
             [firstLineBlocked appendString:@" "];
         }
         // there will always be 1 or 2 space mismatch..
-        while ([firstLineBlocked sizeWithFont:font].width < width - firstLineWidth) {
+        while ([firstLineBlocked sizeWithFont:font].width <= width - firstLineWidth + ConservativeSpaceReservation) {
+            // about the "<=" (instead of "<") and +2: to be more conservative on space occupation
+            
             [firstLineBlocked appendString:@" "];
         }
     }
