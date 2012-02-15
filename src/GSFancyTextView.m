@@ -13,6 +13,7 @@
 @synthesize contentHeight = contentHeight_;
 @synthesize fancyText = fancyText_;
 @synthesize matchFrameHeightToContent = matchFrameHeightToContent_;
+@synthesize matchFrameWidthToContent = matchFrameWidthToContent_;
 
 #ifdef GS_ARC_ENABLED
 #else
@@ -51,6 +52,9 @@
     if (matchFrameHeightToContent_) {
         [self setFrameHeightToContentHeight];
     }
+    if (matchFrameWidthToContent_) {
+        [self setFrameWidthToContentWidth];
+    }
     [self setNeedsDisplay];
 }
 
@@ -67,5 +71,22 @@
     frame.size.height = expectedHeight;
     self.frame = frame;
 }
+
+- (void)setFrameWidthToContentWidth {
+    CGFloat width = [fancyText_ contentWidth];
+    if (!width) {
+        [fancyText_ generateLines];
+        width = [fancyText_ contentWidth];
+    }
+    if (width > self.frame.size.width) {
+        // decrease width only. Don't increase.
+        return;
+    }
+    
+    CGRect frame = self.frame;
+    frame.size.width = width;
+    self.frame = frame;
+}
+
 
 @end

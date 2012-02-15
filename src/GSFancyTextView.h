@@ -20,6 +20,7 @@
     CGFloat contentHeight_;
     
     BOOL matchFrameHeightToContent_;
+    BOOL matchFrameWidthToContent_;
 }
 
 /// @name Properties
@@ -36,6 +37,12 @@
  * If it's set to NO, every time we call updateDisplay, only the new width will be used to affect the line height.
  */
 @property (nonatomic, assign) BOOL matchFrameHeightToContent;
+
+
+/** If it is set to YES, the view frame width will be set to match the content width (if the actually content is narrower than assigned width)
+ * every time updateDisplay method is called.
+ */
+@property (nonatomic, assign) BOOL matchFrameWidthToContent;
 
 /// @name Initialization
 
@@ -63,6 +70,12 @@
  * Note: this method sets frame height for once. For automatical frame height update, see matchFrameHeightToContent property.
  */
 - (void)setFrameHeightToContentHeight;
+
+/** Updates the frame size based on fancyText content width
+ *
+ * Does it once. For automatical frame width update, see matchFrameWidthToContent property.
+ */
+- (void)setFrameWidthToContentWidth;
 
 /// @name Accessibility label
 
