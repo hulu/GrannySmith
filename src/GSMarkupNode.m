@@ -37,6 +37,7 @@
     GSRelease(children_);
     GSRelease(IDMap_);
     GSRelease(classesMap_);
+    GSRelease(data_);
     [super dealloc];
 }
 #endif
