@@ -232,6 +232,7 @@
         for (int i=0; i<nodeInOldTree.children.count; i++) {
             GSMarkupNode* childForNewTree = [[GSMarkupNode alloc] init];
             [nodeInNewTree appendChild: childForNewTree]; // declare child relation
+            GSRelease(childForNewTree);
         }
         
         for (int i=nodeInOldTree.children.count-1; i>=0; i--) {
@@ -309,6 +310,7 @@
         [GSFancyText createFontKeyForDict:newChild.data];
         [self appendChild:newChild];
         GSRelease(newChild);
+        GSRelease(ancestorArray);
     }
 }
 

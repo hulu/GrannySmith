@@ -648,7 +648,10 @@ static NSString* unescapedStringForEntity(NSString *entity) {
         // the held ampersand will either be an ampersand or an empty string
         [rString appendString:heldAmpersand];
     }
-    return rString;
+    
+    GSRelease(scanner);
+    
+    return GSAutoreleased(rString);
 }
 
 @end

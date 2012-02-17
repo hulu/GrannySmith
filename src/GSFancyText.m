@@ -1818,6 +1818,7 @@ static NSMutableDictionary* fontMemory_;
         for (NSString* attrib in attribsForPOnly) {
             [dict removeObjectForKey:attrib];
         }
+        GSRelease(attribsForPOnly);
     }
 }
 
