@@ -93,6 +93,7 @@ static int lineID_ = 1;
 - (void)dealloc {
     GSRelease(style_);
     GSRelease(text_);
+    GSRelease(lines_);
     GSRelease(parsedTree_);
     GSRelease(lambdaBlocks_);
     [super dealloc];
