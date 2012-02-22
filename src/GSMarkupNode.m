@@ -344,6 +344,7 @@
         
         if (!stylesToRemove.count) {
             removeOldStyles = NO; // if there's nothing necessary to remove, just don't bother checking every time
+            GSRelease(stylesToRemoveStack);
         }
     }
     
@@ -422,6 +423,9 @@
                 GSAutorelease(stylesToRemoveForChild);
             }
         }
+    }
+    if (removeOldStyles) {
+        GSRelease(stylesToRemoveStack);
     }
     GSRelease(stack);
     GSRelease(styleStack);
