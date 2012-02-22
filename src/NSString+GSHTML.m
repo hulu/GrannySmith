@@ -581,7 +581,8 @@ static NSString* unescapedStringForEntity(NSString *entity) {
             [rString appendString:newString];
         }
         if (scanner.isAtEnd) {
-            return rString;
+            GSRelease(scanner);
+            return GSAutoreleased(rString);
         }
 
         // next time you see a ;, unescape stuff if you need to. 
@@ -603,7 +604,7 @@ static NSString* unescapedStringForEntity(NSString *entity) {
                 // held ampersand will either be an ampersand or an empty string,
                 // but we now know it's not important for parsing now
                 [rString appendString:heldAmpersand];
-                heldAmpersand = @"";
+                // heldAmpersand = @"";
 
                 // put everything you've got so far into the rString and restart this loop
                 if (newString) {
