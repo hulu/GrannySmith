@@ -42,7 +42,8 @@
 - (NSString*)stringByTrimmingTrailingWhitespace;
 
 /** Returns the first non-whitespace/newline character (in NSString)
- * @example @"   xyz" gives @"x". And the foundLocation will be set to 3
+ *
+ * For example @"   xyz" gives @"x". And the foundLocation will be set to 3
  * @return @"" if the string is totally made up with whitespace chars
  */
 - (NSString*)firstNonWhitespaceCharacterSince:(int)location foundAt:(int*)foundLocation;
