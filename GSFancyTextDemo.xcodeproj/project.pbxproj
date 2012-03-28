@@ -32,6 +32,7 @@
 		EC6B5A1614BBE9D40016D910 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1514BBE9D40016D910 /* UIKit.framework */; };
 		EC6B5A1814BBE9D40016D910 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
 		EC6B5A1A14BBE9D40016D910 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1914BBE9D40016D910 /* CoreGraphics.framework */; };
+		ECFEEE751523C790005484CE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = ECFEEE741523C78F005484CE /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		EC6B5A1714BBE9D40016D910 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		EC6B5A1914BBE9D40016D910 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		EC6B5A2D14BBE9D50016D910 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		ECFEEE741523C78F005484CE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +168,7 @@
 		EC6B5A0614BBE9D40016D910 = {
 			isa = PBXGroup;
 			children = (
+				ECFEEE741523C78F005484CE /* README.md */,
 				ECFDC57314BBEB950084F4CB /* GSFancyText */,
 				EC6B5A1B14BBE9D40016D910 /* demo */,
 				EC61850614BCC17500E1DA2F /* tests */,
@@ -299,6 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC2F285E14BF7EF8007D8644 /* InfoPlist.strings in Resources */,
+				ECFEEE751523C790005484CE /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
