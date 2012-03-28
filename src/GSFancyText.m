@@ -3,7 +3,7 @@
 //  -GrannySmith-
 //
 //  Created by Bao Lei on 12/15/11.
-//  Copyright (c) 2011 Hulu. All rights reserved.
+//  Copyright (c) 2011 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #import "GSFancyText.h"
@@ -27,7 +27,7 @@ static int lineID_ = 1;
 + (NSMutableDictionary*)newParsedStyleAttributesFromScanner:(NSScanner*)scanner;
 
 /** part of newParsedMarkupString:withStyleDict:
- * Parse the "span class=abc", "/p", etc, inside the markup tags
+ * Parse the "span class=xyz", "/p", etc, inside the markup tags
  */
 + (NSMutableDictionary*)newStyleFromCurrentTagInScanner:(NSScanner*)scanner withStyleDict:(NSDictionary*)styleDict;
 

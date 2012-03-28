@@ -3,7 +3,7 @@
 //  GSFancyTextDemo
 //
 //  Created by Ben Acland on 1/29/12.
-//  Copyright (c) 2012 Hulu. All rights reserved.
+//  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #import "NSString+GSHTML.h"
@@ -555,7 +555,7 @@ static NSString* unescapedStringForEntity(NSString *entity) {
     return GSAutoreleased([entity copy]);
 }
 
-@implementation NSString (GSHTML)
+@implementation NSString(GSHTML)
 
 - (NSString*)unescapeHTMLEntities {
     if ([self length] == 0) {

@@ -3,12 +3,12 @@
 //  GSFancyTextDemo
 //
 //  Created by Ben Acland on 1/29/12.
-//  Copyright (c) 2012 Hulu. All rights reserved.
+//  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 
 
-@interface NSString (GSHTML)
+@interface NSString(GSHTML)
 
 /** 
  Unescapes all of the entities listed at http://www.w3.org/TR/WD-html40-970708/sgml/entities.html

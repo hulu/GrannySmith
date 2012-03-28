@@ -3,7 +3,7 @@
 //  -GrannySmith-
 //
 //  Created by Bao Lei on 12/15/11.
-//  Copyright (c) 2011 Hulu. All rights reserved.
+//  Copyright (c) 2011 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 /// GSFancyText does parsing and stores parsing result and generated lines.
@@ -105,7 +105,7 @@
 /// @name Markup parsing
 ///--------------------
 
-/** Parse the markup text (e.g. "abc &lt;p class=xyz>def&lt;/p>") 
+/** Parse the markup text (e.g. "xyz <p class=xyz>def</p>") 
  *
  * After parsing, we can always call parsedResultTree to retrieve the result tree
  *
@@ -160,7 +160,7 @@
 /// @name Lambda block
 ///--------------------
 
-/** Set the drawing block for a lambda ID, so that in the fancy text markup string, the tag &lt;lambda id=lambdaID width=xxx height=xxx> will be replaced by this drawing
+/** Set the drawing block for a lambda ID, so that in the fancy text markup string, the tag <lambda id=lambdaID width=xxx height=xxx> will be replaced by this drawing
  * @param drawingBlock is the block for drawing, it takes one CGRect parameter, which is the frame for drawing
  */
 - (void)defineLambdaID:(NSString*)lambdaID withBlock:(void(^)(CGRect))drawingBlock;
@@ -256,13 +256,13 @@
 
 /** Change a node to text.
  *
- * Example: for "ABC &lt;span id=x>123 &lt;span>456&lt;/span> &lt;/span> DEF", changeNodeToText:@"000" forID:@"x" will give "ABC &lt;span id=x>000&lt;/span> DEF"
+ * Example: for "xyz <span id=x>123 <span>456</span> </span> DEF", changeNodeToText:@"000" forID:@"x" will give "xyz <span id=x>000</span> DEF"
  */
 - (void)changeNodeToText:(NSString*)text forID:(NSString*)nodeID;
 
 /** Change a node to a styled text (to be parsed).
  *
- * It's similar to changeNodeToText:forID: but the styledText can have markup tags, e.g. &lt;strong>text&lt;/strong>
+ * It's similar to changeNodeToText:forID: but the styledText can have markup tags, e.g. <strong>text</strong>
  *
  * It can also refer to classes that is either stored in this GSFancyText instance or the global/default style sheet
  */
@@ -270,13 +270,13 @@
 
 /** Append a styled text (to be parsed) to a node
  *
- * Example: for "ABC &lt;span id=x>123 &lt;span>456&lt;/span> &lt;/span> DEF", if we append "a &lt;em>e&lt;/em>" to "x", "a &lt;em>e&lt;/em>" will go after &lt;span>456&lt;/span>
+ * Example: for "xyz <span id=x>123 <span>456</span> </span> DEF", if we append "a <em>e</em>" to "x", "a <em>e</em>" will go after <span>456</span>
  */
 - (void)appendStyledText:(NSString*)text toID:(NSString*)nodeID;
 
 /** Totally cut the node with the given ID
  *
- * Example: for "ABC &lt;span id=x>123 &lt;span>456&lt;/span> &lt;/span> DEF", removeID:@"x" will give "ABC  DEF"
+ * Example: for "xyz <span id=x>123 <span>456</span> </span> DEF", removeID:@"x" will give "xyz  DEF"
  */
 - (void)removeID: (NSString*)nodeID;
 
@@ -297,7 +297,7 @@
  *
  * This just changes styles, but doesn't change class mapping.
  *
- * Example: if we have &lt;p class=a>123&lt;/p>, and we called applyClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
+ * Example: if we have <p class=a>123</p>, and we called applyClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
  *
  * But searching 123 would be still based on class=a
  * @param type can be either GSFancyTextID or GSFancyTextClass
@@ -309,7 +309,7 @@
  *
  * This just changes styles, but doesn't change class mapping.
  *
- * Example: if we have &lt;p class=a>123&lt;/p>, and we called changeStylesToClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
+ * Example: if we have <p class=a>123</p>, and we called changeStylesToClass:b on:GSFancyTextClass withName:a, the styles of 123 are based on b now.
  *
  * But searching 123 would be still based on class=a
  * @param type can be either GSFancyTextID or GSFancyTextClass
@@ -335,7 +335,7 @@
  *
  * Example: if dict does not have line-id key (which is from p) but it has text align, line-id, truncation-mode key, just kick them out
  *
- * Note: this method is called at the tag parsing level, e.g if we have &lt;span class=centerAlign> we just remove the text-align
+ * Note: this method is called at the tag parsing level, e.g if we have <span class=centerAlign> we just remove the text-align
  */
 + (void)cleanStyleDict:(NSMutableDictionary*)dict;
 

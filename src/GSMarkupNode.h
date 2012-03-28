@@ -3,7 +3,7 @@
 //  -GrannySmith-
 //
 //  Created by Bao Lei on 1/4/12.
-//  Copyright (c) 2012 Hulu. All rights reserved.
+//  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 /// It's a tree node with a data dictionary.
@@ -88,7 +88,7 @@
 
 /** Create an array with the content node data in this tree in depth first order (natural markup string order)
  *
- * Example: a tree based on "a &lt;span>B&lt;em>C&lt;/em> D &lt;/span>" will give an array of [a, B, C, D] (styles included) 
+ * Example: a tree based on "a <span>B<em>C</em> D </span>" will give an array of [a, B, C, D] (styles included) 
  *
  * Only content nodes are exported. Container nodes are not. This makes output lighterweight.
  *
@@ -144,7 +144,7 @@
 
 /** Reset the text under this node
  *
- * Example: in this tree "&lt;span id=1>ABC&lt;span class=xxx>XXX&lt;/span>&lt;/span>, if we call resetChildToText:@"123" to id=1 node, it will become &lt;span id=1>123&lt;/span>; and in "&lt;span id=1>ABC<lambda id=xxx>DEF&lt;/span>", if we can the same method, it will give us "&lt;span id=1>123<lambda id=xxx>&lt;/span>"
+ * Example: in this tree "<span id=1>xyz<span class=xxx>XXX</span></span>, if we call resetChildToText:@"123" to id=1 node, it will become <span id=1>123</span>; and in "<span id=1>xyz<lambda id=xxx>DEF</span>", if we can the same method, it will give us "<span id=1>123<lambda id=xxx></span>"
  * @warning If there's any subtree under this node, it will be removed. After this call there will be only one text child note, plus the lambda nodes
  */
 - (void)resetChildToText:(NSString*)text;

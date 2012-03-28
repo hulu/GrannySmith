@@ -3,7 +3,7 @@
 //  -GrannySmith-
 //
 //  Created by Bao Lei on 1/5/12.
-//  Copyright (c) 2012 Hulu. All rights reserved.
+//  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #ifndef GSFancyTextDefines_h

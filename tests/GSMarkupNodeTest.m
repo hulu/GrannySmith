@@ -3,7 +3,7 @@
 //  GSFancyTextTest
 //
 //  Created by Bao Lei on 1/10/12.
-//  Copyright (c) 2012 Hulu. All rights reserved.
+//  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #import <SenTestingKit/SenTestingKit.h>
@@ -111,7 +111,7 @@
     NSString* newText = [textNode.data objectForKey:GSFancyTextTextKey];
     STAssertTrue([newText isEqualToString:@"Hello"], @"we set Hello but get %@", newText);
     
-    GSMarkupNode* lambdaNode = [GSFancyText parsedMarkupString:@"<span id=9>ABC<lambda id=10></span>" withStyleDict:nil];
+    GSMarkupNode* lambdaNode = [GSFancyText parsedMarkupString:@"<span id=9>xyz<lambda id=10></span>" withStyleDict:nil];
     [testMarkupNode_ appendSubtree:lambdaNode underNode:testNode];
     testNode = [testMarkupNode_ childNodeWithID:@"9"];
     [testNode resetChildToText:@"123"];

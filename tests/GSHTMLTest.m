@@ -3,7 +3,7 @@
 //  GSFancyTextDemo
 //
 //  Created by Bao Lei on 1/29/12.
-//  Copyright (c) 2012 Hulu. All rights reserved.
+//  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #import "NSString+GSHTML.h"

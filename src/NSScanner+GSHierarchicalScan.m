@@ -3,13 +3,13 @@
 //  -GrannySmith-
 //
 //  Created by Bao Lei on 12/22/11.
-//  Copyright (c) 2011 Hulu. All rights reserved.
+//  Copyright (c) 2011 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #import "NSScanner+GSHierarchicalScan.h"
 #import "GSFancyTextDefines.h"
 
-@implementation NSScanner (GSHierarchicalScan)
+@implementation NSScanner(GSHierarchicalScan)
 
 - (GSScanResult) scanUpToString:(NSString*)target endToken:(NSString*)endToken intoString:(NSString**)intoString {
     

@@ -3,7 +3,7 @@
 //  -GrannySmith-
 //
 //  Created by Bao Lei on 7/14/11.
-//  Copyright 2011 hulu. All rights reserved.
+//  Copyright 2011 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 /** This category deals with line breakings of strings.
@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSString (GSParsingHelper)
+@interface NSString(GSParsingHelper)
 
 /** Breaks one string into an array of lines, based on word wrapping
  * @param width is the width of the paragraph (the confinement of the text)
@@ -42,7 +42,7 @@
 - (NSString*)stringByTrimmingTrailingWhitespace;
 
 /** Returns the first non-whitespace/newline character (in NSString)
- * @example @"   abc" gives @"a". And the foundLocation will be set to 3
+ * @example @"   xyz" gives @"x". And the foundLocation will be set to 3
  * @return @"" if the string is totally made up with whitespace chars
  */
 - (NSString*)firstNonWhitespaceCharacterSince:(int)location foundAt:(int*)foundLocation;

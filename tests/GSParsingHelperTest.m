@@ -3,7 +3,7 @@
 //  GSFancyTextTest
 //
 //  Created by Bao Lei on 1/10/12.
-//  Copyright (c) 2012 Hulu. All rights reserved.
+//  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #import <SenTestingKit/SenTestingKit.h>

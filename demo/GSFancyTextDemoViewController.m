@@ -3,7 +3,7 @@
 //  GSFancyTextDemo
 //
 //  Created by Bao Lei on 1/9/12.
-//  Copyright (c) 2012 Hulu. All rights reserved.
+//  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #import "GSFancyTextDemoViewController.h"
@@ -77,7 +77,7 @@ CGFloat const buttonMargin = 5;
     
     // Creating the fancy text object
     
-    NSString* text = @"<em>Hello</em> iOS world. <span id='abc' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class='center'>A&lt;&amp;&gt;B</p>Ah I am going to be a line.<p class='margin right'>A line with <em>>1</em> classes</p><p id=eee class='limit2 tmargin bmargin halfwidth'>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of <span class='halfwidth'><strong>texts</strong></span></p>";
+    NSString* text = @"<em>Hello</em> iOS world. <span id='xyz' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class='center'>A&lt;&amp;&gt;B</p>Ah I am going to be a line.<p class='margin right'>A line with <em>>1</em> classes</p><p id=eee class='limit2 tmargin bmargin halfwidth'>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of <span class='halfwidth'><strong>texts</strong></span></p>";
     
     GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:text];
     
@@ -166,7 +166,7 @@ CGFloat const buttonMargin = 5;
 }
 
 - (void)demoTextSwap:(id)sender {
-    [fancyTextView_.fancyText changeNodeToStyledText:@"New <span class=green>Text</span> has been <span class=green>added</span>." forID:@"abc"];
+    [fancyTextView_.fancyText changeNodeToStyledText:@"New <span class=green>Text</span> has been <span class=green>added</span>." forID:@"xyz"];
     [fancyTextView_ updateDisplay];
 
     self.contentSwitchButton.enabled = NO;

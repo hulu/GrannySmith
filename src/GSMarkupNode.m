@@ -3,7 +3,7 @@
 //  -GrannySmith-
 //
 //  Created by Bao Lei on 1/4/12.
-//  Copyright (c) 2012 Hulu. All rights reserved.
+//  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #import "GSMarkupNode.h"
@@ -272,7 +272,7 @@
 
 - (void)resetChildToText:(NSString*)text {
     // for performance considerations, we do this in this way:
-    // 1. if there is a text node under this node, we just replace the text of that node, and remove all other nodes. E.g. <span>abc<span>12</span><span>34</span></span>, just replace the abc text and cut 12, 34
+    // 1. if there is a text node under this node, we just replace the text of that node, and remove all other nodes. E.g. <span>xyz<span>12</span><span>34</span></span>, just replace the xyz and cut 12, 34
     // 2. otherwise, remove all text children (lambda not included) and add the text node. E.g. <span><span>1</span><span>2</span></span>
     
     if (!text) {

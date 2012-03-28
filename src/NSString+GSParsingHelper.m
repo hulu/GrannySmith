@@ -3,7 +3,7 @@
 //  -GrannySmith-
 //
 //  Created by Bao Lei on 7/14/11.
-//  Copyright 2011 hulu. All rights reserved.
+//  Copyright 2011 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
 #import "NSString+GSParsingHelper.h"
@@ -11,7 +11,7 @@
 
 const CGFloat ConservativeSpaceReservation = 1.f;
 
-@implementation NSString (GSParsingHelper)
+@implementation NSString(GSParsingHelper)
 
 - (NSMutableArray*) linesWithWidth:(CGFloat)width font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
 
