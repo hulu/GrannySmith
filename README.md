@@ -69,6 +69,26 @@ For markup text and style sheet rules, please visit http://yyyyyyy
 
 
 
+
+Unit Test Coverage
+==========
+
+A major portion of GSMarkupNode, GSFancyText, GSHTML, GSParsingHelper, GSHierarchicalScan are covered by unit tests.
+
+Methods involving drawing, view displaying, and view frame updating are not covered.
+
+Covered topics:
+Markup text parsing
+Style sheet parsing
+Markup tree construction
+Node replacing/appending/removing
+Style updating
+Line breaking
+HTML unescaping
+Object deep copying
+
+
+
 License
 ==========
 Copyright (C) 2012 by Hulu, LLC
@@ -96,7 +116,7 @@ THE SOFTWARE.
 Contact
 ==========
 
-For support or for further questions, please contact:
+For support or for further questions, please use the issue tracker of github, or contact:
 
       grannysmith-dev@googlegroups.com
 
