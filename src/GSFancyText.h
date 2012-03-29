@@ -13,10 +13,6 @@
 /// It also stores a dictionary of styles, which can be used in markup parsing, as well as style switching afterwards
 ///
 /// This is a model class. It's mainly for processing strings and generate arrays. To create a view, see GSFancyTextView
-///
-/// Example:
-///
-/// @example GSFancyText GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText: @"\<strong\>GSFancyText\</strong\>\<p class=some_class\>Another line\</p\>"]
 
 #import <Foundation/Foundation.h>
 
@@ -343,4 +339,8 @@
 + (void)cleanStyleDict:(NSMutableDictionary*)dict;
 
 @end
+
+
+/// @example GSFancyText GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText: @"\<strong\>GSFancyText\</strong\>\<p class=some_class\>Another line\</p\>"]
+
 

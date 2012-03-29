@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+     <key>CFBundleName</key>
+     <string>GSFancyText</string>
+     <key>CFBundleIdentifier</key>
+     <string>com.hulu.gsfancytext.docset</string>
+     <key>DocSetFeedName</key>
+     <string>GSFancyText Docs</string>
+     <key>DocSetPublisherIdentifier</key>
+     <string>com.hulu</string>
+     <key>DocSetPublisherName</key>
+     <string>Hulu</string>
+</dict>
+</plist>
