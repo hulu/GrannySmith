@@ -69,7 +69,7 @@ To install Xcode docset:
     ~/Library/Developer/Shared/Documentation/DocSets
 2. Restart Xcode
 
-After installing docset
+After installing docset, you can hold option key and click a GSFancyText class or method name in Xcode, to preview or link to the documentation page.
 
 
 Unit Test Coverage
