@@ -12,7 +12,7 @@
 #import "GSFancyText.h"
 
 /// The view class based on GSFancyText model.
-///
+
 /// Features include: setting accessibility lable, auto-resizing, updating view frame height based on content height, etc
 
 @interface GSFancyTextView : UIView {

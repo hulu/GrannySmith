@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
-
+/// HTML related tools for NSString
 
 @interface NSString(GSHTML)
 

@@ -6,10 +6,9 @@
 //  Copyright 2011 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
-/** This category deals with line breakings of strings.
- *
- * And added some other basic string processing methods.
- */
+/// This category deals with line breakings of strings.
+
+/// And added some other basic string processing methods.
 
 #import <Foundation/Foundation.h>
 
@@ -41,10 +40,9 @@
  */
 - (NSString*)stringByTrimmingTrailingWhitespace;
 
-/** Returns the first non-whitespace/newline character (in NSString)
+/** Returns the first non-whitespace/newline character (in NSString). 
  *
- * For example @"   xyz" gives @"x". And the foundLocation will be set to 3
- * @return @"" if the string is totally made up with whitespace chars
+ * E.g. "   xyz" gives "x", and the foundLocation will be set to 3.
  */
 - (NSString*)firstNonWhitespaceCharacterSince:(int)location foundAt:(int*)foundLocation;
 

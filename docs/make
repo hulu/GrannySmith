@@ -1,1 +1,0 @@
-appledoc --project-name "GSFancyText"  --project-company "Hulu"  --company-id com.hulu  --docset-bundle-filename com.hulu.gsfancytext.docset  -t docs/appledoc-template --ignore .m  -d -h -n  --output ./docs --docset-install-path docs  src

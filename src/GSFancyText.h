@@ -6,19 +6,22 @@
 //  Copyright (c) 2011 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
-/// GSFancyText does parsing and stores parsing result and generated lines.
-///
+/// GSFancyText does markup text parsing, stores parsing result, generated lines, and draw the rich text.
+
 /// The initialization can be from an unparsed markup string, or a parsed result tree.
 ///
 /// It also stores a dictionary of styles, which can be used in markup parsing, as well as style switching afterwards
 ///
 /// This is a model class. It's mainly for processing strings and generate arrays. To create a view, see GSFancyTextView
+///
+/// Example:
+///
+/// @example GSFancyText GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText: @"\<strong\>GSFancyText\</strong\>\<p class=some_class\>Another line\</p\>"]
 
 #import <Foundation/Foundation.h>
 
 #import "GSFancyTextDefines.h"
 #import "GSMarkupNode.h"
-
 
 @interface GSFancyText : NSObject  {
     NSMutableArray* lines_; // each line is also an array of styled texts

@@ -7,7 +7,7 @@
 //
 
 /// It's a tree node with a data dictionary.
-///
+
 /// It's used for storing the markup text parsing result.
 
 #import <Foundation/Foundation.h>

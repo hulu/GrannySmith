@@ -1,4 +1,4 @@
-Summary
+Summary {#mainpage}
 ==========
 
 GSFancyText is a rich text drawing library for iOS.
@@ -10,21 +10,20 @@ Example
 
 First define the styles using a CSS-like string:
 
-`NSString* styleSheet = @".green {color:#00ff00; font-weight:bold} .gray {color:gray; font-weight:bold}";`
-
-`[GSFancyText parseStyleAndSetGlobal:styleSheet];`
+    NSString* styleSheet = @".green {color:#00ff00; font-weight:bold} .gray {color:gray; font-weight:bold}";
+    [GSFancyText parseStyleAndSetGlobal:styleSheet];
 
 Then create a GSFancyText object with a markup string:
 
-`GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText: @"<span class=green>Hulu</span> <span class=gray>Plus</span>"];`
+    GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText: @"<span class=green>Hulu</span> <span class=gray>Plus</span>"];
 
 Then you can directly draw this in a customized view:
 
-`[fancyText drawInRect: rect];`
+    [fancyText drawInRect: rect];
 
 Or create a GSFancyTextView object to display it
 
-`GSFancyTextView* fancyView = [[GSFancyTextView alloc] initWithFrame:frame fancyText:fancyText];`
+    GSFancyTextView* fancyView = [[GSFancyTextView alloc] initWithFrame:frame fancyText:fancyText];
 
 
 Notes on ARC
@@ -34,7 +33,7 @@ ARC stands for Automatic Reference Counting.
 
 GSFancyText supports both ARC-enabled and ARC-disabled projects. Depending on your project setting, you need to either enable or delete the following line:
 
-` #define GS_ARC_ENABLED 1`
+    #define GS_ARC_ENABLED 1
 
 in the GSFancyTextDefines.h file.
 
@@ -47,7 +46,7 @@ The open the GSFancyTextDemo.xcodeproj file with Xcode (4.2 or higher version).
 
 First you need to go to GSFancyTextDefines.h file, and uncomment the line:
 
-` #define GS_ARC_ENABLED 1`
+    #define GS_ARC_ENABLED 1
 
 in GSFancyTextDefines.h, because the demo project has ARC enabled.
 
@@ -65,7 +64,12 @@ Please check http://xxxxxx for API documentation.
 
 For markup text and style sheet rules, please visit http://yyyyyyy
 
+To install Xcode docset:
+1. Copy the com.hulu.gsfancytext.docset file in docs folder to
+    ~/Library/Developer/Shared/Documentation/DocSets
+2. Restart Xcode
 
+After installing docset
 
 
 Unit Test Coverage
@@ -117,4 +121,6 @@ Contact
 For support or for further questions, please use the issue tracker of github, or contact:
 
       grannysmith-dev@googlegroups.com
+
+
 
