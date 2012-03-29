@@ -9,25 +9,22 @@ Example
 ==========
 
 First define the styles using a CSS-like string:
-`
-NSString* styleSheet = @".green {color:#00ff00; font-weight:bold} .gray {color:gray; font-weight:bold}";
-[GSFancyText parseStyleAndSetGlobal:styleSheet];
-`
+
+`NSString* styleSheet = @".green {color:#00ff00; font-weight:bold} .gray {color:gray; font-weight:bold}";`
+
+`[GSFancyText parseStyleAndSetGlobal:styleSheet];`
 
 Then create a GSFancyText object with a markup string:
-`
-GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText: @"<span class=green>Hulu</span> <span class=gray>Plus</span>"];
-`
+
+`GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText: @"<span class=green>Hulu</span> <span class=gray>Plus</span>"];`
 
 Then you can directly draw this in a customized view:
-`
-[fancyText drawInRect: rect];
-`
+
+`[fancyText drawInRect: rect];`
 
 Or create a GSFancyTextView object to display it
-`
-GSFancyTextView* fancyView = [[GSFancyTextView alloc] initWithFrame:frame fancyText:fancyText];
-`
+
+`GSFancyTextView* fancyView = [[GSFancyTextView alloc] initWithFrame:frame fancyText:fancyText];`
 
 
 Notes on ARC
@@ -49,6 +46,7 @@ Use the Demo
 The open the GSFancyTextDemo.xcodeproj file with Xcode (4.2 or higher version).
 
 First you need to go to GSFancyTextDefines.h file, and uncomment the line:
+
 ` #define GS_ARC_ENABLED 1`
 
 in GSFancyTextDefines.h, because the demo project has ARC enabled.
