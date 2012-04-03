@@ -1144,7 +1144,9 @@ typedef enum {
     }
     
     if (color) {
-        [dict setObject:color forKey:GSFancyTextColorKey];
+        if (dict) {
+            [dict setObject:color forKey:GSFancyTextColorKey];
+        }
         return color;
     }
     else {
@@ -1169,7 +1171,9 @@ typedef enum {
     }
     
     if (textAlignNumber) {
-        [dict setObject:textAlignNumber forKey:GSFancyTextTextAlignKey];
+        if (dict) {
+            [dict setObject:textAlignNumber forKey:GSFancyTextTextAlignKey];
+        }
         return textAlignNumber;
     }
     else {
@@ -1196,7 +1200,9 @@ typedef enum {
     }
     
     if (result) {
-        [dict setObject:result forKey:GSFancyTextVerticalAlignKey];
+        if (dict) {
+            [dict setObject:result forKey:GSFancyTextVerticalAlignKey];
+        }
         return result;
     }
     else {
@@ -1222,7 +1228,9 @@ typedef enum {
         mode = [NSNumber numberWithInt: UILineBreakModeTailTruncation];
     }
     if (mode) {
-        [dict setValue:mode forKey:GSFancyTextTruncateModeKey];
+        if (dict) {
+            [dict setValue:mode forKey:GSFancyTextTruncateModeKey];
+        }
         return mode;
     }
     else {
@@ -1726,6 +1734,10 @@ static NSMutableDictionary* fontMemory_;
                 CGContextSetFillColorWithColor(ctx, [segmentColor CGColor]);
                 CGContextSetStrokeColorWithColor(ctx, [segmentColor CGColor]);
                 
+                // get shadow if there is any
+                NSString* segmentShadow = [segment objectForKey:GSFancyTextShadowKey];
+                [self processShadow:segmentShadow forContext:ctx];
+                
                 // get truncation
                 NSNumber* truncationNumber = [segment objectForKey:GSFancyTextTruncateModeKey];
                 UILineBreakMode truncateMode = truncationNumber ? [truncationNumber intValue] : UILineBreakModeTailTruncation;
@@ -1766,6 +1778,45 @@ static NSMutableDictionary* fontMemory_;
         // copy the block onto the heap
         void(^theBlock)(CGPoint) = GSAutoreleased([drawingBlock copy]);
         [lambdaBlocks_ setObject:theBlock forKey:lambdaID];
+    }
+}
+
+#pragma mark - Processing drawing parameters
+
+- (void)processShadow:(NSString*)shadowValue forContext:(CGContextRef)context {
+    BOOL hasShadow = NO;
+    CGFloat hOffset = 0.f;
+    CGFloat vOffset = 0.f;
+    CGFloat blur = 0.f;
+    UIColor* color = nil;
+    
+    if (shadowValue) {
+        NSArray* args = [shadowValue componentsSeparatedByString:@" "];
+        if (args.count >= 2) {
+            hasShadow = YES;
+            hOffset = [[args objectAtIndex:0] floatValue];
+            vOffset = [[args objectAtIndex:1] floatValue];
+            if (args.count == 3) {
+                color = [[self class] parseColor:[args objectAtIndex:2] intoDictionary:nil];
+                if (!color) {
+                    blur = [[args objectAtIndex:2] floatValue];
+                }
+            }
+            else { // >=4
+                blur = [[args objectAtIndex:2] floatValue];
+                color = [[self class] parseColor:[args objectAtIndex:3] intoDictionary:nil];
+            }
+        }
+    }
+    
+    if (hasShadow) {
+        if (!color) {
+            color = [UIColor blackColor];
+        }
+        CGContextSetShadowWithColor(context, CGSizeMake(0.f, 1.f), .5f, [UIColor blackColor].CGColor);
+    }
+    else {
+        CGContextSetShadow(context, CGSizeMake(0.f, 0.f), 0.f);
     }
 }
 

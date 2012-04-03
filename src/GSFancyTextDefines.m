@@ -13,6 +13,7 @@ int const GSFancyTextTypicalSize = 10;
 #pragma mark - css keys
 
 NSString* const GSFancyTextColorKey  = @"color";
+NSString* const GSFancyTextShadowKey  = @"text-shadow";
 NSString* const GSFancyTextFontNameKey  = @"font-family";
 NSString* const GSFancyTextFontSizeKey  = @"font-size";
 NSString* const GSFancyTextFontWeightKey  = @"font-weight";

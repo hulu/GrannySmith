@@ -65,6 +65,7 @@ typedef enum {
 ///-----------------------------
 /// standard css supported
 extern NSString* const GSFancyTextColorKey;  // @"color"
+extern NSString* const GSFancyTextShadowKey;  // @"text-shadow"
 extern NSString* const GSFancyTextFontNameKey;  // @"font-family"
 extern NSString* const GSFancyTextFontSizeKey;  // @"font-size"
 extern NSString* const GSFancyTextFontWeightKey;  // @"font-weight"
