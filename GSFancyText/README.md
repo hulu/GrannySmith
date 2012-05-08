@@ -4,7 +4,6 @@ Summary {#mainpage}
 GSFancyText is a rich text drawing library for iOS.
 
 
-
 Example
 ==========
 
