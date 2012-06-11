@@ -63,8 +63,7 @@ For markup text and style sheet rules, please check the wiki page:
 https://github.com/hulu/GrannySmith/wiki/GSFancyText
 
 To install Xcode docset:
-1. Copy the com.hulu.gsfancytext.docset file in GSFancyText/docs folder to
-    ~/Library/Developer/Shared/Documentation/DocSets
+1. Copy the com.hulu.gsfancytext.docset file in GSFancyText/docs folder to ~/Library/Developer/Shared/Documentation/DocSets
 2. Restart Xcode
 
 After installing docset, you can hold option key and click a GSFancyText class or method name in Xcode, to preview or link to the documentation page.
@@ -83,15 +82,20 @@ A major portion of GSMarkupNode, GSFancyText, GSHTML, GSParsingHelper, GSHierarc
 Methods involving drawing, view displaying, and view frame updating are not covered.
 
 Covered topics:
-Markup text parsing
-Style sheet parsing
-Markup tree construction
-Node replacing/appending/removing
-Style updating
-Line breaking
-HTML unescaping
-Object deep copying
+* Markup text parsing
+* Style sheet parsing
+* Markup tree construction
+* Node replacing/appending/removing
+* Style updating
+* Line breaking
+* HTML unescaping
+* Object deep copying
 
+
+Demo App Screenshot
+==========
+
+![GSFancyText Demo App](https://github.com/hulu/GrannySmith/wiki/GSFancyTextDemo.png)
 
 
 License
