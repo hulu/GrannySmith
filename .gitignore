@@ -1,4 +1,5 @@
 build
+GSFancyText/docs/Doxygen/output/*
 *.xcodeproj/*.mode1v3
 *.xcodeproj/*.mode2v3
 *.xcodeproj/*.pbxuser
