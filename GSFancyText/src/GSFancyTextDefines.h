@@ -16,8 +16,12 @@
 /// To check whether ARC is enabled for your project, hit cmd+1, select the project, then the target, then Build Settings, then search for Objective-C Automatic Reference Counting. If it exists and is set to Yes, ARC is enabled.
 
 
-/// Comment the following line if ARC (Automatic Reference Counting) is enabled. Uncomment it if ARC is not enabled.
+/// Uncomment the following line if ARC (Automatic Reference Counting) is enabled. Comment it if ARC is not enabled.
 // #define GS_ARC_ENABLED 1
+
+/// Comment the following line if ARC is enabled but your deployment target is iOS 4.x.
+// #define GS_ARC_WEAK_REF_ENABLED 1
+
 
 //#define GS_DEBUG_MARKUP 1           // Uncomment to log the markup text warnings
 //#define GS_DEBUG_PERFORMANCE 1      // Uncomment to log the performance measurements
@@ -157,8 +161,13 @@ extern NSString* const GSFancyTextAdvancedTruncationKey; // @"advanced-truncatio
 #define GSRetained(obj) obj
 #define GSAutorelease(obj) 
 #define GSAutoreleased(obj) obj
-#define GSWeak weak
-#define GSWeakPrefix __weak
+  #ifdef GS_ARC_WEAK_REF_ENABLED
+    #define GSWeak weak
+    #define GSWeakPrefix __weak
+  #else
+    #define GSWeak assign
+    #define GSWeakPrefix __unsafe_unretained
+  #endif
 #define GSBridgePreix __bridge
 #else
 #define GSRelease(obj) [obj release]
