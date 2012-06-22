@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Hulu, LLC. All rights reserved. See LICENSE.txt.
 //
 
-#ifndef GSFancyTextDemo_GSConfig_h
-#define GSFancyTextDemo_GSConfig_h
+#ifndef GSConfig_h
+#define GSConfig_h
 
 #warning: Please set the GS_ARC_ENABLED flag according to your project setting. Then comment this line out to disable the warning.
 /// For more information about ARC, please read: http://developer.apple.com/library/mac/#releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html

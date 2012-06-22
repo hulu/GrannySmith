@@ -8,7 +8,6 @@
 
 #import "GSConfig.h"
 
-
 #ifndef GSFancyTextDefines_h
 #define GSFancyTextDefines_h
 

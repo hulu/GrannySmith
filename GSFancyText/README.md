@@ -66,14 +66,9 @@ For markup text and style sheet rules, please check the wiki page:
 https://github.com/hulu/GrannySmith/wiki/GSFancyText
 
 To install Xcode docset:
-<<<<<<< HEAD
-1. Copy the com.hulu.gsfancytext.docset file in GSFancyText/docs folder to ~/Library/Developer/Shared/Documentation/DocSets
-2. Restart Xcode
-=======
 1. Install Doxygen, run ruby docs/create.rb to generate a docset file.
 2. Copy the com.hulu.gsfancytext.docset file in GSFancyText/docs folder to ~/Library/Developer/Shared/Documentation/DocSets
 3. Restart Xcode
->>>>>>> os
 
 After installing docset, you can hold option key and click a GSFancyText class or method name in Xcode, to preview or link to the documentation page.
 
