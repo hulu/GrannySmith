@@ -64,6 +64,7 @@
 		EC2F286E14BF7F13007D8644 /* GSMarkupNodeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSMarkupNodeTest.m; path = tests/GSMarkupNodeTest.m; sourceTree = SOURCE_ROOT; };
 		EC2F286F14BF7F13007D8644 /* GSParsingHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSParsingHelperTest.m; path = tests/GSParsingHelperTest.m; sourceTree = SOURCE_ROOT; };
 		EC34B58214D60C4700653715 /* GSHTMLTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSHTMLTest.m; path = tests/GSHTMLTest.m; sourceTree = SOURCE_ROOT; };
+		EC4CB1ED159519D40062191B /* GSConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSConfig.h; sourceTree = "<group>"; };
 		EC61850214BCC17500E1DA2F /* GSFancyTextTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GSFancyTextTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC61851914BCC3F200E1DA2F /* GSFancyText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSFancyText.h; sourceTree = "<group>"; };
 		EC61851A14BCC3F200E1DA2F /* GSFancyText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GSFancyText.m; sourceTree = "<group>"; };
@@ -147,6 +148,7 @@
 		EC61851414BCC3F200E1DA2F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				EC4CB1ED159519D40062191B /* GSConfig.h */,
 				EC61851914BCC3F200E1DA2F /* GSFancyText.h */,
 				EC61851A14BCC3F200E1DA2F /* GSFancyText.m */,
 				EC61851B14BCC3F200E1DA2F /* GSFancyTextDefines.h */,
