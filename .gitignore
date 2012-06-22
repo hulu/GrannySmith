@@ -1,3 +1,4 @@
+GSConfig.h
 build
 GSFancyText/docs/Doxygen/output/*
 *.xcodeproj/*.mode1v3
