@@ -34,8 +34,11 @@ GSFancyText supports both ARC-enabled and ARC-disabled projects. Depending on yo
 
     #define GS_ARC_ENABLED 1
 
-in the GSFancyTextDefines.h file.
+in the GSConfig.h file.
 
+When ARC is enabled, you can further configure the support of weak reference by enabling or disabling the GS_ARC_WEAK_REF_ENABLED flag.
+
+Make sure that modifications of configurations in GSConfig.h is not committed in git.
 
 
 Use the Demo
@@ -63,8 +66,9 @@ For markup text and style sheet rules, please check the wiki page:
 https://github.com/hulu/GrannySmith/wiki/GSFancyText
 
 To install Xcode docset:
-1. Copy the com.hulu.gsfancytext.docset file in GSFancyText/docs folder to ~/Library/Developer/Shared/Documentation/DocSets
-2. Restart Xcode
+1. Install Doxygen, run ruby docs/create.rb to generate a docset file.
+2. Copy the com.hulu.gsfancytext.docset file in GSFancyText/docs folder to ~/Library/Developer/Shared/Documentation/DocSets
+3. Restart Xcode
 
 After installing docset, you can hold option key and click a GSFancyText class or method name in Xcode, to preview or link to the documentation page.
 
