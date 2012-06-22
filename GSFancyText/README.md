@@ -46,11 +46,11 @@ Use the Demo
 
 The open the GSFancyTextDemo.xcodeproj file with Xcode (4.2 or higher version).
 
-First you need to go to GSFancyTextDefines.h file, and uncomment the line:
+First you need to go to GSConfig.h, and uncomment the following line:
 
     #define GS_ARC_ENABLED 1
 
-in GSFancyTextDefines.h, because the demo project has ARC enabled.
+because the demo project has ARC enabled.
 
 Then you should be able to compile and run the app. For better viewing experience, it's recommended to compile it to an iPhone, iPod touch, or iPhone simulator.
 
