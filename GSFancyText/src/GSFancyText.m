@@ -1813,7 +1813,7 @@ static NSMutableDictionary* fontMemory_;
         if (!color) {
             color = [UIColor blackColor];
         }
-        CGContextSetShadowWithColor(context, CGSizeMake(0.f, 1.f), .5f, [UIColor blackColor].CGColor);
+        CGContextSetShadowWithColor(context, CGSizeMake(hOffset, vOffset), blur, color.CGColor);
     }
     else {
         CGContextSetShadow(context, CGSizeMake(0.f, 0.f), 0.f);

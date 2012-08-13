@@ -70,14 +70,15 @@ CGFloat const buttonMargin = 5;
     .limit2{line-count:2; truncate-mode:tail}\
     .halfwidth {min-width:50%}\
     .middle {truncate-mode:middle}\
-    .doublespace {line-height: 200%}";
+    .doublespace {line-height: 200%}\
+    .shadow{text-shadow: 1 1 0.5 #ff0000}";
     
     [GSFancyText parseStyleAndSetGlobal:style];
     
     
     // Creating the fancy text object
     
-    NSString* text = @"<em>Hello</em> iOS world. <span id='xyz' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class='center'>A&lt;&amp;&gt;B</p>Ah I am going to be a line.<p class='margin right'>A line with <em>>1</em> classes</p><p id=eee class='limit2 tmargin bmargin halfwidth'>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of <span class='halfwidth'><strong>texts</strong></span></p>";
+    NSString* text = @"<em>Hello</em> iOS world. <span id='xyz' class='yellow'>The sunrise <strong>and</strong> the sunset.</span> <strong>drawing</strong> <lambda id=circle width=36 height=12 vertical-align=baseline> some shapes <p class='right'><span class='green'> A new <strong><em>paragraph</em></strong> with different alignments</span> and <span class=blue>different</span> colors!</p><p class='center'>A&lt;&amp;&gt;B</p>Ah I am going to be a line.<p class='margin right shadow'>A line with <em>>1</em> classes</p><p id=eee class='limit2 tmargin bmargin halfwidth'>Really a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of a lot of <span class='halfwidth'><strong>texts</strong></span></p>";
     
     GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText:text];
     
