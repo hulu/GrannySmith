@@ -497,7 +497,9 @@ static int lineID_ = 1;
                 
                 // Regular case: if it is not the last line, it means that this line is long enough to cover a whole line
                 if (i != segmentLines.count -1 ) {
-                    contentWidth_ = width_;
+                    CGFloat widthUsed = [lineText sizeWithFont:segmentFont].width;
+                    CGFloat currentLineContentWidth = widthUsed + (width_ - currentLineSpaceLeft);
+                    contentWidth_ = MAX(contentWidth_, currentLineContentWidth);
                     if (!insertLineBlock() ) {
                         return lines_;
                     }

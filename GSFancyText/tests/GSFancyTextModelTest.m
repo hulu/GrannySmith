@@ -409,6 +409,44 @@
     STAssertEqualsWithAccuracy(fancyText.contentHeight, expectedHeight, 0.1, @"total height=%f, should be %f", fancyText.contentHeight, expectedHeight);
 }
 
+- (void)testContentWidth {
+    GSFancyText* f = [[GSFancyText alloc] initWithMarkupText:@"<span id=x>1234567</span>"];
+    f.width = 1000;
+    [f generateLines];
+    STAssertTrue(f.contentWidth>0, @"no way. it's %f", f.contentWidth);
+    
+    UIFont* font = [UIFont systemFontOfSize:16];
+    NSString* s1 = @"Foxtro Uniform Charlie Kilo";
+    CGFloat expectedW = [s1 sizeWithFont:font].width;
+    
+    [f changeAttribute:GSFancyTextFontSizeKey to:[NSNumber numberWithFloat:16] on:GSFancyTextID withName:@"x"];
+    [f changeNodeToText:s1 forID:@"x"];
+    [f generateLines];
+    
+    NSLog(@"pure text: %@", f.pureText);
+    
+    STAssertTrue(f.contentWidth == expectedW, @"content width not right: %f, should be:%f", f.contentWidth, expectedW);
+    
+    NSString* s2 = @"A quill pen is a writing implement made from a moulted flight feather (preferably a primary wing-feather) of a large bird. Quills were used for writing with ink before the invention of the dip pen, the metal-nibbed pen, the fountain pen, and, eventually, the ballpoint pen. The hand-cut goose quill is still used as a calligraphy tool, however rarely because many papers are now derived from wood pulp and wear down the quill very quickly. It is still the tool of choice for a few professionals and provides an unmatched sharp stroke as well as greater flexibility than a steel pen.";
+    expectedW = 1000;
+    [f changeNodeToText:s2 forID:@"x"];
+    [f generateLines];
+    STAssertTrue((expectedW - f.contentWidth)<100 && expectedW>=f.contentWidth, @"content width not right: %f, should be:%f", f.contentWidth, expectedW);
+    
+    NSString* s3 = @"Short\nShorter\nShortest";
+    [f changeNodeToText:s3 forID:@"x"];
+    [f generateLines];
+    expectedW = [@"Shortest" sizeWithFont:font].width;
+    STAssertTrue(f.contentWidth == expectedW, @"content width not right: %f, should be:%f", f.contentWidth, expectedW);
+    
+    NSString* s4 = @"<strong>Make You Long</strong> Short\nShorter\nShortest";
+    expectedW = [@"Make You Long Short" sizeWithFont:font].width;
+    [f changeNodeToStyledText:s4 forID:@"x"];
+    [f generateLines];
+    STAssertTrue(f.contentWidth >= expectedW, @"content width not right: %f, should be:%f", f.contentWidth, expectedW);
+    
+    
+}
 
 
 @end
