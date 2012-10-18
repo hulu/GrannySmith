@@ -15,7 +15,7 @@
  #define GS_ARC_ENABLED 1
 
 /// Comment the following line if ARC is enabled but your deployment target is iOS 4.x.
-// #define GS_ARC_WEAK_REF_ENABLED 1
+ #define GS_ARC_WEAK_REF_ENABLED 1
 
 
 // #define GS_DEBUG_MARKUP 1           // Uncomment to log the markup text warnings
