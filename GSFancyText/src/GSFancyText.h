@@ -32,6 +32,8 @@
     NSMutableDictionary* lambdaBlocks_; // key is lambda id, value is a block for drawing code with 1 parameter: the starting point
     
     GSMarkupNode* parsedTree_; // root of the parsed result (in tree structure). ready after parseStructure
+    
+    NSMutableArray* drawActionArray_;
 }
 
 
@@ -248,6 +250,12 @@
 /** Draw self in a rect
  */
 - (void)drawInRect:(CGRect)rect;
+
+/** Prepare an array of actions for drawing. This method takes time and can be performed on background thread.
+ * When this is done, it's ok to call drawInRect.
+ * @note If this method is not performed, calling drawInRect will draw nothing.
+ */
+- (void)prepareDrawingInRect:(CGRect)rect;
 
 ///----------------------------------
 /// @name Content/Style modification

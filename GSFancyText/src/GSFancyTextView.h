@@ -52,13 +52,11 @@
 
 /// @name Frame update
 
-/** Whenever the fancyText parsed structure changes, or view frame changes, call this method to make sure that the display will be updated.
+/** Call this method when fancy text is set or changed.
  *
  * It will do 3 things: 1. re-generate the lines, 2. update the view height is demanded, 3. setNeedsDisplay for the view
  *
  * For best visual experience, call this method in view controller's willAnimateRotationToInterfaceOrientation:duration: method
- *
- * This can also be called in loadView method after adding the fancyTextView to the screen, so that the frame height can be updated (need to set matchFrameHeightToContent in this case)
  */
 - (void)updateDisplay;
 

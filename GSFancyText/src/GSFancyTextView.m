@@ -41,51 +41,67 @@
 
 
 - (void)updateAccessibilityLabel {
-    self.isAccessibilityElement = YES;
-    NSString* pureText = [fancyText_ pureText];
-    self.accessibilityLabel = pureText;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        NSString* pureText = [fancyText_ pureText];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            self.isAccessibilityElement = YES;
+            self.accessibilityLabel = pureText;
+        });
+    });
 }
 
 - (void)updateDisplay {
     self.fancyText.width = self.frame.size.width;
-    [self.fancyText generateLines];
-    if (matchFrameHeightToContent_) {
-        [self setFrameHeightToContentHeight];
-    }
-    if (matchFrameWidthToContent_) {
-        [self setFrameWidthToContentWidth];
-    }
-    [self setNeedsDisplay];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self.fancyText generateLines];
+        if (matchFrameHeightToContent_) {
+            [self setFrameHeightToContentHeight];
+        }
+        if (matchFrameWidthToContent_) {
+            [self setFrameWidthToContentWidth];
+        }
+        [self.fancyText prepareDrawingInRect:self.bounds];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self setNeedsDisplay];
+        });
+    });
 }
 
 - (void)setFrameHeightToContentHeight {
-    CGFloat textContentHeight = [fancyText_ contentHeight];
-    CGFloat expectedHeight = (contentHeight_ >= textContentHeight? contentHeight_ : textContentHeight);
-    
-    if (!expectedHeight) {
-        [fancyText_ generateLines];
-        expectedHeight = [fancyText_ contentHeight];
-    }
-    
-    CGRect frame = self.frame;
-    frame.size.height = expectedHeight;
-    self.frame = frame;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        CGFloat textContentHeight = [fancyText_ contentHeight];
+        CGFloat expectedHeight = (contentHeight_ >= textContentHeight? contentHeight_ : textContentHeight);
+        if (!expectedHeight) {
+            [fancyText_ generateLines];
+            expectedHeight = [fancyText_ contentHeight];
+        }
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            CGRect frame = self.frame;
+            frame.size.height = expectedHeight;
+            self.frame = frame;
+        });
+    });
 }
 
 - (void)setFrameWidthToContentWidth {
-    CGFloat width = [fancyText_ contentWidth];
-    if (!width) {
-        [fancyText_ generateLines];
-        width = [fancyText_ contentWidth];
-    }
-    if (width > self.frame.size.width) {
-        // decrease width only. Don't increase.
-        return;
-    }
-    
-    CGRect frame = self.frame;
-    frame.size.width = width;
-    self.frame = frame;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        CGFloat width = [fancyText_ contentWidth];
+        if (!width) {
+            [fancyText_ generateLines];
+            width = [fancyText_ contentWidth];
+        }
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            if (width > self.frame.size.width) {
+                // decrease width only. Don't increase.
+                return;
+            }
+            
+            CGRect frame = self.frame;
+            frame.size.width = width;
+            self.frame = frame;
+        });
+    });
 }
 
 

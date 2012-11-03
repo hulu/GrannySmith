@@ -96,6 +96,7 @@ static int lineID_ = 1;
     GSRelease(lines_);
     GSRelease(parsedTree_);
     GSRelease(lambdaBlocks_);
+    CGRelease(drawActionArray_);
     [super dealloc];
 }
 #endif
@@ -105,7 +106,7 @@ static int lineID_ = 1;
         width_ = width;
         maxHeight_ = maxHeight;
         if (globalStyleDictionary_) {
-            self.style = globalStyleDictionary_;
+            self.style = [globalStyleDictionary_ copy];
             if (styleDict != globalStyleDictionary_) {
                 [self appendStyleDict:styleDict];
             }
@@ -132,7 +133,7 @@ static int lineID_ = 1;
         maxHeight_ = 0.f;
         parsedTree_ = [tree copy];
         lambdaBlocks_ = [[NSMutableDictionary alloc] initWithCapacity:GSFancyTextTypicalSize];
-        self.style = globalStyleDictionary_;
+        self.style = [globalStyleDictionary_ copy];
         self.text = @"";
     }
     return self;
@@ -1472,304 +1473,320 @@ static NSMutableDictionary* fontMemory_;
 #pragma mark - draw
 
 - (void)drawInRect:(CGRect)rect {
-    
-    #ifdef GS_DEBUG_PERFORMANCE
-    NSDate* startDraw = [NSDate date];
-    #endif
-    
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    CGFloat frameWidth = rect.size.width;
-    
-    if (width_ != frameWidth) {
-        width_ = frameWidth;
-        [self generateLines];
-    }
-    else if (!lines_) {
-        [self generateLines];
-    }
-    
-    // x, y, h, w, baseline are line level parameters
-    CGFloat x = 0.f;
-    CGFloat y = rect.origin.y;
-    __block CGFloat h = 0.f;
-    __block CGFloat w = 0.f;
-    __block CGFloat baseline = 0.f;
-    
-    // the following are segment level paramters, each line may have several segments
-    __block NSArray* segments;
-    __block NSDictionary* segment;
-    __block CGFloat segmentHeight;
-    __block CGFloat segmentWidth;
-    __block UIFont* segmentFont;
-    __block NSString* segmentText;
-    __block BOOL segmentIsLambda;
-    __block CGFloat segmentBaseline;
-    __block CGFloat lineWidthLimit = 0;
-    CGFloat lineLeftMargin = 0;
-    __block CGFloat lineRightMargin = 0;
-    int lineID = -1;
-    int previousLineID = -1;
-    CGFloat previousLineBottomMargin = 0;
-    
-    void(^getSegmentAtIndexBlock) (int) = ^(int index) {
-        segment = [segments objectAtIndex:index];
-        segmentIsLambda = [[segment allKeys] containsObject:GSFancyTextInternalLambdaIDKey];
-    };
-    
-    void(^getSegmentInfoBlock) () = ^(void) {
-        segmentFont = [segment objectForKey:GSFancyTextFontKey];
-        segmentText = [segment objectForKey: GSFancyTextTextKey];
-        segmentBaseline = (segmentFont.lineHeight - segmentFont.ascender - segmentFont.descender)/2.f;
-        //note that descender is a negative number. -descender is the absolute height of descender from the baseline
-    };
-    void(^getSegmentInfoWithWidthBlock) () = ^(void) {
+    [drawActionArray_ enumerateObjectsUsingBlock:^(void (^call)(CGContextRef), NSUInteger idx, BOOL *stop) {
+        call(ctx);
+    }];
+}
+
+- (void)prepareDrawingInRect:(CGRect)rect {
+    @synchronized(self) {
+#ifdef GS_DEBUG_PERFORMANCE
+        NSDate* startDraw = [NSDate date];
+#endif
+//        __block CGContextRef ctx;
+//        dispatch_sync(dispatch_get_main_queue(), ^{
+//            
+//        });
         
-        if (segmentIsLambda) {
-            segmentWidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
-        }
-        else {
-            getSegmentInfoBlock();
-            segmentWidth = [segmentText sizeWithFont:segmentFont].width;
-        }
-        CGFloat left = frameWidth - lineRightMargin - w;
-        if (segmentWidth > left) {
-            segmentWidth = left;
-        }
-    };
-    void(^updateLineTextHeightBlock) () = ^(void) {
-        if (segmentIsLambda) {
-            segmentHeight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
-        }
-        else {
-            segmentHeight = [(UIFont*)[segment objectForKey:GSFancyTextFontKey] lineHeight];
-        }
-        NSString* specifiedHeight = [segment objectForKey:GSFancyTextLineHeightKey];
-        if (specifiedHeight) {
-            segmentHeight = [specifiedHeight possiblyPercentageNumberWithBase:segmentHeight];
-        }
-        if (segmentHeight > h) {
-            h = segmentHeight;
-            baseline = segmentBaseline; // we use the baseline of the biggest font to be the standard baseline of this line
-        }
-    };
-    
-    for (int l=0; l < lines_.count; l++){
-        segments = [lines_ objectAtIndex:l];
-        if (!segments.count) {
-            continue;
-        }
-        NSDictionary* firstSegment = [segments objectAtIndex:0];
-        lineLeftMargin = [[firstSegment objectForKey:GSFancyTextMarginLeft] possiblyPercentageNumberWithBase:frameWidth];
-        lineRightMargin = [[firstSegment objectForKey:GSFancyTextMarginRight] possiblyPercentageNumberWithBase:frameWidth];
-        lineWidthLimit = frameWidth - lineLeftMargin - lineRightMargin;
+        drawActionArray_ = [[NSMutableArray alloc] init];
         
-        lineID = [[firstSegment objectForKey:GSFancyTextLineIDKey] intValue];
-        if (previousLineID>=0 && lineID!=previousLineID) {
-            y += previousLineBottomMargin;
+        CGFloat frameWidth = rect.size.width;
+        
+        if (width_ != frameWidth) {
+            width_ = frameWidth;
+            [self generateLines];
+        }
+        else if (!lines_) {
+            [self generateLines];
         }
         
-        // determine if we need to calculate total width
-        GSTextAlign align = 0;
-        NSNumber* alignNumber = [firstSegment objectForKey:GSFancyTextTextAlignKey];
-        if (alignNumber) {
-            align = [alignNumber intValue];
-        }
+        // x, y, h, w, baseline are line level parameters
+        CGFloat x = 0.f;
+        CGFloat y = rect.origin.y;
+        __block CGFloat h = 0.f;
+        __block CGFloat w = 0.f;
+        __block CGFloat baseline = 0.f;
         
-        BOOL advancedTruncation = [[firstSegment objectForKey:GSFancyTextAdvancedTruncationKey] boolValue];
+        // the following are segment level paramters, each line may have several segments
+        __block NSArray* segments;
+        __block NSDictionary* segment;
+        __block CGFloat segmentHeight;
+        __block CGFloat segmentWidth;
+        __block UIFont* segmentFont;
+        __block NSString* segmentText;
+        __block BOOL segmentIsLambda;
+        __block CGFloat segmentBaseline;
+        __block CGFloat lineWidthLimit = 0;
+        CGFloat lineLeftMargin = 0;
+        __block CGFloat lineRightMargin = 0;
+        int lineID = -1;
+        int previousLineID = -1;
+        CGFloat previousLineBottomMargin = 0;
         
-        h = 0.f;
-        w = 0.f;
+        void(^getSegmentAtIndexBlock) (int) = ^(int index) {
+            segment = [segments objectAtIndex:index];
+            segmentIsLambda = [[segment allKeys] containsObject:GSFancyTextInternalLambdaIDKey];
+        };
         
-        // first loop: preparation (pre-calculate width, height and starting x)
-        NSMutableArray* widthForSegment = nil; // the width for each segment. Use this only for head and middle truncation.
-        // because for tail truncation and clip, space assignment is first come first serve.
-        
-        if (advancedTruncation) {
-            // advanced truncation case.. a lot of shit here
-            widthForSegment = [[NSMutableArray alloc] initWithCapacity:segments.count];
-            CGFloat totalWidth = 0;
-            for (int i = 0; i<segments.count; i++) {
-                getSegmentAtIndexBlock(i);
-                getSegmentInfoWithWidthBlock();
-                updateLineTextHeightBlock();
-                [widthForSegment addObject:[NSNumber numberWithFloat:segmentWidth]];
-                totalWidth += segmentWidth;
-            }
-            if (totalWidth > lineWidthLimit) {
-                for (int i = 0; i<segments.count; i++) {
-                    getSegmentAtIndexBlock(i);
-                    CGFloat maxWidth = [[widthForSegment objectAtIndex:i] floatValue];
-                    NSString* minWidthString = [segment objectForKey:GSFancyTextMinWidthKey];
-                    CGFloat minWidth = minWidthString? [minWidthString possiblyPercentageNumberWithBase:frameWidth] : maxWidth;
-                    CGFloat roomToCut = maxWidth>minWidth? (maxWidth - minWidth) : 0.f;
-                    CGFloat needToCut = totalWidth - lineWidthLimit;
-                    
-                    if (roomToCut >= needToCut) {
-                        // if this segment is willing to get enough truncate to save the whole line, it's all set here
-                        [widthForSegment replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:(maxWidth - needToCut)]];
-                        break;
-                    }
-                    else if (roomToCut > 0) {
-                        [widthForSegment replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:minWidth]];
-                        totalWidth -= roomToCut;
-                    }
-                }
-            }
-        }
-        else { // clip or truncate tail, the simplest cases
-            for (int i = 0; i<segments.count; i++) {
-                getSegmentAtIndexBlock(i);
-                getSegmentInfoBlock();
-                updateLineTextHeightBlock();
-                BOOL needTotalLength = (align==GSTextAlignCenter || align==GSTextAlignRight);
-                if (needTotalLength) {
-                    getSegmentInfoWithWidthBlock();
-                    w += segmentWidth;
-                }
-            }
-        }
-        
-        
-        
-        // determine some geometries
-        
-        // Calculating starting X
-        if (align==GSTextAlignLeft) {
-            x = lineLeftMargin;
-        }
-        else if (align == GSTextAlignCenter) {
-            x = lineLeftMargin + (lineWidthLimit - w)/2.f;
-        }
-        else if (align == GSTextAlignRight) {
-            x = frameWidth - w - lineRightMargin;
-        }
-        if (x<0) {
-            x = 0;
-        }
-        
-        w = x; // since now w will mean the width of space covered by text that's already drawn (it will be used by blocks to determine the available width)
-        x += rect.origin.x;
-        CGFloat maxX = rect.origin.x + (frameWidth - lineRightMargin);
-        
-        // h, y related
-        CGFloat lineTopMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginTop] possiblyPercentageNumberWithBase:h];
-        previousLineBottomMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginBottom] possiblyPercentageNumberWithBase:h];
-        
-        // Drawing loop
-        for (int i=0; i<segments.count; i++) {
-            getSegmentAtIndexBlock(i);
+        void(^getSegmentInfoBlock) () = ^(void) {
+            segmentFont = [segment objectForKey:GSFancyTextFontKey];
+            segmentText = [segment objectForKey: GSFancyTextTextKey];
+            segmentBaseline = (segmentFont.lineHeight - segmentFont.ascender - segmentFont.descender)/2.f;
+            //note that descender is a negative number. -descender is the absolute height of descender from the baseline
+        };
+        void(^getSegmentInfoWithWidthBlock) () = ^(void) {
             
-            // get text(if necessary) and height, baseline
+            if (segmentIsLambda) {
+                segmentWidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
+            }
+            else {
+                getSegmentInfoBlock();
+                segmentWidth = [segmentText sizeWithFont:segmentFont].width;
+            }
+            CGFloat left = frameWidth - lineRightMargin - w;
+            if (segmentWidth > left) {
+                segmentWidth = left;
+            }
+        };
+        void(^updateLineTextHeightBlock) () = ^(void) {
             if (segmentIsLambda) {
                 segmentHeight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
-                segmentBaseline = 0;
             }
             else {
-                getSegmentInfoBlock();
-                segmentHeight = segmentFont.lineHeight;
+                segmentHeight = [(UIFont*)[segment objectForKey:GSFancyTextFontKey] lineHeight];
+            }
+            NSString* specifiedHeight = [segment objectForKey:GSFancyTextLineHeightKey];
+            if (specifiedHeight) {
+                segmentHeight = [specifiedHeight possiblyPercentageNumberWithBase:segmentHeight];
+            }
+            if (segmentHeight > h) {
+                h = segmentHeight;
+                baseline = segmentBaseline; // we use the baseline of the biggest font to be the standard baseline of this line
+            }
+        };
+        
+        for (int l=0; l < lines_.count; l++){
+            segments = [lines_ objectAtIndex:l];
+            if (!segments.count) {
+                continue;
+            }
+            NSDictionary* firstSegment = [segments objectAtIndex:0];
+            lineLeftMargin = [[firstSegment objectForKey:GSFancyTextMarginLeft] possiblyPercentageNumberWithBase:frameWidth];
+            lineRightMargin = [[firstSegment objectForKey:GSFancyTextMarginRight] possiblyPercentageNumberWithBase:frameWidth];
+            lineWidthLimit = frameWidth - lineLeftMargin - lineRightMargin;
+            
+            lineID = [[firstSegment objectForKey:GSFancyTextLineIDKey] intValue];
+            if (previousLineID>=0 && lineID!=previousLineID) {
+                y += previousLineBottomMargin;
             }
             
-            if (i==segments.count-1) {
-                segmentWidth = lineWidthLimit - (w - lineLeftMargin);
+            // determine if we need to calculate total width
+            GSTextAlign align = 0;
+            NSNumber* alignNumber = [firstSegment objectForKey:GSFancyTextTextAlignKey];
+            if (alignNumber) {
+                align = [alignNumber intValue];
             }
-            else {
-                // get confined width
-                if (widthForSegment) {
-                    segmentWidth = [[widthForSegment objectAtIndex:i] floatValue];
-                    if (!segmentWidth) {
-                        continue; // ignore segments that we don't have space for
+            
+            BOOL advancedTruncation = [[firstSegment objectForKey:GSFancyTextAdvancedTruncationKey] boolValue];
+            
+            h = 0.f;
+            w = 0.f;
+            
+            // first loop: preparation (pre-calculate width, height and starting x)
+            NSMutableArray* widthForSegment = nil; // the width for each segment. Use this only for head and middle truncation.
+            // because for tail truncation and clip, space assignment is first come first serve.
+            
+            if (advancedTruncation) {
+                // advanced truncation case.. a lot of shit here
+                widthForSegment = [[NSMutableArray alloc] initWithCapacity:segments.count];
+                CGFloat totalWidth = 0;
+                for (int i = 0; i<segments.count; i++) {
+                    getSegmentAtIndexBlock(i);
+                    getSegmentInfoWithWidthBlock();
+                    updateLineTextHeightBlock();
+                    [widthForSegment addObject:[NSNumber numberWithFloat:segmentWidth]];
+                    totalWidth += segmentWidth;
+                }
+                if (totalWidth > lineWidthLimit) {
+                    for (int i = 0; i<segments.count; i++) {
+                        getSegmentAtIndexBlock(i);
+                        CGFloat maxWidth = [[widthForSegment objectAtIndex:i] floatValue];
+                        NSString* minWidthString = [segment objectForKey:GSFancyTextMinWidthKey];
+                        CGFloat minWidth = minWidthString? [minWidthString possiblyPercentageNumberWithBase:frameWidth] : maxWidth;
+                        CGFloat roomToCut = maxWidth>minWidth? (maxWidth - minWidth) : 0.f;
+                        CGFloat needToCut = totalWidth - lineWidthLimit;
+                        
+                        if (roomToCut >= needToCut) {
+                            // if this segment is willing to get enough truncate to save the whole line, it's all set here
+                            [widthForSegment replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:(maxWidth - needToCut)]];
+                            break;
+                        }
+                        else if (roomToCut > 0) {
+                            [widthForSegment replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:minWidth]];
+                            totalWidth -= roomToCut;
+                        }
                     }
                 }
+            }
+            else { // clip or truncate tail, the simplest cases
+                for (int i = 0; i<segments.count; i++) {
+                    getSegmentAtIndexBlock(i);
+                    getSegmentInfoBlock();
+                    updateLineTextHeightBlock();
+                    BOOL needTotalLength = (align==GSTextAlignCenter || align==GSTextAlignRight);
+                    if (needTotalLength) {
+                        getSegmentInfoWithWidthBlock();
+                        w += segmentWidth;
+                    }
+                }
+            }
+            
+            
+            
+            // determine some geometries
+            
+            // Calculating starting X
+            if (align==GSTextAlignLeft) {
+                x = lineLeftMargin;
+            }
+            else if (align == GSTextAlignCenter) {
+                x = lineLeftMargin + (lineWidthLimit - w)/2.f;
+            }
+            else if (align == GSTextAlignRight) {
+                x = frameWidth - w - lineRightMargin;
+            }
+            if (x<0) {
+                x = 0;
+            }
+            
+            w = x; // since now w will mean the width of space covered by text that's already drawn (it will be used by blocks to determine the available width)
+            x += rect.origin.x;
+            CGFloat maxX = rect.origin.x + (frameWidth - lineRightMargin);
+            
+            // h, y related
+            CGFloat lineTopMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginTop] possiblyPercentageNumberWithBase:h];
+            previousLineBottomMargin = [[[segments objectAtIndex:0] objectForKey:GSFancyTextMarginBottom] possiblyPercentageNumberWithBase:h];
+            
+            // Drawing loop
+            for (int i=0; i<segments.count; i++) {
+                getSegmentAtIndexBlock(i);
+                
+                // get text(if necessary) and height, baseline
+                if (segmentIsLambda) {
+                    segmentHeight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
+                    segmentBaseline = 0;
+                }
                 else {
-                    getSegmentInfoWithWidthBlock();
+                    getSegmentInfoBlock();
+                    segmentHeight = segmentFont.lineHeight;
                 }
-            }
-            
-            // update y based on top margin 
-            if (lineID != previousLineID) {
-                // it's not for every line
-                y += lineTopMargin;
                 
-                // we don't need to use previousLineID from here, so just set previousID to lineID
-                previousLineID = lineID;
-            }
-            
-            // get vertical align
-            NSNumber* valignNumber = [segment objectForKey:GSFancyTextVerticalAlignKey];
-            GSVerticalAlign valign = valignNumber ? [valignNumber intValue] : 0; // 0 is always the default, no matter what the default is
-            CGFloat actualY;
-            switch (valign) {
-                case GSVerticalAlignBaseline:
-                    actualY = y + h - segmentHeight - (baseline - segmentBaseline);
-                    break;
-                case GSVerticalAlignBottom:
-                    actualY = y + h - segmentHeight;
-                    break;
-                case GSVerticalAlignMiddle:
-                    actualY = y + (h-segmentHeight)/2;
-                    break;
-                case GSVerticalAlignTop:
-                    actualY = y;
-                    break;
-            }
-            
-            // draw
-            if (segmentIsLambda) {
-                NSString* lambdaID = [segment objectForKey:GSFancyTextInternalLambdaIDKey];
-                CGFloat lwidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
-                CGFloat lheight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
-                void(^drawingBlock)(CGRect);
-                if ((drawingBlock = [lambdaBlocks_ objectForKey:lambdaID])) {
-                    CGRect rect = GSRectMakeRounded(x, actualY, lwidth, lheight);
-                    drawingBlock(rect);
+                if (i==segments.count-1) {
+                    segmentWidth = lineWidthLimit - (w - lineLeftMargin);
                 }
-                #ifdef GS_DEBUG_MARKUP
                 else {
-                    GSDebugLog(@"\n[Warning]\nBlock %@... undefined. A blank space will be created.\n\n", lambdaID);
+                    // get confined width
+                    if (widthForSegment) {
+                        segmentWidth = [[widthForSegment objectAtIndex:i] floatValue];
+                        if (!segmentWidth) {
+                            continue; // ignore segments that we don't have space for
+                        }
+                    }
+                    else {
+                        getSegmentInfoWithWidthBlock();
+                    }
                 }
-                #endif
-            }
-            else {
-                // get color
-                UIColor* segmentColor = [segment objectForKey:GSFancyTextColorKey];
-                CGContextSetFillColorWithColor(ctx, [segmentColor CGColor]);
-                CGContextSetStrokeColorWithColor(ctx, [segmentColor CGColor]);
                 
-                // get shadow if there is any
-                NSString* segmentShadow = [segment objectForKey:GSFancyTextShadowKey];
-                [self processShadow:segmentShadow forContext:ctx];
+                // update y based on top margin
+                if (lineID != previousLineID) {
+                    // it's not for every line
+                    y += lineTopMargin;
+                    
+                    // we don't need to use previousLineID from here, so just set previousID to lineID
+                    previousLineID = lineID;
+                }
                 
-                // get truncation
-                NSNumber* truncationNumber = [segment objectForKey:GSFancyTextTruncateModeKey];
-                UILineBreakMode truncateMode = truncationNumber ? [truncationNumber intValue] : UILineBreakModeTailTruncation;
+                // get vertical align
+                NSNumber* valignNumber = [segment objectForKey:GSFancyTextVerticalAlignKey];
+                GSVerticalAlign valign = valignNumber ? [valignNumber intValue] : 0; // 0 is always the default, no matter what the default is
+                CGFloat actualY;
+                switch (valign) {
+                    case GSVerticalAlignBaseline:
+                        actualY = y + h - segmentHeight - (baseline - segmentBaseline);
+                        break;
+                    case GSVerticalAlignBottom:
+                        actualY = y + h - segmentHeight;
+                        break;
+                    case GSVerticalAlignMiddle:
+                        actualY = y + (h-segmentHeight)/2;
+                        break;
+                    case GSVerticalAlignTop:
+                        actualY = y;
+                        break;
+                }
                 
-                // actually draw
-                CGRect textArea = GSRectMakeRounded(x, actualY, segmentWidth, segmentHeight);
-                [segmentText drawInRect:textArea withFont:segmentFont lineBreakMode:truncateMode];
+                // draw
+                if (segmentIsLambda) {
+                    NSString* lambdaID = [segment objectForKey:GSFancyTextInternalLambdaIDKey];
+                    CGFloat lwidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
+                    CGFloat lheight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
+                    void(^drawingBlock)(CGRect);
+                    if ((drawingBlock = [lambdaBlocks_ objectForKey:lambdaID])) {
+                        CGRect rect = GSRectMakeRounded(x, actualY, lwidth, lheight);
+                        drawingBlock(rect);
+                    }
+#ifdef GS_DEBUG_MARKUP
+                    else {
+                        GSDebugLog(@"\n[Warning]\nBlock %@... undefined. A blank space will be created.\n\n", lambdaID);
+                    }
+#endif
+                }
+                else {
+                    // get color
+                    UIColor* segmentColor = [[segment objectForKey:GSFancyTextColorKey] copy];
+                    
+                    [drawActionArray_ addObject:^(CGContextRef ctx) {
+                        CGColorRef c = [segmentColor CGColor];
+                        CGContextSetFillColorWithColor(ctx, c);
+                        CGContextSetStrokeColorWithColor(ctx, c);
+                    }];
+                    
+                    // get shadow if there is any
+                    NSString* segmentShadow = [segment objectForKey:GSFancyTextShadowKey];
+                    [self processShadow:segmentShadow];
+                    
+                    // get truncation
+                    NSNumber* truncationNumber = [segment objectForKey:GSFancyTextTruncateModeKey];
+                    UILineBreakMode truncateMode = truncationNumber ? [truncationNumber intValue] : UILineBreakModeTailTruncation;
+                    
+                    // actually draw
+                    CGRect textArea = GSRectMakeRounded(x, actualY, segmentWidth, segmentHeight);
+                    
+                    NSString* thisText = [segmentText copy];
+                    UIFont* thisFont = [segmentFont copy];
+                    [drawActionArray_ addObject:^(CGContextRef ctx) {
+                        [thisText drawInRect:textArea withFont:thisFont lineBreakMode:truncateMode];
+                    }];
+                }
+                
+                x += segmentWidth;
+                w += segmentWidth;
+                
+                if (x >= maxX) {
+                    break;
+                }
             }
             
-            x += segmentWidth;
-            w += segmentWidth;
+            GSRelease(widthForSegment);
             
-            if (x >= maxX) {
-                break;
-            }
+            // Updating Y for the next line
+            y += h;
         }
+        y += previousLineBottomMargin;
         
-        GSRelease(widthForSegment);
-        
-        // Updating Y for the next line
-        y += h;
+        contentHeight_ = y - rect.origin.y;
     }
-    y += previousLineBottomMargin;
-    
-    contentHeight_ = y - rect.origin.y;
-    
-    #ifdef GS_DEBUG_PERFORMANCE
-    GSDebugLog(@"drawing time: %f", -[startDraw timeIntervalSinceNow]);
-    #endif
-    
 }
 
 - (void)defineLambdaID:(NSString*)lambdaID withBlock:(void(^)(CGRect))drawingBlock {
@@ -1785,7 +1802,7 @@ static NSMutableDictionary* fontMemory_;
 
 #pragma mark - Processing drawing parameters
 
-- (void)processShadow:(NSString*)shadowValue forContext:(CGContextRef)context {
+- (void)processShadow:(NSString*)shadowValue {
     BOOL hasShadow = NO;
     CGFloat hOffset = 0.f;
     CGFloat vOffset = 0.f;
@@ -1815,10 +1832,16 @@ static NSMutableDictionary* fontMemory_;
         if (!color) {
             color = [UIColor blackColor];
         }
-        CGContextSetShadowWithColor(context, CGSizeMake(0.f, 1.f), .5f, [UIColor blackColor].CGColor);
+        
+        UIColor* thisColor = [color copy];
+        [drawActionArray_ addObject:^(CGContextRef context) {
+            CGContextSetShadowWithColor(context, CGSizeMake(hOffset, vOffset), blur, thisColor.CGColor);
+        }];
     }
     else {
-        CGContextSetShadow(context, CGSizeMake(0.f, 0.f), 0.f);
+        [drawActionArray_ addObject:^(CGContextRef context) {
+            CGContextSetShadow(context, CGSizeMake(0.f, 0.f), 0.f);
+        }];
     }
 }
 
