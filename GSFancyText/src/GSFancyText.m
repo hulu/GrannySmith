@@ -1474,9 +1474,15 @@ static NSMutableDictionary* fontMemory_;
 
 - (void)drawInRect:(CGRect)rect {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [drawActionArray_ enumerateObjectsUsingBlock:^(void (^call)(CGContextRef), NSUInteger idx, BOOL *stop) {
-        call(ctx);
-    }];
+    @try {
+        [drawActionArray_ enumerateObjectsUsingBlock:^(void (^call)(CGContextRef), NSUInteger idx, BOOL *stop) {
+            call(ctx);
+        }];
+    }
+    @catch (NSException* ex) {
+        // Just break if the array is mutated during enumeration
+        // A setNeedsDisplay will be called to clean up the mess
+    }
 }
 
 - (void)prepareDrawingInRect:(CGRect)rect {
