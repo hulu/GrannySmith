@@ -34,6 +34,17 @@
     return self;
 }
 
++ (GSFancyTextView*)fancyTextViewWithFrame:(CGRect)frame markupText:(NSString*)markup,... {
+    va_list args;
+    va_start(args, markup);
+    NSString* content = [[NSString alloc] initWithFormat:markup arguments:args];
+    va_end(args);
+    GSFancyText* ft = [[GSFancyText alloc] initWithMarkupText:content];
+    GSFancyTextView* ftv = [[self alloc] initWithFrame:frame fancyText:ft];
+    GSRelease(ft);
+    return GSAutoreleased(ftv);
+}
+
 - (void)drawRect:(CGRect)rect
 {
     [fancyText_ drawInRect:rect];

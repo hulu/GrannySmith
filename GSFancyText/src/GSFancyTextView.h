@@ -50,6 +50,13 @@
  */
 - (id)initWithFrame:(CGRect)frame fancyText:(GSFancyText*)fancyText;
 
+/** The easiest way to create a simple fancy text view.
+ *
+ * e.g. [GSFancyTextView fancyTextViewWithFrame:CGRectMake(0, 0, 200, 200) markupText:@"<strong>Hello</strong> %@ %d", @"World", 2013];
+ */
++ (GSFancyTextView*)fancyTextViewWithFrame:(CGRect)frame markupText:(NSString*)markup,...;
+
+
 /// @name Frame update
 
 /** Call this method when fancy text is set or changed.
