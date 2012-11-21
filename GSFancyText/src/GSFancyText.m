@@ -1762,7 +1762,8 @@ static NSMutableDictionary* fontMemory_;
                     UILineBreakMode truncateMode = truncationNumber ? [truncationNumber intValue] : UILineBreakModeTailTruncation;
                     
                     // actually draw
-                    CGRect textArea = GSRectMakeRounded(x, actualY, segmentWidth, segmentHeight);
+                    CGFloat safeWidthAddition = 10.f;
+                    CGRect textArea = GSRectMakeRounded(x, actualY, segmentWidth + safeWidthAddition, segmentHeight);
                     
                     NSString* thisText = [segmentText copy];
                     UIFont* thisFont = [segmentFont copy];
