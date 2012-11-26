@@ -1766,7 +1766,7 @@ static NSMutableDictionary* fontMemory_;
                     CGRect textArea = GSRectMakeRounded(x, actualY, segmentWidth + safeWidthAddition, segmentHeight);
                     
                     NSString* thisText = [segmentText copy];
-                    UIFont* thisFont = [segmentFont copy];
+                    UIFont* thisFont = [UIFont fontWithName:segmentFont.fontName size:segmentFont.pointSize];
                     [drawActionArray_ addObject:^(CGContextRef ctx) {
                         [thisText drawInRect:textArea withFont:thisFont lineBreakMode:truncateMode];
                     }];
