@@ -1745,12 +1745,11 @@ static NSMutableDictionary* fontMemory_;
                 }
                 else {
                     // get color
-                    UIColor* segmentColor = [[segment objectForKey:GSFancyTextColorKey] copy];
+                    CGColorRef segmentCGColor = [[segment objectForKey:GSFancyTextColorKey] CGColor];
                     
                     [drawActionArray_ addObject:^(CGContextRef ctx) {
-                        CGColorRef c = [segmentColor CGColor];
-                        CGContextSetFillColorWithColor(ctx, c);
-                        CGContextSetStrokeColorWithColor(ctx, c);
+                        CGContextSetFillColorWithColor(ctx, segmentCGColor);
+                        CGContextSetStrokeColorWithColor(ctx, segmentCGColor);
                     }];
                     
                     // get shadow if there is any
