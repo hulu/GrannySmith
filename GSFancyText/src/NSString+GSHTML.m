@@ -563,9 +563,10 @@ static NSString* unescapedStringForEntity(NSString *entity) {
     }
 
     // make sure we're set up to unescape
-    if (!unescapeTable_) {
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
         initUnescapeVars();
-    }
+    });
 
     NSMutableString *rString = [[NSMutableString alloc] initWithCapacity:[self length]];
     NSScanner *scanner = [[NSScanner alloc] initWithString:self];
