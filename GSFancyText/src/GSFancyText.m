@@ -1471,7 +1471,7 @@ static NSMutableDictionary* fontMemory_;
     GSRelease(changeList);
 }
 
--(CGFloat) widthForString:(NSString*) string andFont:(UIFont *) font {
+- (CGFloat) widthForString:(NSString*) string andFont:(UIFont *) font {
     NSDictionary *attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
     
@@ -1554,7 +1554,7 @@ static NSMutableDictionary* fontMemory_;
             }
             else {
                 getSegmentInfoBlock();
-                segmentWidth = [segmentText sizeWithFont:segmentFont].width;
+                segmentWidth = [self widthForString:segmentText andFont:segmentFont];
             }
             CGFloat left = frameWidth - lineRightMargin - w;
             if (segmentWidth > left) {
