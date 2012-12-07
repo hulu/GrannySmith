@@ -11,6 +11,7 @@
 #import "NSString+GSHTML.h"
 #import "NSScanner+GSHierarchicalScan.h"
 #import <objc/message.h>
+#import <CoreText/CoreText.h>
 
 /// globalStyleDictionary_ is a parsed style dictionary that can be accessed globally
 static NSMutableDictionary* globalStyleDictionary_;
@@ -496,9 +497,16 @@ static int lineID_ = 1;
                 
                 GSRelease(piece);
                 
+                NSDictionary *attributes = [NSDictionary dictionaryWithObject:segmentFont forKey:NSFontAttributeName];
+                NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:lineText attributes:attributes];
+                
+                CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef) attributedString);
+                CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0,0), NULL, CGSizeMake(width_, CGFLOAT_MAX), NULL);
+                
+                CGFloat widthUsed = textSize.width;
+                
                 // Regular case: if it is not the last line, it means that this line is long enough to cover a whole line
                 if (i != segmentLines.count -1 ) {
-                    CGFloat widthUsed = [lineText sizeWithFont:segmentFont].width;
                     CGFloat currentLineContentWidth = widthUsed + (width_ - currentLineSpaceLeft);
                     contentWidth_ = MAX(contentWidth_, currentLineContentWidth);
                     if (!insertLineBlock() ) {
@@ -507,7 +515,6 @@ static int lineID_ = 1;
                 }
                 else {
                     // for any unfinished line, calculate the width left for the current line
-                    CGFloat widthUsed = [lineText sizeWithFont:segmentFont].width;
                     currentLineSpaceLeft = currentLineSpaceLeft - widthUsed;
                     // this is the last line of this segment, and there are more than 1 line in this break, 
                     // remove the margin space
