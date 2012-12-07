@@ -497,13 +497,7 @@ static int lineID_ = 1;
                 
                 GSRelease(piece);
                 
-                NSDictionary *attributes = [NSDictionary dictionaryWithObject:segmentFont forKey:NSFontAttributeName];
-                NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:lineText attributes:attributes];
-                
-                CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef) attributedString);
-                CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0,0), NULL, CGSizeMake(width_, CGFLOAT_MAX), NULL);
-                
-                CGFloat widthUsed = textSize.width;
+                CGFloat widthUsed = [self widthForString:lineText andFont:segmentFont];
                 
                 // Regular case: if it is not the last line, it means that this line is long enough to cover a whole line
                 if (i != segmentLines.count -1 ) {
@@ -1475,6 +1469,16 @@ static NSMutableDictionary* fontMemory_;
         GSRelease(styles);
     }
     GSRelease(changeList);
+}
+
+-(CGFloat) widthForString:(NSString*) string andFont:(UIFont *) font {
+    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
+    
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef) attributedString);
+    CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0,0), NULL, CGSizeMake(width_, CGFLOAT_MAX), NULL);
+    
+    return textSize.width;
 }
 
 #pragma mark - draw
