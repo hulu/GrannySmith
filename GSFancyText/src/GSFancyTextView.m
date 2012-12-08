@@ -61,7 +61,7 @@
     });
 }
 
-- (void)updateDisplay {
+- (void)updateDisplayWithCompletionHandler:(void(^)())completionHandler {
     self.fancyText.width = self.frame.size.width;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self.fancyText generateLines];
@@ -74,8 +74,15 @@
         [self.fancyText prepareDrawingInRect:self.bounds];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self setNeedsDisplay];
+            if (completionHandler) {
+                completionHandler();
+            }
         });
     });
+}
+
+- (void)updateDisplay {
+    [self updateDisplayWithCompletionHandler:nil];
 }
 
 - (void)setFrameHeightToContentHeight {

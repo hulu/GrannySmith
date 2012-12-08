@@ -68,6 +68,8 @@
 - (void)updateDisplay;
 
 
+- (void)updateDisplayWithCompletionHandler:(void(^)())completionHandler;
+
 /** Updates the frame size based on fancyText content height
  *
  * We may assign extra/more than enough space at the beginning, so after the drawing we can truncate the view frame to fit the content.
