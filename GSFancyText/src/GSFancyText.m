@@ -1472,11 +1472,13 @@ static NSMutableDictionary* fontMemory_;
 }
 
 - (CGFloat) widthForString:(NSString*) string andFont:(UIFont *) font {
-    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
+    CFMutableAttributedStringRef attributedString = CFAttributedStringCreateMutable(kCFAllocatorDefault, 0);
+    CFAttributedStringReplaceString (attributedString, CFRangeMake(0, 0), (CFStringRef)string);
+    CTFontRef ctFont = CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL);
+    CFAttributedStringSetAttribute(attributedString, CFRangeMake(0, CFAttributedStringGetLength(attributedString)), kCTFontAttributeName, ctFont);
     
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef) attributedString);
-    CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0,0), NULL, CGSizeMake(width_, CGFLOAT_MAX), NULL);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attributedString);
+    CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0,0), NULL, CGSizeMake(width_, CGFLOAT_MAX), NULL);    
     
     return textSize.width;
 }
