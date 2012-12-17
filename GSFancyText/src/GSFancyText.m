@@ -996,6 +996,10 @@ typedef enum {
                 }
                 break;
             case ParsingLhs:{
+                if (scanResult!=ScanMeetTarget) {
+                    return style;
+                }
+                
                 attribName = GSTrim(currentText);
                 if ([attribName caseInsensitiveCompare:GSFancyTextClassKey]==NSOrderedSame) {
                     attrib = ReadingClass; // currently we only care about class=, otherwise we should use an enum instead of BOOL
@@ -1488,7 +1492,7 @@ static NSMutableDictionary* fontMemory_;
 - (void)drawInRect:(CGRect)rect {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     for (int i=0; i<drawActionArray_.count; i++) {
-        void(^call)(CGContextRef) = [drawActionArray_ huSafeObjectAtIndex:i];
+        void(^call)(CGContextRef) = [drawActionArray_ objectAtIndex:i];
         call(ctx);
     }
 }

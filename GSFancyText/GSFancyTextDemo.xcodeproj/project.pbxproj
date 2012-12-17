@@ -32,6 +32,7 @@
 		EC6B5A1614BBE9D40016D910 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1514BBE9D40016D910 /* UIKit.framework */; };
 		EC6B5A1814BBE9D40016D910 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
 		EC6B5A1A14BBE9D40016D910 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1914BBE9D40016D910 /* CoreGraphics.framework */; };
+		EC9CACC7167FA801004DE9AA /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC9CACC6167FA801004DE9AA /* CoreText.framework */; };
 		ECFEEE751523C790005484CE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = ECFEEE741523C78F005484CE /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +84,7 @@
 		EC6B5A1714BBE9D40016D910 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		EC6B5A1914BBE9D40016D910 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		EC6B5A2D14BBE9D50016D910 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		EC9CACC6167FA801004DE9AA /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		ECFEEE741523C78F005484CE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,6 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC9CACC7167FA801004DE9AA /* CoreText.framework in Frameworks */,
 				EC6B5A1614BBE9D40016D910 /* UIKit.framework in Frameworks */,
 				EC6B5A1814BBE9D40016D910 /* Foundation.framework in Frameworks */,
 				EC6B5A1A14BBE9D40016D910 /* CoreGraphics.framework in Frameworks */,
@@ -170,6 +173,7 @@
 		EC6B5A0614BBE9D40016D910 = {
 			isa = PBXGroup;
 			children = (
+				EC9CACC6167FA801004DE9AA /* CoreText.framework */,
 				ECFEEE741523C78F005484CE /* README.md */,
 				ECFDC57314BBEB950084F4CB /* GSFancyText */,
 				EC6B5A1B14BBE9D40016D910 /* demo */,
