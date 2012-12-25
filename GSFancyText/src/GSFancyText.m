@@ -1127,7 +1127,28 @@ typedef enum {
         
         [scanner setScanLocation:1]; // bypass '#' character
         [scanner scanHexInt:&result];
+        if (value.length < 7) { // short form (#FFF)
+            result = (result & 0xF) + ((result & 0xF) << 4) +
+            ((result & 0xF0) << 4)  + ((result & 0xF0) << 8) +
+            ((result & 0xF00) << 8) + ((result & 0xF00) << 12);
+        }
         color = GSRgb(result);
+    }
+    else if ([value rangeOfString:GSFancyTextRGBAValue].location != NSNotFound) {
+        value = [value stringByReplacingOccurrencesOfString:GSFancyTextRGBAValue withString:@""];
+        value = [value stringByReplacingOccurrencesOfString:@"(" withString:@""];
+        value = [value stringByReplacingOccurrencesOfString:@")" withString:@""];
+        NSArray* colors = [value componentsSeparatedByString:@","];
+        if (colors.count == 4) {
+            CGFloat r = [(NSString*)[colors objectAtIndex:0] floatValue];
+            CGFloat g = [(NSString*)[colors objectAtIndex:1] floatValue];
+            CGFloat b = [(NSString*)[colors objectAtIndex:2] floatValue];
+            CGFloat a = [(NSString*)[colors objectAtIndex:3] floatValue];
+            
+            if (r<=255.f && r>=0.f && g<=255.f && g>=0.f && b<=255.f && b>=0.f && a<=1.f && a>=0.f) {
+                color = [UIColor colorWithRed:r/255.f green:g/255.f blue:b/255.f alpha:a];
+            }
+        }
     }
     else if ([value rangeOfString:GSFancyTextRGBValue].location != NSNotFound) {
         value = [value stringByReplacingOccurrencesOfString:GSFancyTextRGBValue withString:@""];

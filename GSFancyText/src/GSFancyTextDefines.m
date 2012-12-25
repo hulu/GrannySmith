@@ -39,6 +39,7 @@ NSString* const GSFancyTextAltKey = @"alt";
 NSString* const GSFancyTextBoldValue  = @"bold";
 NSString* const GSFancyTextItalicValue  = @"italic";
 NSString* const GSFancyTextRGBValue  = @"rgb";
+NSString* const GSFancyTextRGBAValue  = @"rgba";
 NSString* const GSFancyTextAlignLeftValue  = @"left";
 NSString* const GSFancyTextAlignCenterValue  = @"center";
 NSString* const GSFancyTextAlignRightValue  = @"right";
