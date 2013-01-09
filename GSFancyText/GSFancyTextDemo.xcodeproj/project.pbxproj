@@ -19,6 +19,7 @@
 		EC2F287314BF7F13007D8644 /* GSMarkupNodeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F286E14BF7F13007D8644 /* GSMarkupNodeTest.m */; };
 		EC2F287414BF7F13007D8644 /* GSParsingHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC2F286F14BF7F13007D8644 /* GSParsingHelperTest.m */; };
 		EC34B58314D60C4700653715 /* GSHTMLTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EC34B58214D60C4700653715 /* GSHTMLTest.m */; };
+		EC4E1FB7169D04F900CB41D9 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EC4E1FB6169D04F900CB41D9 /* Default-568h@2x.png */; };
 		EC61850314BCC17500E1DA2F /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A2D14BBE9D50016D910 /* SenTestingKit.framework */; };
 		EC61850414BCC17500E1DA2F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1514BBE9D40016D910 /* UIKit.framework */; };
 		EC61850514BCC17500E1DA2F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6B5A1714BBE9D40016D910 /* Foundation.framework */; };
@@ -66,6 +67,7 @@
 		EC2F286F14BF7F13007D8644 /* GSParsingHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSParsingHelperTest.m; path = tests/GSParsingHelperTest.m; sourceTree = SOURCE_ROOT; };
 		EC34B58214D60C4700653715 /* GSHTMLTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GSHTMLTest.m; path = tests/GSHTMLTest.m; sourceTree = SOURCE_ROOT; };
 		EC4CB1ED159519D40062191B /* GSConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSConfig.h; sourceTree = "<group>"; };
+		EC4E1FB6169D04F900CB41D9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "demo/Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		EC61850214BCC17500E1DA2F /* GSFancyTextTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GSFancyTextTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC61851914BCC3F200E1DA2F /* GSFancyText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSFancyText.h; sourceTree = "<group>"; };
 		EC61851A14BCC3F200E1DA2F /* GSFancyText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GSFancyText.m; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				EC2F285C14BF7EF8007D8644 /* GSFancyTextDemo-Prefix.pch */,
 				EC2F285D14BF7EF8007D8644 /* main.m */,
 				EC0A301514BF8CC200AD98CE /* GSFancyTextTest-Info.plist */,
+				EC4E1FB6169D04F900CB41D9 /* Default-568h@2x.png */,
 			);
 			name = demo;
 			path = HUFancyTextDemo;
@@ -272,7 +275,7 @@
 		EC6B5A0814BBE9D40016D910 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = Hulu;
 			};
 			buildConfigurationList = EC6B5A0B14BBE9D40016D910 /* Build configuration list for PBXProject "GSFancyTextDemo" */;
@@ -309,6 +312,7 @@
 			files = (
 				EC2F285E14BF7EF8007D8644 /* InfoPlist.strings in Resources */,
 				ECFEEE751523C790005484CE /* README.md in Resources */,
+				EC4E1FB7169D04F900CB41D9 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
