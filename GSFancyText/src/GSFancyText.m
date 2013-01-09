@@ -1742,7 +1742,9 @@ static NSMutableDictionary* fontMemory_;
                     void(^drawingBlock)(CGRect);
                     if ((drawingBlock = [lambdaBlocks_ objectForKey:lambdaID])) {
                         CGRect rect = GSRectMakeRounded(x, actualY, lwidth, lheight);
-                        drawingBlock(rect);
+                        [drawActionArray_ addObject:^(CGContextRef ctx) {
+                            drawingBlock(rect);
+                        }];
                     }
 #ifdef GS_DEBUG_MARKUP
                     else {
