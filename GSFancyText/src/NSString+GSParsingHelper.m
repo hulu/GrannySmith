@@ -42,6 +42,10 @@ const CGFloat ConservativeSpaceReservation = 1.f;
     NSString* subString = [self substringWithRange:NSMakeRange(start, len)];
     [result addObject:subString];
     while (start + len < self.length) {
+        if (limitLineCount>0 && result.count == limitLineCount-1) {
+            [result addObject:[self substringFromIndex:start+len]];
+            return GSAutoreleased(result);
+        }
         start = start + len;
         len = CTTypesetterSuggestLineBreak(ts, start, width);
         NSString* subString = [self substringWithRange:NSMakeRange(start, len)];
