@@ -51,4 +51,9 @@
  */
 - (float)possiblyPercentageNumberWithBase: (float)base;
 
+
+/** Returns the width of the string
+ */
+- (CGFloat)widthWithFont:(UIFont *)font maxWidth:(CGFloat)maxWidth;
+
 @end

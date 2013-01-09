@@ -300,4 +300,16 @@ const CGFloat ConservativeSpaceReservation = 1.f;
     }
 }
 
+- (CGFloat)widthWithFont:(UIFont *)font maxWidth:(CGFloat)maxWidth {
+    CFMutableAttributedStringRef attributedString = CFAttributedStringCreateMutable(kCFAllocatorDefault, 0);
+    CFAttributedStringReplaceString (attributedString, CFRangeMake(0, 0), (CFStringRef)self);
+    CTFontRef ctFont = CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL);
+    CFAttributedStringSetAttribute(attributedString, CFRangeMake(0, CFAttributedStringGetLength(attributedString)), kCTFontAttributeName, ctFont);
+    
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attributedString);
+    CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0,0), NULL, CGSizeMake(maxWidth, CGFLOAT_MAX), NULL);
+    
+    return textSize.width;
+}
+
 @end

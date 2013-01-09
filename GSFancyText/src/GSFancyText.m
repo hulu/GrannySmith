@@ -497,7 +497,7 @@ static int lineID_ = 1;
                 
                 GSRelease(piece);
                 
-                CGFloat widthUsed = [self widthForString:lineText andFont:segmentFont];
+                CGFloat widthUsed = [lineText widthWithFont:segmentFont maxWidth:width_];
                 
                 // Regular case: if it is not the last line, it means that this line is long enough to cover a whole line
                 if (i != segmentLines.count -1 ) {
@@ -1475,17 +1475,7 @@ static NSMutableDictionary* fontMemory_;
     GSRelease(changeList);
 }
 
-- (CGFloat) widthForString:(NSString*) string andFont:(UIFont *) font {
-    CFMutableAttributedStringRef attributedString = CFAttributedStringCreateMutable(kCFAllocatorDefault, 0);
-    CFAttributedStringReplaceString (attributedString, CFRangeMake(0, 0), (CFStringRef)string);
-    CTFontRef ctFont = CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL);
-    CFAttributedStringSetAttribute(attributedString, CFRangeMake(0, CFAttributedStringGetLength(attributedString)), kCTFontAttributeName, ctFont);
-    
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attributedString);
-    CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0,0), NULL, CGSizeMake(width_, CGFLOAT_MAX), NULL);    
-    
-    return textSize.width;
-}
+
 
 #pragma mark - draw
 
@@ -1560,7 +1550,7 @@ static NSMutableDictionary* fontMemory_;
             }
             else {
                 getSegmentInfoBlock();
-                segmentWidth = [self widthForString:segmentText andFont:segmentFont];
+                segmentWidth = [segmentText widthWithFont:segmentFont maxWidth:width_];
             }
             CGFloat left = frameWidth - lineRightMargin - w;
             if (segmentWidth > left) {
