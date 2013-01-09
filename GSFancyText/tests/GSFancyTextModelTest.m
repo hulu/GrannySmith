@@ -425,7 +425,6 @@
     
     NSLog(@"pure text: %@", f.pureText);
     
-    #warning TODO investigate the difference
     STAssertTrue( fabsf(f.contentWidth - expectedW)<3, @"content width not right: %f, should be:%f", f.contentWidth, expectedW);
     
     NSString* s2 = @"A quill pen is a writing implement made from a moulted flight feather (preferably a primary wing-feather) of a large bird. Quills were used for writing with ink before the invention of the dip pen, the metal-nibbed pen, the fountain pen, and, eventually, the ballpoint pen. The hand-cut goose quill is still used as a calligraphy tool, however rarely because many papers are now derived from wood pulp and wear down the quill very quickly. It is still the tool of choice for a few professionals and provides an unmatched sharp stroke as well as greater flexibility than a steel pen.";
