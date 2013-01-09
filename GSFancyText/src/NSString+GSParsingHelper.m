@@ -17,6 +17,10 @@ const CGFloat ConservativeSpaceReservation = 1.f;
 
 - (NSMutableArray*) linesWithWidth:(CGFloat)width font:(UIFont*)font firstLineWidth:(CGFloat)firstLineWidth limitLineCount:(int)limitLineCount {
 
+    if (limitLineCount==1) {
+        return [NSMutableArray arrayWithObject:self];
+    }
+
     #ifdef GS_DEBUG_CODE
     GSDebugLog(@"LineBreak - The string: %@, 1st line: %f, other lines: %f", self, firstLineWidth, width);
     #endif
@@ -30,17 +34,33 @@ const CGFloat ConservativeSpaceReservation = 1.f;
     CFDictionaryRef attr = CFDictionaryCreate(NULL, (const void **)&keys, (const void **)&values,
                                               sizeof(keys) / sizeof(keys[0]), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     CFAttributedStringRef attrString = CFAttributedStringCreate(NULL, (__bridge CFStringRef)self, attr);
-    CFRelease(attr);
     CFRelease(ctFont);
     
     CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attrString);
     CFRelease(attrString);
     
+    // if the first line is too narrow, and we have a second line that has enough space, we should skip the first line
+    NSString* temp = [NSString stringWithFormat:@" %@", self];
+    CFAttributedStringRef tempAttribStr = CFAttributedStringCreate(NULL, (__bridge CFStringRef)temp, attr);
+    CTTypesetterRef tempTs = CTTypesetterCreateWithAttributedString(tempAttribStr);
+    BOOL firstLineTooNarrow = CTTypesetterSuggestLineBreak(tempTs, 0, firstLineWidth)<=1;
+    BOOL secondLineBetter = CTTypesetterSuggestLineBreak(ts, 0, width) > CTTypesetterSuggestLineBreak(ts, 0, firstLineWidth);
+    BOOL shouldSkipFirstLine = (firstLineTooNarrow && secondLineBetter && limitLineCount!=1);
+    // the logic above is not perfect, e.g. if the str starts with "abcde ..." and the space in 1st line just fits "abcde" but won't fit " abcde", the space in the 1st line will be wasted, but it's not that bad, since the difference between "abcde" and ". abcde" is not that obvious. At least it's much better than getting the first word truncated to fit the 1st line while 2nd line has a lot of spaces.
+    
+    CFRelease(attr);
+    
     NSMutableArray* result = [NSMutableArray array];
     CFIndex start = 0;
-    CFIndex len = CTTypesetterSuggestLineBreak(ts, start, firstLineWidth);
-    NSString* subString = [self substringWithRange:NSMakeRange(start, len)];
-    [result addObject:subString];
+    CFIndex len = 0;
+    if (shouldSkipFirstLine) {
+        [result addObject:@""];
+    }
+    else {
+        len = CTTypesetterSuggestLineBreak(ts, start, firstLineWidth);
+        NSString* subString = [self substringWithRange:NSMakeRange(start, len)];
+        [result addObject:subString];
+    }
     while (start + len < self.length) {
         if (limitLineCount>0 && result.count == limitLineCount-1) {
             [result addObject:[self substringFromIndex:start+len]];
