@@ -21,6 +21,8 @@
     
     BOOL matchFrameHeightToContent_;
     BOOL matchFrameWidthToContent_;
+    
+    dispatch_queue_t workingQueue_;
 }
 
 /// @name Properties

@@ -15,10 +15,14 @@
 @synthesize matchFrameHeightToContent = matchFrameHeightToContent_;
 @synthesize matchFrameWidthToContent = matchFrameWidthToContent_;
 
-#ifdef GS_ARC_ENABLED
-#else
+
 - (void)dealloc {
+    dispatch_release(workingQueue_);
+#ifdef GS_ARC_ENABLED
+}
+#else
     GSRelease(fancyText_);
+    
     [super dealloc];
 }
 #endif
@@ -30,6 +34,7 @@
         contentHeight_ = 0.f;
         self.backgroundColor = [UIColor clearColor];
         matchFrameHeightToContent_ = NO;
+        workingQueue_ = dispatch_queue_create("gs.fancytext.queue", NULL);
     }
     return self;
 }
@@ -52,7 +57,7 @@
 
 
 - (void)updateAccessibilityLabel {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    dispatch_async(workingQueue_, ^{
         NSString* pureText = [fancyText_ pureText];
         dispatch_sync(dispatch_get_main_queue(), ^{
             self.isAccessibilityElement = YES;
@@ -63,7 +68,7 @@
 
 - (void)updateDisplayWithCompletionHandler:(void(^)())completionHandler {
     self.fancyText.width = self.frame.size.width;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(workingQueue_, ^{
         [self.fancyText generateLines];
         if (matchFrameHeightToContent_) {
             [self setFrameHeightToContentHeight];
@@ -86,7 +91,7 @@
 }
 
 - (void)setFrameHeightToContentHeight {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(workingQueue_, ^{
         CGFloat textContentHeight = [fancyText_ contentHeight];
         CGFloat expectedHeight = (contentHeight_ >= textContentHeight? contentHeight_ : textContentHeight);
         if (!expectedHeight) {
@@ -102,7 +107,7 @@
 }
 
 - (void)setFrameWidthToContentWidth {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(workingQueue_, ^{
         CGFloat width = [fancyText_ contentWidth];
         if (!width) {
             [fancyText_ generateLines];
