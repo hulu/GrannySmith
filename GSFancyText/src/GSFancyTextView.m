@@ -17,7 +17,11 @@
 
 
 - (void)dealloc {
-    dispatch_release(workingQueue_);
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0 || !defined(GS_ARC_ENABLED)
+    if (workingQueue_) {
+        dispatch_release(workingQueue_);
+    }
+#endif
 #ifdef GS_ARC_ENABLED
 }
 #else
