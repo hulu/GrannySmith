@@ -103,40 +103,49 @@
 }
 
 - (void)setFrameHeightToContentHeight {
-    dispatch_async(self.workingQueue, ^{
-        CGFloat textContentHeight = [fancyText_ contentHeight];
-        CGFloat expectedHeight = (contentHeight_ >= textContentHeight? contentHeight_ : textContentHeight);
-        if (!expectedHeight) {
-            [fancyText_ generateLines];
-            expectedHeight = [fancyText_ contentHeight];
-        }
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            CGRect frame = self.frame;
-            frame.size.height = expectedHeight;
-            self.frame = frame;
-        });
-    });
+    CGFloat textContentHeight = [fancyText_ contentHeight];
+    CGFloat expectedHeight = (contentHeight_ >= textContentHeight? contentHeight_ : textContentHeight);
+    if (!expectedHeight) {
+        [fancyText_ generateLines];
+        expectedHeight = [fancyText_ contentHeight];
+    }
+    
+    void(^updateFrameBlock)() = ^{
+        CGRect frame = self.frame;
+        frame.size.height = expectedHeight;
+        self.frame = frame;
+    };
+    
+    if ([NSThread isMainThread]) {
+        updateFrameBlock();
+    }
+    else {
+        dispatch_sync(dispatch_get_main_queue(), updateFrameBlock);
+    }
 }
 
 - (void)setFrameWidthToContentWidth {
-    dispatch_async(self.workingQueue, ^{
-        CGFloat width = [fancyText_ contentWidth];
-        if (!width) {
-            [fancyText_ generateLines];
-            width = [fancyText_ contentWidth];
+    CGFloat width = [fancyText_ contentWidth];
+    if (!width) {
+        [fancyText_ generateLines];
+        width = [fancyText_ contentWidth];
+    }
+    void(^updateFrameBlock)() = ^{
+        if (width > self.frame.size.width) {
+            // decrease width only. Don't increase.
+            return;
         }
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            if (width > self.frame.size.width) {
-                // decrease width only. Don't increase.
-                return;
-            }
-            
-            CGRect frame = self.frame;
-            frame.size.width = width;
-            self.frame = frame;
-        });
-    });
+        CGRect frame = self.frame;
+        frame.size.width = width;
+        self.frame = frame;
+    };
+    
+    if ([NSThread isMainThread]) {
+        updateFrameBlock();
+    }
+    else {
+        dispatch_sync(dispatch_get_main_queue(), updateFrameBlock);
+    }
 }
 
 
