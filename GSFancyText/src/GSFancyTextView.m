@@ -17,6 +17,7 @@
 
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0 || !defined(GS_ARC_ENABLED)
     if (workingQueue_) {
         dispatch_release(workingQueue_);
@@ -31,13 +32,20 @@
 }
 #endif
 
--(id) initWithFrame:(CGRect)frame fancyText:(GSFancyText*)fancyText {
-    if (( self = [super initWithFrame:frame] )) {
-        fancyText_ = GSRetained(fancyText);
-        fancyText_.width = frame.size.width;
+- (id)initWithFrame:(CGRect)frame {
+    if (( self = [super initWithFrame:frame])) {
         contentHeight_ = 0.f;
         self.backgroundColor = [UIColor clearColor];
         matchFrameHeightToContent_ = NO;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    }
+    return self;
+}
+
+-(id) initWithFrame:(CGRect)frame fancyText:(GSFancyText*)fancyText {
+    if (( self = [self initWithFrame:frame] )) {
+        fancyText_ = GSRetained(fancyText);
+        fancyText_.width = frame.size.width;
     }
     return self;
 }
@@ -79,8 +87,18 @@
 }
 
 - (void)updateDisplayWithCompletionHandler:(void(^)())completionHandler {
+    [self updateDisplayWithCompletionHandler:completionHandler justForRotation:NO];
+}
+
+- (void)updateDisplayWithCompletionHandler:(void(^)())completionHandler justForRotation:(BOOL)justForRotation {
     self.fancyText.width = self.frame.size.width;
+    self.hidden = YES;
     dispatch_async(self.workingQueue, ^{
+        UIDeviceOrientation currentOrientation = [UIDevice currentDevice].orientation;
+        if (justForRotation && currentOrientation == lastHandledOrientation_) {
+            return;
+        }
+        lastHandledOrientation_ = currentOrientation;
         [self.fancyText generateLines];
         if (matchFrameHeightToContent_) {
             [self setFrameHeightToContentHeight];
@@ -91,6 +109,7 @@
         [self.fancyText prepareDrawingInRect:self.bounds];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self setNeedsDisplay];
+            self.hidden = NO;
             if (completionHandler) {
                 completionHandler();
             }
@@ -99,7 +118,7 @@
 }
 
 - (void)updateDisplay {
-    [self updateDisplayWithCompletionHandler:nil];
+    [self updateDisplayWithCompletionHandler:nil justForRotation:NO];
 }
 
 - (void)setFrameHeightToContentHeight {
@@ -146,6 +165,10 @@
     else {
         dispatch_sync(dispatch_get_main_queue(), updateFrameBlock);
     }
+}
+
+- (void)didRotate:(NSNotification*)notification {
+    [self updateDisplayWithCompletionHandler:nil justForRotation:YES];
 }
 
 

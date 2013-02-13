@@ -23,6 +23,8 @@
     BOOL matchFrameWidthToContent_;
     
     dispatch_queue_t workingQueue_;
+    
+    UIDeviceOrientation lastHandledOrientation_;
 }
 
 /// @name Properties
