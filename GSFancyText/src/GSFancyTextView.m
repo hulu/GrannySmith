@@ -92,7 +92,7 @@
 
 - (void)updateDisplayWithCompletionHandler:(void(^)())completionHandler justForRotation:(BOOL)justForRotation {
     self.fancyText.width = self.frame.size.width;
-    self.hidden = YES;
+//    self.hidden = YES;
     dispatch_async(self.workingQueue, ^{
         UIDeviceOrientation currentOrientation = [UIDevice currentDevice].orientation;
         if (justForRotation && currentOrientation == lastHandledOrientation_) {
@@ -109,7 +109,7 @@
         [self.fancyText prepareDrawingInRect:self.bounds];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self setNeedsDisplay];
-            self.hidden = NO;
+//            self.hidden = NO;
             if (completionHandler) {
                 completionHandler();
             }
