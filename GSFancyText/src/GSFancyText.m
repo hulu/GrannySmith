@@ -1480,10 +1480,12 @@ static NSMutableDictionary* fontMemory_;
 #pragma mark - draw
 
 - (void)drawInRect:(CGRect)rect {
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    for (int i=0; i<drawActionArray_.count; i++) {
-        void(^call)(CGContextRef) = [drawActionArray_ objectAtIndex:i];
-        call(ctx);
+    @synchronized(self) {
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        for (int i=0; i<drawActionArray_.count; i++) {
+            void(^call)(CGContextRef) = [drawActionArray_ objectAtIndex:i];
+            call(ctx);
+        }
     }
 }
 
