@@ -1708,6 +1708,8 @@ static NSMutableDictionary* fontMemory_;
                     }
                 }
                 
+                NSLog(@"for text: %@, width is %f", segmentText, segmentWidth);
+                
                 // update y based on top margin
                 if (lineID != previousLineID) {
                     // it's not for every line
@@ -1772,7 +1774,7 @@ static NSMutableDictionary* fontMemory_;
                     UILineBreakMode truncateMode = truncationNumber ? [truncationNumber intValue] : UILineBreakModeTailTruncation;
                     
                     // actually draw
-                    CGFloat safeWidthAddition = 10.f;
+                    CGFloat safeWidthAddition = 5.f;
                     CGRect textArea = GSRectMakeRounded(x, actualY, segmentWidth + safeWidthAddition, segmentHeight);
                     
                     NSString* thisText = [segmentText copy];

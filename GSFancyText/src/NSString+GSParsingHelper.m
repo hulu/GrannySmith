@@ -57,7 +57,7 @@ const CGFloat ConservativeSpaceReservation = 1.f;
         [result addObject:@""];
     }
     else {
-        len = CTTypesetterSuggestLineBreak(ts, start, firstLineWidth);
+        len = CTTypesetterSuggestLineBreak(ts, start, firstLineWidth - ConservativeSpaceReservation);
         NSString* subString = [self substringWithRange:NSMakeRange(start, len)];
         [result addObject:subString];
     }
@@ -67,7 +67,7 @@ const CGFloat ConservativeSpaceReservation = 1.f;
             return GSAutoreleased(result);
         }
         start = start + len;
-        len = CTTypesetterSuggestLineBreak(ts, start, width);
+        len = CTTypesetterSuggestLineBreak(ts, start, width - ConservativeSpaceReservation);
         NSString* subString = [self substringWithRange:NSMakeRange(start, len)];
         [result addObject:subString];
     }
@@ -155,7 +155,7 @@ const CGFloat ConservativeSpaceReservation = 1.f;
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attributedString);
     CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0,0), NULL, CGSizeMake(maxWidth, CGFLOAT_MAX), NULL);
     
-    return textSize.width;
+    return textSize.width + ConservativeSpaceReservation;
 }
 
 @end
