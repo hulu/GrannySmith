@@ -24,7 +24,7 @@
     
     dispatch_queue_t workingQueue_;
     
-    UIDeviceOrientation lastHandledOrientation_;
+    CGSize lastHandledSize_;
 }
 
 /// @name Properties

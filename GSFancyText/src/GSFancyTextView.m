@@ -37,7 +37,6 @@
         contentHeight_ = 0.f;
         self.backgroundColor = [UIColor clearColor];
         matchFrameHeightToContent_ = NO;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
     }
     return self;
 }
@@ -87,18 +86,18 @@
 }
 
 - (void)updateDisplayWithCompletionHandler:(void(^)())completionHandler {
-    [self updateDisplayWithCompletionHandler:completionHandler justForRotation:NO];
+    [self updateDisplayWithCompletionHandler:completionHandler justForResize:NO];
 }
 
-- (void)updateDisplayWithCompletionHandler:(void(^)())completionHandler justForRotation:(BOOL)justForRotation {
+- (void)updateDisplayWithCompletionHandler:(void(^)())completionHandler justForResize:(BOOL)justForResize {
     self.fancyText.width = self.frame.size.width;
 //    self.hidden = YES;
     dispatch_async(self.workingQueue, ^{
-        UIDeviceOrientation currentOrientation = [UIDevice currentDevice].orientation;
-        if (justForRotation && currentOrientation == lastHandledOrientation_) {
+        CGSize currentSize = self.frame.size;
+        if (justForResize && currentSize.width == lastHandledSize_.width && currentSize.height == lastHandledSize_.height) {
             return;
         }
-        lastHandledOrientation_ = currentOrientation;
+        lastHandledSize_ = currentSize;
         [self.fancyText generateLines];
         if (matchFrameHeightToContent_) {
             [self setFrameHeightToContentHeight];
@@ -118,7 +117,7 @@
 }
 
 - (void)updateDisplay {
-    [self updateDisplayWithCompletionHandler:nil justForRotation:NO];
+    [self updateDisplayWithCompletionHandler:nil justForResize:NO];
 }
 
 - (void)setFrameHeightToContentHeight {
@@ -167,9 +166,10 @@
     }
 }
 
-- (void)didRotate:(NSNotification*)notification {
-    [self updateDisplayWithCompletionHandler:nil justForRotation:YES];
-}
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self updateDisplayWithCompletionHandler:nil justForResize:YES];
+}
 
 @end
