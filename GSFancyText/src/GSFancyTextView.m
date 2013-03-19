@@ -167,9 +167,11 @@
 }
 
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    [self updateDisplayWithCompletionHandler:nil justForResize:YES];
-}
+// TODO this won't work perfectly yet, so disabling it for now and will think about later.
+// In some cases we don't want to trigger updateDisplay call without inserting a completion handler
+//- (void)layoutSubviews {
+//    [super layoutSubviews];
+//    [self updateDisplayWithCompletionHandler:nil justForResize:YES];
+//}
 
 @end
