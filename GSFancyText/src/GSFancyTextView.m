@@ -99,13 +99,15 @@
         }
         lastHandledSize_ = currentSize;
         [self.fancyText generateLines];
+        [self.fancyText prepareDrawingInRect:self.bounds];
+        
         if (matchFrameHeightToContent_) {
             [self setFrameHeightToContentHeight];
         }
         if (matchFrameWidthToContent_) {
             [self setFrameWidthToContentWidth];
         }
-        [self.fancyText prepareDrawingInRect:self.bounds];
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self setNeedsDisplay];
 //            self.hidden = NO;

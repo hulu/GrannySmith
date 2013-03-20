@@ -1708,7 +1708,6 @@ static NSMutableDictionary* fontMemory_;
                     }
                 }
                 
-                NSLog(@"for text: %@, width is %f", segmentText, segmentWidth);
                 
                 // update y based on top margin
                 if (lineID != previousLineID) {
