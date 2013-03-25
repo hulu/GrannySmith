@@ -1273,7 +1273,9 @@ static NSMutableDictionary* fontMemory_;
         familyName = name;
     }
     else {
-        familyName = GSFancyTextDefaultFontFamily;
+        // allow custom font:
+        return [UIFont fontWithName:name size:size];
+//        familyName = GSFancyTextDefaultFontFamily;
     }
     NSArray* availableFontNames = [UIFont fontNamesForFamilyName:familyName];
     
