@@ -1271,12 +1271,13 @@ static NSMutableDictionary* fontMemory_;
     
     if ([fontFamilies containsObject:name]) {
         familyName = name;
-    } else if (!name) {
-        //If user does not select a font, use the default
-        //We need this case since a lot of places does not set the font
-        familyName = GSFancyTextDefaultFontFamily;
-    } else {
+    }
+    else if (name.length) {
+        // allow custom font:
         return [UIFont fontWithName:name size:size];
+    }
+    else {
+        familyName = GSFancyTextDefaultFontFamily;
     }
     NSArray* availableFontNames = [UIFont fontNamesForFamilyName:familyName];
     
