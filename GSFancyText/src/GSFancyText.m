@@ -1840,7 +1840,7 @@ static NSMutableDictionary* fontMemory_;
                     blur = [[args objectAtIndex:2] floatValue];
                 }
             }
-            else { // >=4
+            else if (args.count >=4){ // >=4
                 blur = [[args objectAtIndex:2] floatValue];
                 color = [[self class] parseColor:[args objectAtIndex:3] intoDictionary:nil];
             }
