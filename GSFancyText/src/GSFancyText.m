@@ -1601,6 +1601,10 @@ static NSMutableDictionary* fontMemory_;
             }
             
             BOOL advancedTruncation = [[firstSegment objectForKey:GSFancyTextAdvancedTruncationKey] boolValue];
+            if (l==lines_.count-1 && [firstSegment objectForKey:GSFancyTextMinWidthKey]) {
+                // it's a hack fix for now: if it's the last line and the first element has a min-width, force use advanced truncation.
+                advancedTruncation = YES;
+            }
             
             h = 0.f;
             w = 0.f;
