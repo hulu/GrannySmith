@@ -34,6 +34,8 @@
     GSMarkupNode* parsedTree_; // root of the parsed result (in tree structure). ready after parseStructure
     
     NSMutableArray* drawActionArray_;
+    
+    NSMutableArray* shadowColorArray_;
 }
 
 

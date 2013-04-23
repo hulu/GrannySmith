@@ -97,7 +97,8 @@ static int lineID_ = 1;
     GSRelease(lines_);
     GSRelease(parsedTree_);
     GSRelease(lambdaBlocks_);
-    CGRelease(drawActionArray_);
+    GSRelease(drawActionArray_);
+    GSRelease(shadowColorArray_);
     [super dealloc];
 }
 #endif
@@ -1875,9 +1876,14 @@ static NSMutableDictionary* fontMemory_;
             color = [UIColor blackColor];
         }
         
-        UIColor* thisColor = [color copy];
+        if (!shadowColorArray_) {
+            shadowColorArray_ = [NSMutableArray new];
+        }
+        [shadowColorArray_ addObject:color];
+        
+        CGColorRef shadowColor = color.CGColor;
         [drawActionArray_ addObject:^(CGContextRef context) {
-            CGContextSetShadowWithColor(context, CGSizeMake(hOffset, vOffset), blur, thisColor.CGColor);
+            CGContextSetShadowWithColor(context, CGSizeMake(hOffset, vOffset), blur, shadowColor);
         }];
     }
     else {
