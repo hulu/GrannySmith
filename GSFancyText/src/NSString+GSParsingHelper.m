@@ -37,7 +37,6 @@ const CGFloat ConservativeSpaceReservation = 1.f;
     CFRelease(ctFont);
     
     CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attrString);
-    CFRelease(attrString);
     
     // if the first line is too narrow, and we have a second line that has enough space, we should skip the first line
     NSString* temp = [NSString stringWithFormat:@" %@", self];
@@ -48,7 +47,6 @@ const CGFloat ConservativeSpaceReservation = 1.f;
     BOOL shouldSkipFirstLine = (firstLineTooNarrow && secondLineBetter && limitLineCount!=1);
     // the logic above is not perfect, e.g. if the str starts with "abcde ..." and the space in 1st line just fits "abcde" but won't fit " abcde", the space in the 1st line will be wasted, but it's not that bad, since the difference between "abcde" and ". abcde" is not that obvious. At least it's much better than getting the first word truncated to fit the 1st line while 2nd line has a lot of spaces.
     
-    CFRelease(attr);
     
     NSMutableArray* result = [NSMutableArray array];
     CFIndex start = 0;
@@ -71,6 +69,13 @@ const CGFloat ConservativeSpaceReservation = 1.f;
         NSString* subString = [self substringWithRange:NSMakeRange(start, len)];
         [result addObject:subString];
     }
+    
+    CFRelease(ts);
+    CFRelease(tempTs);
+    CFRelease(attrString);
+    CFRelease(tempAttribStr);
+    CFRelease(attr);
+    
     return result;
 }
 
@@ -154,6 +159,10 @@ const CGFloat ConservativeSpaceReservation = 1.f;
     
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attributedString);
     CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0,0), NULL, CGSizeMake(maxWidth, CGFLOAT_MAX), NULL);
+    
+    CFRelease(framesetter);
+    CFRelease(attributedString);
+    CFRelease(ctFont);
     
     return textSize.width + ConservativeSpaceReservation;
 }
