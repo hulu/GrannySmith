@@ -62,6 +62,12 @@ const CGFloat ConservativeSpaceReservation = 1.f;
     while (start + len < self.length) {
         if (limitLineCount>0 && result.count == limitLineCount-1) {
             [result addObject:[self substringFromIndex:start+len]];
+            
+            CFRelease(ts);
+            CFRelease(tempTs);
+            CFRelease(attrString);
+            CFRelease(tempAttribStr);
+            CFRelease(attr);
             return GSAutoreleased(result);
         }
         start = start + len;
