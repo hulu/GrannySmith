@@ -1572,7 +1572,6 @@ static NSMutableDictionary* fontMemory_;
             //note that descender is a negative number. -descender is the absolute height of descender from the baseline
         };
         void(^getSegmentInfoWithWidthBlock) () = ^(void) {
-            
             if (segmentIsLambda) {
                 segmentWidth = [[segment objectForKey:GSFancyTextWidthKey] floatValue];
             }
@@ -1590,7 +1589,11 @@ static NSMutableDictionary* fontMemory_;
                 segmentHeight = [[segment objectForKey:GSFancyTextHeightKey] floatValue];
             }
             else {
-                segmentHeight = [(UIFont*)[segment objectForKey:GSFancyTextFontKey] lineHeight];
+                UIFont *font = (UIFont*)[segment objectForKey:GSFancyTextFontKey];
+                segmentHeight = font.lineHeight;
+                if (HUFloatOSVersion() >= 7.0) {
+                    segmentHeight = segmentHeight - font.descender;
+                }
             }
             NSString* specifiedHeight = [segment objectForKey:GSFancyTextLineHeightKey];
             if (specifiedHeight) {
