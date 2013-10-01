@@ -1591,9 +1591,6 @@ static NSMutableDictionary* fontMemory_;
             else {
                 UIFont *font = (UIFont*)[segment objectForKey:GSFancyTextFontKey];
                 segmentHeight = font.lineHeight;
-                if (HUFloatOSVersion() >= 7.0) {
-                    segmentHeight = segmentHeight - font.descender;
-                }
             }
             NSString* specifiedHeight = [segment objectForKey:GSFancyTextLineHeightKey];
             if (specifiedHeight) {
@@ -1830,6 +1827,11 @@ static NSMutableDictionary* fontMemory_;
             y += h;
         }
         y += previousLineBottomMargin;
+        
+        UIFont *font = (UIFont*)[segment objectForKey:GSFancyTextFontKey];
+        if (HUFloatOSVersion() >= 7.0) {
+            y = y- font.descender;
+        }
         
         contentHeight_ = y - rect.origin.y;
     }
