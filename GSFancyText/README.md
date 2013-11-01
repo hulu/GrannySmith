@@ -20,7 +20,7 @@ Then you can directly draw this in a customized view:
 
     [fancyText drawInRect: rect];
 
-Or create a GSFancyTextView object to display it
+Or create a GSFancyTextView object to display some rich text
 
     GSFancyTextView* fancyView = [[GSFancyTextView alloc] initWithFrame:frame fancyText:fancyText];
 

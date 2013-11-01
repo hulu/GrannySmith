@@ -1829,7 +1829,7 @@ static NSMutableDictionary* fontMemory_;
         y += previousLineBottomMargin;
         
         UIFont *font = (UIFont*)[segment objectForKey:GSFancyTextFontKey];
-        if (HUFloatOSVersion() >= 7.0) {
+        if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0) {
             y = y- font.descender;
         }
         
