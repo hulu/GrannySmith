@@ -12,17 +12,10 @@ First define the styles using a CSS-like string:
     NSString* styleSheet = @".green {color:#00ff00; font-weight:bold} .gray {color:gray; font-weight:bold}";
     [GSFancyText parseStyleAndSetGlobal:styleSheet];
 
-Then create a GSFancyText object with a markup string:
+Then create a GSFancyTextView object to display some rich text
 
-    GSFancyText* fancyText = [[GSFancyText alloc] initWithMarkupText: @"<span class=green>Hulu</span> <span class=gray>Plus</span>"];
-
-Then you can directly draw this in a customized view:
-
-    [fancyText drawInRect: rect];
-
-Or create a GSFancyTextView object to display some rich text
-
-    GSFancyTextView* fancyView = [[GSFancyTextView alloc] initWithFrame:frame fancyText:fancyText];
+    GSFancyTextView* fancyTextView = [GSFancyTextView fancyTextViewWithFrame:frame markupText:@"<span class=green>Hulu</span> <span class=gray>Plus</span>"];
+    [fancyTextView updateDisplay];
 
 
 Notes on ARC
