@@ -1800,7 +1800,7 @@ static NSMutableDictionary* fontMemory_;
                     
                     // get truncation
                     NSNumber* truncationNumber = [segment objectForKey:GSFancyTextTruncateModeKey];
-                    UILineBreakMode truncateMode = truncationNumber ? [truncationNumber intValue] : UILineBreakModeTailTruncation;
+                    NSLineBreakMode truncateMode = truncationNumber ? [truncationNumber intValue] : NSLineBreakByTruncatingTail;
                     
                     // actually draw
                     CGFloat safeWidthAddition = 5.f;
