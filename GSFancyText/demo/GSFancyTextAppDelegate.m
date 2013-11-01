@@ -20,8 +20,7 @@
     [self.window makeKeyAndVisible];
     
     demoViewController_ = [[GSFancyTextDemoViewController alloc] init];
-    demoViewController_.view.frame = self.window.bounds;
-    [self.window addSubview:demoViewController_.view];
+    self.window.rootViewController = demoViewController_;
     
     return YES;
 }
