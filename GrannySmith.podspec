@@ -24,9 +24,4 @@ Pod::Spec.new do |s|
   s.subspec 'GSFancyText' do |sp|
     sp.source_files = 'GSFancyText/src'
   end
-  def s.post_install(target)
-    File.open( config.project_pods_root + 'GrannySmith/GSFancyText/src/GSConfig.h', "w+" ) do |file|
-      file.puts file.read.gsub("#warning","//#warning")
-    end
-  end
 end
