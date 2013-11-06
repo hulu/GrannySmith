@@ -12,14 +12,14 @@
 
 
 /// Uncomment the following line if ARC (Automatic Reference Counting) is enabled. Comment it if ARC is not enabled.
-#if __has_feature(objc_arc)
- #define GS_ARC_ENABLED 1
-#endif
+//#if __has_feature(objc_arc)
+#define GS_ARC_ENABLED 1
+//#endif
 
 /// Comment the following line if ARC is enabled but your deployment target is iOS 4.x.
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0
- #define GS_ARC_WEAK_REF_ENABLED 1
-#endif
+//#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0
+#define GS_ARC_WEAK_REF_ENABLED 1
+//#endif
 
 
 // #define GS_DEBUG_MARKUP 1           // Uncomment to log the markup text warnings
