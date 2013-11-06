@@ -19,7 +19,6 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
   s.author       = "Hulu"
-  s.source       = { :git => "https://github.com/hulu/GrannySmith.git", :tag => "1.0.1" }
   s.platform     = :ios
 
   s.subspec 'GSFancyText' do |sp|
