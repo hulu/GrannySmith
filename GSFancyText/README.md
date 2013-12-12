@@ -16,36 +16,19 @@ Then create a GSFancyTextView object to display some rich text
 
     GSFancyTextView* fancyTextView = [GSFancyTextView fancyTextViewWithFrame:frame markupText:@"<span class=green>Hulu</span> <span class=gray>Plus</span>"];
     [fancyTextView updateDisplay];
+    
+Or alternatively:
 
-
-Notes on ARC
-==========
-
-ARC stands for Automatic Reference Counting.
-
-GSFancyText supports both ARC-enabled and ARC-disabled projects. Depending on your project setting, you need to either enable or delete the following line:
-
-    #define GS_ARC_ENABLED 1
-
-in the GSConfig.h file.
-
-When ARC is enabled, you can further configure the support of weak reference by enabling or disabling the GS_ARC_WEAK_REF_ENABLED flag.
-
-Make sure that modifications of configurations in GSConfig.h is not committed in git.
+    [fancyTextView updateDisplayWithCompletionHandler:^{
+        // logic to align fancyTextView based on its size
+        // ...
+    }];
 
 
 Use the Demo
 ==========
 
-The open the GSFancyTextDemo.xcodeproj file with Xcode (4.2 or higher version).
-
-First you need to go to GSFancyTextDefines.h file, and uncomment the line:
-
-    #define GS_ARC_ENABLED 1
-
-in GSFancyTextDefines.h, because the demo project has ARC enabled.
-
-Then you should be able to compile and run the app. For better viewing experience, it's recommended to compile it to an iPhone, iPod touch, or iPhone simulator.
+The open the GSFancyTextDemo.xcodeproj file with Xcode and run the app. For better viewing experience, it's recommended to compile it to an iPhone, iPod touch, or iPhone simulator.
 
 You can check the GSFancyTextDemoViewController.m file under demo folder to see how the fancy text is defined. You can also change the parameters and see how it affects the output.
 
@@ -97,7 +80,7 @@ Demo App Screenshot
 
 License
 ==========
-Copyright (C) 2012 by Hulu, LLC
+Copyright (C) 2013 by Hulu, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -116,15 +99,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-
-
-Contact
-==========
-
-For support or for further questions, please use the issue tracker of github, or contact:
-
-      grannysmith-dev@googlegroups.com
 
 
 
