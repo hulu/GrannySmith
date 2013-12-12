@@ -1,5 +1,5 @@
-Summary {#mainpage}
-==========
+Summary
+=======
 
 GSFancyText is a rich text drawing library for iOS.
 
