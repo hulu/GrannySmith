@@ -124,8 +124,12 @@ static int lineID_ = 1;
     return self;
 }
 
-- (id)initWithMarkupText:(NSString*)text {
-    return [self initWithMarkupText:text styleDict:nil width:0 maxHeight:0];
+- (id)initWithMarkupText:(NSString*)text,... {
+    va_list args;
+    va_start(args, text);
+    NSString* fullText = [[NSString alloc] initWithFormat:text arguments:args];
+    va_end(args);
+    return [self initWithMarkupText:fullText styleDict:nil width:0 maxHeight:0];
 }
 
 

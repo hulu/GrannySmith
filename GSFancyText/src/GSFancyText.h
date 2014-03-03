@@ -77,7 +77,7 @@
 
 /** Initialize with a formatted text and the global style (if set). The width and max height are set to 0 and can be changed later.
  */
-- (id)initWithMarkupText:(NSString*)text;
+- (id)initWithMarkupText:(NSString*)text, ...;
 
 /** Init with a parsed structure.
  *
