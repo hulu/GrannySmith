@@ -1173,7 +1173,7 @@ typedef enum {
     else {
         SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%@Color", value]);
         if ([[UIColor class] respondsToSelector: sel]) {
-            color = objc_msgSend([UIColor class], sel);
+            color = ((UIColor* (*)(Class, SEL))objc_msgSend)([UIColor class], sel);
         }
     }
     
