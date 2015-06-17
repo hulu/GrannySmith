@@ -1,7 +1,7 @@
 Summary
 ==========
 
-GrannySmith is Hulu's Objective C open source project.
+GrannySmith is Hulu's Objective-C open source project.
 
 The first tool provided in GrannySmith is [GSFancyText](GSFancyText/README.md). It allows you to format rich text in iOS in HTML/CSS fashion.
 

@@ -12,7 +12,7 @@ First define the styles using a CSS-like string:
     NSString* styleSheet = @".green {color:#00ff00; font-weight:bold} .gray {color:gray; font-weight:bold}";
     [GSFancyText parseStyleAndSetGlobal:styleSheet];
 
-Then create a GSFancyTextView object to display some rich text
+Then create a GSFancyTextView object to display some rich text:
 
     GSFancyTextView* fancyTextView = [GSFancyTextView fancyTextViewWithFrame:frame markupText:@"<span class=green>Hulu</span> <span class=gray>Plus</span>"];
     [fancyTextView updateDisplay];
@@ -28,9 +28,9 @@ Or alternatively:
 Use the Demo
 ==========
 
-The open the GSFancyTextDemo.xcodeproj file with Xcode and run the app. For better viewing experience, it's recommended to compile it to an iPhone, iPod touch, or iPhone simulator.
+The open the GSFancyTextDemo.xcodeproj file with Xcode and run the app. For a better viewing experience, it's recommended to compile it to an iPhone, iPod touch, or iPhone simulator.
 
-You can check the GSFancyTextDemoViewController.m file under demo folder to see how the fancy text is defined. You can also change the parameters and see how it affects the output.
+You can check the GSFancyTextDemoViewController.m file under the demo folder to see how the fancy text is defined. You can also change the parameters and see how it affects the output.
 
 
 
@@ -46,9 +46,9 @@ To install Xcode docset:
 2. Copy the com.hulu.gsfancytext.docset file in GSFancyText/docs folder to ~/Library/Developer/Shared/Documentation/DocSets
 3. Restart Xcode
 
-After installing docset, you can hold option key and click a GSFancyText class or method name in Xcode, to preview or link to the documentation page.
+After installing docset, you can hold the option key and click a GSFancyText class or method name in Xcode, to preview or link to the documentation page.
 
-To create documentation and docset based on the latest code, install Doxygen and run the script GSFancyText/docs/create.rb
+To create documentation and docset based on the latest code, install Doxygen and run the script GSFancyText/docs/create.rb.
 A new docset will be created and installed, and HTML based documentations are available at:
 GSFancyText/docs/Doxygen/output/html
 
